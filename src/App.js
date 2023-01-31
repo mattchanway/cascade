@@ -20,6 +20,7 @@ import ForgotPasswordModalForm from './components/ForgotPasswordModalForm';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
+import noBgLogo from './assets/no_white_logo.png';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({
@@ -97,7 +98,10 @@ function App() {
 
         </UserContext.Provider>
       </BrowserRouter>
-
+      
+    {/* <div id='footer-logo-wrapper'>
+    <img id='footer-logo' src={noBgLogo}></img>
+    </div> */}
     </div>
   );
 }

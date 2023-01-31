@@ -14,7 +14,7 @@ function TimecardsFilterReportForm({populatePage}) {
     const { employeeId, position, userNotFound } = useContext(UserContext);
 
     let INIT_STATE = {
-        fromDate: null, toDate: null, employeeId: null, jobId: null, overtime: false
+        fromDate: '', toDate: '', employeeId: '', jobId: '', overtime: false
     };
 
     const [timecardReportFormData, setTimecardReportFormData] = useState(INIT_STATE);
@@ -37,10 +37,12 @@ function TimecardsFilterReportForm({populatePage}) {
     async function handleReportSubmit(evt) {
         evt.preventDefault();
         try {
-
+           
             let { fromDate, toDate, employeeId, jobId, overtime } = timecardReportFormData;
-            if (jobId === "All Jobs") jobId = null;
-            if (employeeId === "All Employees") employeeId = null;
+            if (jobId.length === 0) jobId = null;
+            if (employeeId.length === 0) employeeId = null;
+            if (fromDate === '') fromDate = undefined;
+            if (toDate === '') toDate = undefined;
            
             let res = await axios.get(`/timecards/filter`, {
                 params: {
@@ -63,6 +65,7 @@ function TimecardsFilterReportForm({populatePage}) {
             ...fData,
             [name]: value
         }))
+        console.log(timecardReportFormData)
         
 
 
@@ -106,7 +109,7 @@ function TimecardsFilterReportForm({populatePage}) {
                         value={timecardReportFormData.employeeId}
                         onChange={(e) => handleChange(e)}
                     >
-                        <option value={null}>All Employees</option>
+                        <option value={''}>All Employees</option>
                         {employeeDropDownData && employeeDropDownData.map(emp => <option value={emp.employee_id}>{emp.first_name} {emp.last_name}</option>)}
                     </Form.Control>
 
@@ -118,7 +121,7 @@ function TimecardsFilterReportForm({populatePage}) {
                         value={timecardReportFormData.jobId}
                         onChange={handleChange}
                     >
-                        <option value={null}>All Jobs</option>
+                        <option value={''}>All Jobs</option>
                         {jobsDropdownData && jobsDropdownData.map(job => <option value={job.job_id}>{job.job_id} - {job.job_name}</option>)}
                     </Form.Control>
 

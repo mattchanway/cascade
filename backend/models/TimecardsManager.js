@@ -145,7 +145,7 @@ class TimecardsManager {
             }
             if (jobId !== undefined) {
                 queryValues.push(jobId);
-                whereExpressions.push(`job_id = $${queryValues.length}`);
+                whereExpressions.push(`timecards.job_id = $${queryValues.length}`);
             }
             if (overtime === true) {
 
@@ -156,7 +156,7 @@ class TimecardsManager {
                 query += " WHERE " + whereExpressions.join(" AND ");
 
             }
-            console.log(query, whereExpressions, queryValues)
+            console.log(whereExpressions, queryValues)
             const result = await db.query(query, queryValues);
 
 

@@ -26,12 +26,7 @@ CREATE TABLE certifications(
     certification_pay FLOAT
 );
 
--- CREATE TABLE documents(
---     document_id SERIAL PRIMARY KEY,
---     document_job_id TEXT references jobs
---     document_name TEXT NOT NULL,
---     document_link TEXT NOT NULL
--- );
+
 
 CREATE TABLE employees (
     employee_id SERIAL PRIMARY KEY,

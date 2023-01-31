@@ -18,7 +18,7 @@ router.post("/", async function (req, res, next) {
         let result = await EmployeeManager.authenticate(id, password);
 
         if (result !== false) {
-            res.cookie('sessionId', result.session_id, { maxAge: 99999999999 * 600 });
+            res.cookie('sessionId', result.session_id, { maxAge: ((1000 * 60) * 420) });
         }
         return res.json(result);
     }
@@ -51,7 +51,7 @@ router.post("/password-update/:id", authenticateJWT, ensureLoggedIn, async funct
         const user = res.locals.user;
         let employee_id = user.employee_id;
         let position = user.position;
-       
+
         let passwordToken = await EmployeeManager.createPasswordToken(employee_id, position);
         return res.json(passwordToken);
     }
@@ -106,18 +106,7 @@ router.post("/password-forgotten-update/:token", async function (req, res, next)
 router.get("/whoami", async function (req, res, next) {
 
     try {
-        // this can check the sessionId, and if it is expired, should send a signal to the client to redirect to login
-        if(req.query.token){
-            let token = req.query.token;
-            const { exp } = jwt.decode(sessionId);
-            if (Date.now() >= exp * 1000) {
-                console.log('date catch')
-                return res.json({ noUser: "unable to auth" });
-            }
-            let userResult = await EmployeeManager.getUserFromPasswordToken(token);
-            return res.json(userResult);
-        }
-
+    
         if (req.cookies.sessionId) {
             console.log('FOUND THE COOKIE', req.cookies.sessionId)
             let sessionId = req.cookies.sessionId;

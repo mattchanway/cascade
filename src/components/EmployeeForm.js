@@ -17,10 +17,10 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
     let {id} = useParams();
 
     const INIT_STATE = edit !== true ? {
-        first_name: '', last_name: '', position: '',
+        first_name: '', last_name: '', email:'', position: '',
         certification: '', start_date: null, address: ''
     } : {
-        firstName, lastName, position, certification, start_date, address
+        firstName, lastName, email:'', position, certification, start_date, address
     }
 
     const [employeeFormData, setEmployeeFormData] = useState(INIT_STATE);
@@ -49,14 +49,14 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
     async function postNewEmployee(evt) {
         evt.preventDefault();
         try {
-            let { first_name, last_name, position,
+            let { first_name, last_name, email, position,
             certification, start_date, address} = employeeFormData;
 
             let res = !edit ? await axios.post(`/employees`, {
-                first_name, last_name, position,
+                first_name, last_name, email, position,
                 certification, start_date, address
             }) : await axios.put(`/employees/${id}`, {
-                first_name, last_name, position,
+                first_name, last_name, email, position,
             certification, start_date, address
             })
             console.log(res.data)
@@ -74,7 +74,7 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
             ...fData,
             [name]: value
         }))
-        console.log(employeeFormData)
+       
     }
 
     if(isLoading === true) return (
@@ -107,6 +107,15 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
                         type="text"
                         name="last_name"
                         value={employeeFormData.last_name}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="email">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                        type="email"
+                        name="email"
+                        value={employeeFormData.email}
                         onChange={handleChange}
                     />
                 </Form.Group>

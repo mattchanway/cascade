@@ -1,4 +1,7 @@
 const express = require("express");
+const crypto = require('crypto');
+const algorithm = 'aes-192-cbc';
+
 const morgan = require("morgan");
 const cors = require("cors");
 const bodyParser = require('body-parser');

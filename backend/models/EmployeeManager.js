@@ -70,12 +70,12 @@ class EmployeeManager {
 
         try {
 
-            const { temp_password, first_name, last_name, position, certification, start_date, address, photo } = data;
+            const { temp_password, first_name, last_name, email, position, certification, start_date, address, photo } = data;
             const INIT_PASSWORD = await bcrypt.hash(temp_password, 10);
             const DONT_USE_THIS_PASSWORD = 'password';
-            const result = await db.query(`INSERT INTO employees (password,first_name, last_name, position, certification, start_date, address, photo) 
-            VALUES($1, $2, $3, $4, $5, $6,$7,$8) returning *`, [DONT_USE_THIS_PASSWORD, first_name,
-                last_name, position, certification, start_date, address, photo]);
+            const result = await db.query(`INSERT INTO employees (password,first_name, last_name, email, position, certification, start_date, address, photo) 
+            VALUES($1, $2, $3, $4, $5, $6,$7,$8,$9) returning *`, [DONT_USE_THIS_PASSWORD, first_name,
+                last_name, email, position, certification, start_date, address, photo]);
 
             let newUser = result.rows[0];
             delete newUser.password;
@@ -139,7 +139,6 @@ class EmployeeManager {
                 position: position,
                 exp: Date.now() + ((1000 * 60) * 480)
             };
-            // let SESSION_OPTIONS = { expiresIn: 600000000 * 7200 };
 
             let jwtToken = jwt.sign(jwtPayload, SECRET_KEY);
             let session = jwt.sign(sessionPayload, SECRET_KEY);

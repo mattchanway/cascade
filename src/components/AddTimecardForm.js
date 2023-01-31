@@ -7,6 +7,7 @@ import Toast from 'react-bootstrap/Toast';
 import Button from 'react-bootstrap/Button';
 import toISOLocal from '../helpers/toISOLocal';
 import axios from 'axios';
+import CurrencyInput from 'react-currency-input-field';
 
 function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToast }) {
 
@@ -111,7 +112,8 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                         <Form.Group className="mb-3" controlId="expensesInput">
                             <Form.Label>Expenses</Form.Label>
                             <Form.Control
-                                type="text"
+                                prefix="$"
+                               
                                 name="expenses"
                                 value={timecardFormData.expenses}
                                 onChange={handleChange}
