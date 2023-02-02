@@ -1,4 +1,6 @@
 const SECRET_KEY = process.env.SECRET_KEY || "secret-dev";
+const CRYPTO_PASSWORD = 'xq]nm,Vf7-$vU(HYwRc2s^W<nNZ@7,';
+const CRYPTO_ALGORITHM = 'aes-192-cbc';
 
 require("dotenv").config();
 
@@ -8,7 +10,8 @@ function getDatabaseUri(){
 }
 
 module.exports = {
-
+    CRYPTO_PASSWORD,
     SECRET_KEY,
+    CRYPTO_ALGORITHM,
     getDatabaseUri
 };

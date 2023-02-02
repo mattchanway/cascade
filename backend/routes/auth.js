@@ -4,6 +4,7 @@ const EmployeeManager = require("../models/EmployeeManager");
 const jwt = require("jsonwebtoken");
 const { authenticateJWT, ensureLoggedIn } = require("../middleware/middlewareAuth");
 const { SECRET_KEY } = require("../config");
+const { encrypt, decrypt } = require('../encryption');
 
 
 // POST / LOGIN
@@ -19,6 +20,8 @@ router.post("/", async function (req, res, next) {
 
         if (result !== false) {
             res.cookie('sessionId', result.session_id, { maxAge: ((1000 * 60) * 420) });
+
+
         }
         return res.json(result);
     }
@@ -108,17 +111,21 @@ router.get("/whoami", async function (req, res, next) {
     try {
     
         if (req.cookies.sessionId) {
-            console.log('FOUND THE COOKIE', req.cookies.sessionId)
+           console.log('HHHHHHHHHHHHHHHHHHHHI')
             let sessionId = req.cookies.sessionId;
+            let encrypted = encrypt(sessionId);
+            console.log('ENCRYPTED', encrypted);
+            let decrypted = decrypt(encrypted)
+            console.log('DECRYPTED', decrypted, 'OG SESSION ID', sessionId)
             const { exp } = jwt.decode(sessionId);
-            console.log(exp)
+           
             if (Date.now() >= exp * 1000) {
                 console.log('date catch')
                 return res.json({ noUser: "unable to auth" });
             }
 
             let userResult = await EmployeeManager.whoAmI(sessionId);
-            console.log(userResult)
+           
             return res.json(userResult);
         }
         return res.json({ noUser: "unable to auth" });
