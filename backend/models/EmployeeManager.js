@@ -70,11 +70,10 @@ class EmployeeManager {
 
         try {
 
-            const { temp_password, first_name, last_name, email, position, certification, start_date, address, photo } = data;
-            const INIT_PASSWORD = await bcrypt.hash(temp_password, 10);
-            const DONT_USE_THIS_PASSWORD = 'password';
+            const { first_name, last_name, email, position, certification, start_date, address, photo } = data;
+            const INIT_PASSWORD = await bcrypt.hash(`${last_name}123`, 10);
             const result = await db.query(`INSERT INTO employees (password,first_name, last_name, email, position, certification, start_date, address, photo) 
-            VALUES($1, $2, $3, $4, $5, $6,$7,$8,$9) returning *`, [DONT_USE_THIS_PASSWORD, first_name,
+            VALUES($1, $2, $3, $4, $5, $6,$7,$8,$9) returning *`, [INIT_PASSWORD, first_name,
                 last_name, email, position, certification, start_date, address, photo]);
 
             let newUser = result.rows[0];
@@ -96,8 +95,7 @@ class EmployeeManager {
 
             if (user) {
                 const isValid = bcrypt.compare(password, user.password);
-                if (password === user.password) {
-                    // *****NEED TO ENCRYPT ******
+                if (isValid) {
                     let { jwtToken, session } = await this.createNewTokens(id, user.position);
                     let fin = await this.updateDatabaseTokens(id, jwtToken, session);
                     return fin;
@@ -273,8 +271,7 @@ class EmployeeManager {
             if (!auth) return false;
 
             const hashedPassword = await bcrypt.hash(newPassword, 10);
-            const FAKE_TEMP_PASSWORD = newPassword;
-            await db.query(`UPDATE employees SET password = $1, WHERE employee_id = $2`, [FAKE_TEMP_PASSWORD, id]);
+            await db.query(`UPDATE employees SET password = $1, WHERE employee_id = $2`, [hashedPassword, id]);
 
             return true;
 

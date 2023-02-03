@@ -19,8 +19,8 @@ router.post("/", async function (req, res, next) {
         let result = await EmployeeManager.authenticate(id, password);
 
         if (result !== false) {
-            res.cookie('sessionId', result.session_id, { maxAge: ((1000 * 60) * 420) });
-
+            let encrypted = encrypt(result.session_id);
+            res.cookie('sessionId', encrypted, { maxAge: ((1000 * 60) * 420)  });
 
         }
         return res.json(result);
@@ -109,23 +109,15 @@ router.post("/password-forgotten-update/:token", async function (req, res, next)
 router.get("/whoami", async function (req, res, next) {
 
     try {
-    
-        if (req.cookies.sessionId) {
-           console.log('HHHHHHHHHHHHHHHHHHHHI')
-            let sessionId = req.cookies.sessionId;
-            let encrypted = encrypt(sessionId);
-            console.log('ENCRYPTED', encrypted);
-            let decrypted = decrypt(encrypted)
-            console.log('DECRYPTED', decrypted, 'OG SESSION ID', sessionId)
-            const { exp } = jwt.decode(sessionId);
-           
-            if (Date.now() >= exp * 1000) {
-                console.log('date catch')
-                return res.json({ noUser: "unable to auth" });
-            }
 
-            let userResult = await EmployeeManager.whoAmI(sessionId);
-           
+        if (req.cookies.sessionId) {
+
+            let sessionId = req.cookies.sessionId;
+            let split = sessionId.split(':.');
+            let decryptObj = { iv: split[0], encryptedData: split[1] }
+            let decrypted = decrypt(decryptObj)
+            let userResult = await EmployeeManager.whoAmI(decrypted);
+
             return res.json(userResult);
         }
         return res.json({ noUser: "unable to auth" });

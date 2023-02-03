@@ -63,7 +63,7 @@ INSERT INTO certifications(certification_name, certification_pay) VALUES ('None'
 
 INSERT INTO employees(password,first_name, last_name, email,position, certification, start_date, address, photo, jwt_token, session_id, password_reset_token, first_login) 
 VALUES('password','Matt','Chanway', 'matthewchanway@gmail.com',2,1,'2022-12-01','1000 24th Ave, Surrey BC V4X YYY','https://i.ibb.co/yXZVP97/headshot.jpg',null,null,null,false),
-('password','Shawn','Rostas', 'testEmail2@gmail.com',3,3,'2008-01-01','345 72nd Ave, Surrey BC V4X YYY', default,null,null,null,false),
+-- ('password','Shawn','Rostas', 'testEmail2@gmail.com',3,3,'2008-01-01','345 72nd Ave, Surrey BC V4X YYY', default,null,null,null,false),
 ('password','Zakk','Wylde', 'testEmail3@gmail.com',1,3,'2022-01-02','123 Fake St, Hollywood CA 43684','https://assets.blabbermouth.net/media/zakkwyldeschecter3_638_2.jpg',null,null,null,false);
 
 INSERT INTO jobs(job_id, job_name, job_address_street_line1, job_address_street_unit, job_address_street_city, job_description, shop_docs_link)

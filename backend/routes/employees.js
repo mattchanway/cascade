@@ -49,9 +49,8 @@ router.get("/:id", authenticateJWT, ensureLoggedIn, ensureCorrectUserOrManager, 
 router.post("/", async function (req, res, next) {
 
     try {
-        console.log(req.body)
-        let data = {...req.body, temp_password: 'password'}
-        let result = await EmployeeManager.addEmployee(data);
+        
+        let result = await EmployeeManager.addEmployee(req.body);
         return res.json(result);
     }
     catch (err) {
