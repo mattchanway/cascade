@@ -1,7 +1,7 @@
 // import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Jobs from "./components/Jobs";
 import UserContext from './components/UserContext';
 import JobDetail from './components/JobDetail';
@@ -76,6 +76,8 @@ function App() {
     </div>
   )
 
+  
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -91,7 +93,7 @@ function App() {
             <Route path="/employees/:id" element={<EmployeeDetail></EmployeeDetail>} ></Route>
             <Route path="/employees" element={<Employees></Employees>} ></Route>
             <Route path="/admin" element={<Admin></Admin>}></Route>
-            <Route path="/admin/password" element={<ResetPasswordInternal  loggedInUser={loggedInUser}></ResetPasswordInternal>} ></Route>
+            <Route path="/admin/password" element={<ResetPasswordInternal  loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}></ResetPasswordInternal>} ></Route>
             <Route path="/reset-password/:token" element={<ForgotPasswordReset setLoggedInUser={setLoggedInUser}></ForgotPasswordReset>} ></Route>
             <Route path="/accounts/password/reset" element={<ForgotPasswordModalForm></ForgotPasswordModalForm>} ></Route>
           </Routes>

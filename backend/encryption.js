@@ -12,9 +12,7 @@ const CRYPTO_KEY = crypto.scryptSync(CRYPTO_PASSWORD, SALT, 32);
     let encrypted = cipher.update(str)
    encrypted = Buffer.concat([encrypted, cipher.final()]);
 
-   // return {
-   //    encryptedData: encrypted.toString('base64'),
-   //    iv: iv.toString('base64')};
+
    return `${iv.toString('hex')}:.${encrypted.toString('hex')}`;
    }
    catch(e){

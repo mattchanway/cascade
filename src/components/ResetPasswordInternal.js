@@ -1,21 +1,21 @@
 import React, { useState, useContext } from 'react';
-import {redirect, Navigate} from 'react-router-dom';
+import {redirect, Navigate, useNavigate} from 'react-router-dom';
 import axios from "axios";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Login from './Login';
 import UserContext from './UserContext';
 
-function ResetPassword({ loggedInUser }) {
+function ResetPassword({ loggedInUser, setLoggedInUser }) {
 
 
-
+    const navigate = useNavigate();
     let INIT_STATE = {
-        password: '', confirmPassword: ''
+        oldPassword: '', password: '', confirmPassword: ''
     };
 
     const [passwordFormData, setPasswordFormData] = useState(INIT_STATE);
-    const { employeeId, position, userNotFound } = useContext(UserContext);
+    const { employeeId, position, userNotFound, firstLogin } = useContext(UserContext);
 
     const handleChange = evt => {
         const { name, value } = evt.target;
@@ -28,7 +28,20 @@ function ResetPassword({ loggedInUser }) {
     async function handlePasswordSubmit(evt) {
         evt.preventDefault();
         try {
-
+            let check = validatePasswords(passwordFormData.password, passwordFormData.confirmPassword);
+            let res = await axios.patch(`/employees/${employeeId}`,{oldPassword: passwordFormData.oldPassword, password: passwordFormData.password,
+            firstLogin: firstLogin})
+            setPasswordFormData(INIT_STATE);
+            console.log(res)
+            setLoggedInUser({
+                employeeId: res.data.employee_id,
+                position: res.data.position,
+                firstName: res.data.first_name,
+                lastName: res.data.last_name,
+                userNotFound: false,
+                firstLogin: res.data.first_login})
+            navigate('/');
+            
 
         }
         catch (e) {
@@ -40,6 +53,7 @@ function ResetPassword({ loggedInUser }) {
     function validatePasswords(str1, str2) {
 
         if (str1 !== str2) alert('no');
+       
 
 
     }
@@ -50,8 +64,17 @@ function ResetPassword({ loggedInUser }) {
      }
 
     return (
-        <Form onSubmit={validatePasswords}>
-            <Form.Group className="mb-3" controlId="expensesInput">
+        <Form onSubmit={handlePasswordSubmit}>
+            <Form.Group className="mb-3">
+                <Form.Label>Old Password</Form.Label>
+                <Form.Control
+                    type="password"
+                    name="oldPassword"
+                    value={passwordFormData.oldPassword}
+                    onChange={handleChange}
+                />
+            </Form.Group>
+            <Form.Group className="mb-3">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                     type="password"
@@ -60,7 +83,7 @@ function ResetPassword({ loggedInUser }) {
                     onChange={handleChange}
                 />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="notesInput">
+            <Form.Group className="mb-3">
                 <Form.Label>Confirm Password</Form.Label>
                 <Form.Control
                     type="password"

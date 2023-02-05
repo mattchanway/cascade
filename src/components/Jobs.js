@@ -18,7 +18,7 @@ function Jobs({ setLoggedInUser }) {
     const location = useLocation();
     const flash = location.state && location.state.message === 'success' ? true : false;
     const [jobs, setJobs] = useState([]);
-    const { employeeId, userNotFound, firstName, lastName } = useContext(UserContext);
+    const { employeeId, userNotFound, firstName, lastName, firstLogin } = useContext(UserContext);
     const [jobAddedAlert, setJobAddedAlert] = useState(flash);
     axios.defaults.withCredentials = true;
 
@@ -43,6 +43,10 @@ function Jobs({ setLoggedInUser }) {
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
     }
+
+    if (employeeId  && firstLogin === true) {
+        return <Navigate to="/admin/password" replace={true}></Navigate>
+     }
 
     return (
         <div className='job-list-container'>

@@ -27,7 +27,7 @@ class EmployeeManager {
 
             const result = await db.query(`
         SELECT t.job_id, t.reg_time, t.overtime, t.notes, t.location_submitted, t.timecard_date,
-        t.time_submitted, t.timecard_id, e.employee_id, e.first_name, e.last_name, e.address, e.start_date,
+        t.time_submitted, t.timecard_id, e.employee_id, e.first_name, e.last_name, e.start_date,
         j.job_name, p.position_name, c.certification_name from timecards t 
         join employees e on t.employee_id = e.employee_id
         join jobs j on t.job_id = j.job_id
@@ -39,7 +39,7 @@ class EmployeeManager {
 
             if (!result.rows.length) {
 
-                let newResult = await db.query(`SELECT e.employee_id, e.first_name, e.last_name, e.address, e.start_date,
+                let newResult = await db.query(`SELECT e.employee_id, e.first_name, e.last_name, e.start_date,
                  p.position_name, c.certification_name from employees e 
                  join  positions p on p.position_id = e.position
                  join certifications c on c.certification_id = e.certification
@@ -70,11 +70,11 @@ class EmployeeManager {
 
         try {
 
-            const { first_name, last_name, email, position, certification, start_date, address, photo } = data;
+            const { first_name, last_name, email, position, certification, start_date } = data;
             const INIT_PASSWORD = await bcrypt.hash(`${last_name}123`, 10);
-            const result = await db.query(`INSERT INTO employees (password,first_name, last_name, email, position, certification, start_date, address, photo) 
-            VALUES($1, $2, $3, $4, $5, $6,$7,$8,$9) returning *`, [INIT_PASSWORD, first_name,
-                last_name, email, position, certification, start_date, address, photo]);
+            const result = await db.query(`INSERT INTO employees (password,first_name, last_name, email, position, certification, start_date) 
+            VALUES($1, $2, $3, $4, $5, $6,$7) returning *`, [INIT_PASSWORD, first_name,
+                last_name, email, position, certification, start_date]);
 
             let newUser = result.rows[0];
             delete newUser.password;
@@ -114,6 +114,7 @@ class EmployeeManager {
         try {
             const res2 = await db.query(`UPDATE employees SET jwt_token =$1, session_id = $2 WHERE employee_id =$3 returning *`, [jwt, session, id]);
             const loggedInUser = res2.rows[0]
+            console.log('UPDATED DATABASE TOKENS', loggedInUser.session_id)
             delete loggedInUser.password;
             return loggedInUser;
         }
@@ -121,6 +122,30 @@ class EmployeeManager {
         catch (e) {
             return e;
         }
+
+    }
+
+    static async rotateJwtToken(employee_id, position){
+
+        try {
+
+            let jwtPayload = {
+                employee_id: employee_id,
+                position: position,
+                exp: Date.now() + ((1000 * 60) * 15)
+            };
+            let jwtToken = jwt.sign(jwtPayload, SECRET_KEY);
+            const res2 = await db.query(`UPDATE employees SET jwt_token =$1  WHERE employee_id =$2 returning jwt_token`, [jwtToken, employee_id]);
+            return res2.rows[0].jwt_token
+
+        }
+
+        catch(e){
+
+            return e;
+        }
+
+
 
     }
 
@@ -191,6 +216,7 @@ class EmployeeManager {
         try {
             let res = await db.query(`SELECT jwt_token FROM employees WHERE session_id = $1`, [sessionId]);
             const user = res.rows[0];
+            console.log('INSIDE GETJWT',user, sessionId)
 
             return user.jwt_token;
         }
@@ -263,17 +289,20 @@ class EmployeeManager {
 
     }
 
-    static async updateInternalPassword(id, oldPassword, newPassword) {
+    static async updateInternalPassword(id, oldPassword, newPassword, firstLogin) {
 
         try {
 
-            let auth = await this.authenticate(id, oldPassword);
-            if (!auth) return false;
-
+            // let auth = await this.authenticate(id, oldPassword);
+            // if (!auth) return false;
+            const query = `UPDATE employees SET password = $1 ${firstLogin === true ? ' ,first_login = false' : ''}
+            WHERE employee_id = $2 returning *`;
+            
             const hashedPassword = await bcrypt.hash(newPassword, 10);
-            await db.query(`UPDATE employees SET password = $1, WHERE employee_id = $2`, [hashedPassword, id]);
-
-            return true;
+            let userQuery = await db.query(query, [hashedPassword, id]);
+            let user = userQuery.rows[0]
+            delete user.password;
+            return user;
 
 
         }

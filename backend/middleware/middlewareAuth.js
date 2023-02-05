@@ -3,6 +3,7 @@
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config");
 const EmployeeManager = require("../models/EmployeeManager");
+const { decrypt, encrypt } = require("../encryption");
 
 /** Middleware: Authenticate user.
  *
@@ -14,27 +15,17 @@ const EmployeeManager = require("../models/EmployeeManager");
 
 async function authenticateJWT(req, res, next) {
     try {
-        const sessionId = req.cookies.sessionId;
+        if (req.cookies.sessionId) {
 
-        if (sessionId) {
-
-            const sessionTokenPayload = jwt.verify(sessionId, SECRET_KEY);
-            // console.log("sessiontokenpayload",sessionTokenPayload)
-            if (Date.now() >= sessionTokenPayload.exp) {
-                console.log('gotcha')
-                return next();
-            }
-
-            const dbFetch = await EmployeeManager.getJwt(sessionId);
-            console.log("DBFETCH", dbFetch)
+            let split = req.cookies.sessionId.split(':.');
+            let decryptObj = { iv: split[0], encryptedData: split[1] }
+            let decrypted = decrypt(decryptObj)
+            const sessionTokenPayload = jwt.verify(decrypted, SECRET_KEY);
+            const dbFetch = await EmployeeManager.getJwt(decrypted);
             const dbTokenPayload = jwt.verify(dbFetch, SECRET_KEY);
-            console.log(Date.now(), dbTokenPayload.exp);
-            console.log("DBTOKEN", dbTokenPayload)
-
-            if (Date.now() >= dbTokenPayload.exp) {
-                // ***need to rotate the JWT token here**
+            if (dbTokenPayload && Date.now() >= dbTokenPayload.exp) {
                 console.log('ROTATING TOKEN')
-                const { jwtToken, session } = await EmployeeManager.createNewTokens(sessionTokenPayload.employee_id, sessionTokenPayload.position);
+                const jwtToken = await EmployeeManager.rotateJwtToken(sessionTokenPayload.employee_id, sessionTokenPayload.position)
                 res.locals.user = jwt.verify(jwtToken, SECRET_KEY);
                 return next();
             }
@@ -87,7 +78,8 @@ function ensureManager(req, res, next) {
 function ensureCorrectUserOrManager(req, res, next) {
     try {
         const user = res.locals.user;
-        if ((!user.isAdmin && !user.employee_id === req.params.id)) {
+        console.log('ENSURE CORRECT USER OR MANAGER', user)
+        if ((user.position !== 3 && user.employee_id !== req.params.id)) {
             throw new Error("Unauthorized, must be manager or same user");
         }
         return next();

@@ -18,7 +18,7 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
 
     const INIT_STATE = edit !== true ? {
         first_name: '', last_name: '', email:'', position: '',
-        certification: '', start_date: null, address: ''
+        certification: '', start_date: null
     } : {
         firstName, lastName, email:'', position, certification, start_date, address
     }
@@ -54,10 +54,10 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
 
             let res = !edit ? await axios.post(`/employees`, {
                 first_name, last_name, email, position,
-                certification, start_date, address
+                certification, start_date
             }) : await axios.put(`/employees/${id}`, {
                 first_name, last_name, email, position,
-            certification, start_date, address
+            certification, start_date
             })
             console.log(res.data)
             navigate(`/`);
@@ -154,16 +154,6 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
                         onChange={handleChange}
                         type="date"
                         autoFocus
-                    />
-                </Form.Group>
-               
-                <Form.Group className="mb-3" controlId="address">
-                    <Form.Label>Address</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="address"
-                        value={employeeFormData.address}
-                        onChange={handleChange}
                     />
                 </Form.Group>
 

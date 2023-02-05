@@ -37,8 +37,6 @@ CREATE TABLE employees (
     position int NOT NULL references positions,
     certification int NOT NULL references certifications,
     start_date DATE NOT NULL,
-    address TEXT NOT NULL,
-    photo TEXT DEFAULT 'https://www.seekpng.com/png/detail/115-1150456_avatar-generic-avatar.png',
     jwt_token VARCHAR,
     session_id VARCHAR,
     password_reset_token VARCHAR,
@@ -57,14 +55,14 @@ CREATE TABLE timecards (
     location_submitted TEXT,
     notes TEXT);
 
-INSERT INTO positions(position_name, position_base_pay) VALUES('Welder', 50.00), ('Labourer', 30.00), ('Manager', 75.00);
+INSERT INTO positions(position_name, position_base_pay) VALUES('Employee', 0.00), ('Labourer', 0.00), ('Manager', 0.00);
 
 INSERT INTO certifications(certification_name, certification_pay) VALUES ('None', 0.00), ('Apprentice', 5.00), ('Journeyman', 15.00);
 
-INSERT INTO employees(password,first_name, last_name, email,position, certification, start_date, address, photo, jwt_token, session_id, password_reset_token, first_login) 
-VALUES('password','Matt','Chanway', 'matthewchanway@gmail.com',2,1,'2022-12-01','1000 24th Ave, Surrey BC V4X YYY','https://i.ibb.co/yXZVP97/headshot.jpg',null,null,null,false),
--- ('password','Shawn','Rostas', 'testEmail2@gmail.com',3,3,'2008-01-01','345 72nd Ave, Surrey BC V4X YYY', default,null,null,null,false),
-('password','Zakk','Wylde', 'testEmail3@gmail.com',1,3,'2022-01-02','123 Fake St, Hollywood CA 43684','https://assets.blabbermouth.net/media/zakkwyldeschecter3_638_2.jpg',null,null,null,false);
+INSERT INTO employees(password,first_name, last_name, email,position, certification, start_date, jwt_token, session_id, password_reset_token, first_login) 
+VALUES('password','Matt','Chanway', 'matthewchanway@gmail.com',3,1,'2022-12-01',null,null,null,true),
+
+('password','Zakk','Wylde', 'testEmail3@gmail.com',1,3,'2022-01-02',null,null,null,false);
 
 INSERT INTO jobs(job_id, job_name, job_address_street_line1, job_address_street_unit, job_address_street_city, job_description, shop_docs_link)
 VALUES('400-22044', 'Dr. Oonchi', '1845 Marine Drive', null, 'West Vancouver', 'Doctors office','https://www.dropbox.com/sh/diwnsimhvkiy7hs/AADn3VkGDe8H4YwKqYqzJXj7a?dl=0'),
@@ -74,9 +72,9 @@ VALUES('400-22044', 'Dr. Oonchi', '1845 Marine Drive', null, 'West Vancouver', '
 
 
 INSERT INTO timecards(job_id, employee_id, timecard_date, reg_time, overtime, expenses, time_submitted, location_submitted, notes)
-VALUES('400-22044',3,'2022-12-26', 8.0, 0.0, 3452.53, CURRENT_TIMESTAMP, null, 'bought new les paul'),
-('400-22044',3,'2022-12-27', 8.0, 1.0, 4612.21, CURRENT_TIMESTAMP, null,'bought new marshall 800'),
-('400-22044',3,'2022-12-28', 0.0, 0.0, 10342.54, CURRENT_TIMESTAMP, null,'went to rehab'),
+VALUES('400-22044',2,'2023-02-01', 8.0, 0.0, 3452.53, CURRENT_TIMESTAMP, null, 'bought new les paul'),
+('400-22044',2,'2023-02-02', 8.0, 1.0, 4612.21, CURRENT_TIMESTAMP, null,'bought new marshall 800'),
+('400-22044',2,'2023-02-03', 0.0, 0.0, 10342.54, CURRENT_TIMESTAMP, null,'went to rehab'),
 ('19-005',1,'2022-12-26', 8.0, 0.0, 0, CURRENT_TIMESTAMP, null,null),
 ('19-005',1,'2022-12-27', 8.0, 1.0, 0, CURRENT_TIMESTAMP, null,null),
 ('19-005',1,'2022-12-28', 8.0, 2.0, 0, CURRENT_TIMESTAMP, null,null);
