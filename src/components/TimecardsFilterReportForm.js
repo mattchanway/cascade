@@ -5,6 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Login from './Login';
+import Alert from 'react-bootstrap/Alert';
+import Container from 'react-bootstrap/Container';
 
 
 
@@ -77,12 +79,16 @@ function TimecardsFilterReportForm({populatePage}) {
 
     return (
         <div>
+            <h1>Employee Timecard Report</h1>
 
-            <Form onSubmit={handleReportSubmit}>
+            
+            <Form className='report' onSubmit={handleReportSubmit}>
+           
                 <Form.Group className="mb-3" controlId="from-date-input">
-                    <Form.Label>Date *must be YYYY-MM-DD*</Form.Label>
+                    <Form.Label className='date-caution'>From Date must be YYYY-MM-DD</Form.Label>
                     <Form.Control
-
+                        required
+                        
                         name="fromDate"
                         value={timecardReportFormData.fromDate}
                         onChange={handleChange}
@@ -91,9 +97,9 @@ function TimecardsFilterReportForm({populatePage}) {
                     />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="to-date-input">
-                    <Form.Label>Date *must be YYYY-MM-DD*</Form.Label>
+                    <Form.Label className='date-caution'>To Date must be YYYY-MM-DD</Form.Label>
                     <Form.Control
-
+                        required
                         name="toDate"
                         value={timecardReportFormData.toDate}
 

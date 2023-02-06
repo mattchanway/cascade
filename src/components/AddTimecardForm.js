@@ -125,6 +125,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                                 as="textarea"
                                 rows={3}
                                 name="notes"
+                                maxLength = {150}
                                 value={timecardFormData.notes}
                                 onChange={handleChange}
                             />

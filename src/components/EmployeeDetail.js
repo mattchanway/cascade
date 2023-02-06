@@ -47,15 +47,15 @@ function EmployeeDetail() {
 
     }
 
-    if (isUnauthorized === false && isLoading === true) {
+    // if (isUnauthorized === false && isLoading === true) {
 
-        return (
-            <div>
-                <h1>Loading!</h1>
-            </div>
-        )
+    //     return (
+    //         <div>
+    //             <h1>Loading!</h1>
+    //         </div>
+    //     )
 
-    }
+    // }
 
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
@@ -75,29 +75,30 @@ function EmployeeDetail() {
                 <Table responsive>
                     <thead>
                         <tr>
+                        <th>Timecard Date</th>
                             <th>Job Number</th>
                             <th>Job Name</th>
-                            <th>Timecard Date</th>
                             <th>Reg Time</th>
                             <th>Overtime</th>
                             <th>Expenses</th>
                             <th>Notes</th>
                             <th>Submitted At</th>
-                            <th>Location Submitted</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
                         {timecardResults.map(t =>
                             <tr>
+                                <td>{t.timecard_date.slice(0, 10)}</td>
                                 <td>{t.job_id}</td>
                                 <td>{t.job_name}</td>
-                                <td>{t.timecard_date.slice(0, 10)}</td>
+                                
                                 <td>{t.reg_time}</td>
                                 <td>{t.overtime}</td>
                                 <td>${t.expenses ? t.expenses : 0}</td>
                                 <td>{t.notes}</td>
                                 <td>{t.time_submitted}</td>
-                                <td>{t.location_submitted}</td>
+                                
                             </tr>
                         )}
 

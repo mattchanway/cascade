@@ -21,6 +21,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import noBgLogo from './assets/no_white_logo.png';
+import Spinner from './components/Spinner';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({
@@ -71,9 +72,7 @@ function App() {
  console.log(loggedInUser)
 
   if (loggedInUser.employeeId === null && loggedInUser.userNotFound === false) return (
-    <div>
-      <h1>Loading...</h1>
-    </div>
+    <Spinner></Spinner>
   )
 
   

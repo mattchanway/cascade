@@ -11,7 +11,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
 
     const navigate = useNavigate();
     let INIT_STATE = {
-        oldPassword: '', password: '', confirmPassword: ''
+        password: '', confirmPassword: ''
     };
 
     const [passwordFormData, setPasswordFormData] = useState(INIT_STATE);
@@ -29,7 +29,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
         evt.preventDefault();
         try {
             let check = validatePasswords(passwordFormData.password, passwordFormData.confirmPassword);
-            let res = await axios.patch(`/employees/${employeeId}`,{oldPassword: passwordFormData.oldPassword, password: passwordFormData.password,
+            let res = await axios.patch(`/employees/${employeeId}`,{password: passwordFormData.password,
             firstLogin: firstLogin})
             setPasswordFormData(INIT_STATE);
             console.log(res)
@@ -65,15 +65,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
 
     return (
         <Form onSubmit={handlePasswordSubmit}>
-            <Form.Group className="mb-3">
-                <Form.Label>Old Password</Form.Label>
-                <Form.Control
-                    type="password"
-                    name="oldPassword"
-                    value={passwordFormData.oldPassword}
-                    onChange={handleChange}
-                />
-            </Form.Group>
+    
             <Form.Group className="mb-3">
                 <Form.Label>Password</Form.Label>
                 <Form.Control

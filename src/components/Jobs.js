@@ -57,7 +57,7 @@ function Jobs({ setLoggedInUser }) {
             </div>
            
            
-            {jobs && <ListGroup as="ul" id="job-list">
+            {jobs && <ListGroup as="ul" className="job-list">
 
                 {jobs.map((j) => <ListGroup.Item className='jobs-listgroup' action href={`/jobs/${j.job_id}`}>
                     <Container>

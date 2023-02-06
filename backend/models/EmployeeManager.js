@@ -289,7 +289,7 @@ class EmployeeManager {
 
     }
 
-    static async updateInternalPassword(id, oldPassword, newPassword, firstLogin) {
+    static async updateInternalPassword(id, newPassword, firstLogin) {
 
         try {
 

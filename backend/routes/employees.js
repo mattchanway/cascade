@@ -79,7 +79,7 @@ router.patch("/:id", async function (req, res, next) {
        
         let id = req.params.id;
         console.log(req.body)
-        let result = await EmployeeManager.updateInternalPassword(id, req.body.oldPassword, req.body.password, req.body.firstLogin);
+        let result = await EmployeeManager.updateInternalPassword(id, req.body.password, req.body.firstLogin);
 
         return res.json(result);
     }
