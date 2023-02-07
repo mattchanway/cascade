@@ -12,6 +12,7 @@ import Col from 'react-bootstrap/Col';
 import Toast from 'react-bootstrap/Toast';
 import AddTimecardForm from './AddTimecardForm';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import baseURL from '../helpers/constants';
 
 function JobDetail({ }) {
     
@@ -38,7 +39,7 @@ function JobDetail({ }) {
     useEffect(() => {
 
         async function getJob() {
-            let res = await axios.get(`/jobs/${id}`);
+            let res = await axios.get(`${baseURL}/jobs/${id}`);
 
             setJob(res.data);
         }

@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import toISOLocal from '../helpers/toISOLocal';
 import axios from 'axios';
 import CurrencyInput from 'react-currency-input-field';
+import baseURL from '../helpers/constants';
 
 function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToast }) {
 
@@ -28,7 +29,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
             let job_id = job.job_id;
             let employee_id = employeeId
             let { timecard_date, reg_time, overtime, expenses, notes } = timecardFormData;
-            let res = await axios.post(`/timecards/`, {
+            let res = await axios.post(`${baseURL}/timecards/`, {
                 job_id, employee_id, timecard_date, reg_time, overtime, expenses, notes
             })
             setTimecardFormData(INIT_STATE);

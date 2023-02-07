@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import baseURL from '../helpers/constants';
 
 function ForgotPasswordReset({setLoggedInUser}) {
 
@@ -28,7 +29,7 @@ function ForgotPasswordReset({setLoggedInUser}) {
     async function handlePasswordSubmit(password) {
        
         try {
-            let res = await axios.post(`/auth/password-forgotten-update/${token}`, {password});
+            let res = await axios.post(`${baseURL}/auth/password-forgotten-update/${token}`, {password});
             console.log('SUBMIT RESP', res.data)
             setLoggedInUser({employeeId: res.data.employee_id,
                 position: res.data.position,

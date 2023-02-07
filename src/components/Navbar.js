@@ -6,6 +6,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import baseURL from '../helpers/constants';
 
 
 function Navibar({setLoggedInUser}) {
@@ -19,7 +20,7 @@ function Navibar({setLoggedInUser}) {
 
     async function doLogout() {
 
-        await axios.post('/auth/logout');
+        await axios.post(`${baseURL}/auth/logout`);
         setLoggedInUser({
             employeeId: null,
             position: null,

@@ -22,8 +22,12 @@ import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import noBgLogo from './assets/no_white_logo.png';
 import Spinner from './components/Spinner';
+import baseURL from './helpers/constants';
 
 function App() {
+  axios.defaults.withCredentials = true;
+
+
   const [loggedInUser, setLoggedInUser] = useState({
     employeeId: null,
     position: null,
@@ -38,7 +42,7 @@ function App() {
 
     async function whoAmI() {
       try {
-        let res = await axios.get(`/auth/whoami`);
+        let res = await axios.get(`${baseURL}/auth/whoami`);
        
         if (res.data.noUser) setLoggedInUser({
           employeeId: null,

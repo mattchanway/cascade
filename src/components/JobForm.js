@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import ResourceErrorAlert from './ResourceErrorAlert';
 import Login from './Login';
+import baseURL from '../helpers/constants';
 
 function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, description, link }) {
 
@@ -31,11 +32,11 @@ function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, d
             let { job_id, job_name, job_address_street_line1,
                 job_address_street_line2, job_address_street_city, job_description,
                 shop_docs_link } = jobFormData;
-            let res = !edit ? await axios.post(`/jobs`, {
+            let res = !edit ? await axios.post(`${baseURL}/jobs`, {
                 job_id, job_name, job_address_street_line1,
                 job_address_street_line2, job_address_street_city, job_description,
                 shop_docs_link
-            }) : await axios.put(`/jobs/${job_id}`, {
+            }) : await axios.put(`${baseURL}/jobs/${job_id}`, {
                 job_name, job_address_street_line1,
                 job_address_street_line2, job_address_street_city, job_description,
                 shop_docs_link

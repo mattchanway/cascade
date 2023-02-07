@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import BadgeIcon from '@mui/icons-material/Badge';
+import baseURL from '../helpers/constants';
 
 
 function Jobs({ setLoggedInUser }) {
@@ -21,11 +22,11 @@ function Jobs({ setLoggedInUser }) {
     const { employeeId, userNotFound, firstName, lastName, firstLogin } = useContext(UserContext);
     const [jobAddedAlert, setJobAddedAlert] = useState(flash);
     axios.defaults.withCredentials = true;
-
     useEffect(() => {
 
         async function getJobs() {
-            let res = await axios.get(`/jobs`, { withCredentials: true });
+            
+            let res = await axios.get(`${baseURL}/jobs`, { withCredentials: true });
             let newJobs = res.data.noUser ? [] : res.data;
             setJobs(newJobs);
         }

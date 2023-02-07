@@ -6,6 +6,8 @@ import Login from './Login';
 import UserContext from './UserContext';
 import Alert from 'react-bootstrap/Alert';
 import ListGroup from 'react-bootstrap/ListGroup';
+import baseURL from '../helpers/constants';
+
 
 
 function Employees() {
@@ -16,7 +18,7 @@ function Employees() {
     useEffect(() => {
 
         async function getEmployees() {
-            let res = await axios.get(`/employees`);
+            let res = await axios.get(`${baseURL}/employees`);
             console.log(res)
             setEmployees(res.data);
         }

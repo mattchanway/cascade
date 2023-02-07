@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Login from './Login';
 import UserContext from './UserContext';
+import baseURL from '../helpers/constants';
 
 function ResetPassword({ loggedInUser, setLoggedInUser }) {
 
@@ -29,7 +30,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
         evt.preventDefault();
         try {
             let check = validatePasswords(passwordFormData.password, passwordFormData.confirmPassword);
-            let res = await axios.patch(`/employees/${employeeId}`,{password: passwordFormData.password,
+            let res = await axios.patch(`${baseURL}/employees/${employeeId}`,{password: passwordFormData.password,
             firstLogin: firstLogin})
             setPasswordFormData(INIT_STATE);
             console.log(res)

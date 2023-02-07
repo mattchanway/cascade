@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import cascadeLogo from '../assets/cascade_logo.png'
 import '../App.css';
+import baseURL from '../helpers/constants';
 
 
 function Login({ setLoggedInUser }) {
@@ -38,8 +39,9 @@ function Login({ setLoggedInUser }) {
         try {
 
             let { id, password } = loginFormData;
-
-            let res = await axios.post(`/auth/`, {
+            let totalUrl = `${baseURL}/auth`
+            console.log(totalUrl)
+            let res = await axios.post(totalUrl, {
                 id, password
             })
             if (res.data && res.data.employee_id) {

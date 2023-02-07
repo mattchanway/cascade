@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Image from 'react-bootstrap/Image';
 import Toast from 'react-bootstrap/Toast';
 import cascadeLogo from '../assets/cascade_logo.png'
+import baseURL from '../helpers/constants';
 
 function ForgotPasswordModalForm() {
 
@@ -44,7 +45,7 @@ function ForgotPasswordModalForm() {
 
             let { id } = passwordFormData;
 
-            let res = await axios.get(`/auth/password-token/${id}`);
+            let res = await axios.get(`${baseURL}/auth/password-token/${id}`);
             const resetLink = `http://localhost:3000/reset-password/${res.data.passwordToken}`;
             if(!res.data.email) throw new Error()
             setFeedbackEmail(res.data.email);

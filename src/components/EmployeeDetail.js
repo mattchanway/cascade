@@ -6,6 +6,7 @@ import Table from 'react-bootstrap/Table';
 import { useLocation, useParams, useNavigate, redirect, Navigate } from "react-router-dom";
 import axios from 'axios';
 import Login from './Login';
+import baseURL from '../helpers/constants';
 
 
 
@@ -23,7 +24,7 @@ function EmployeeDetail() {
 
         async function getEmployee() {
             try {
-                let res = await axios.get(`/employees/${id}`);
+                let res = await axios.get(`${baseURL}/employees/${id}`);
                 console.log(res.data)
                 setEmployee(res.data.userData);
                 setTimecardResults(res.data.timecardsData)

@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import ResourceErrorAlert from './ResourceErrorAlert';
+import baseURL from '../helpers/constants';
 
 function EmployeeForm({ edit, firstName, lastName, position, certification, start_date, address }) {
 
@@ -31,7 +32,7 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
 
         async function getPositionsAndCertifications() {
             try{
-            let res = await axios.get(`/employees/params`);
+            let res = await axios.get(`${baseURL}/employees/params`);
             setIsLoading(false);
             setCertificationOptions(res.data.certifications);
             setPositionOptions(res.data.positions);
@@ -52,10 +53,10 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
             let { first_name, last_name, email, position,
             certification, start_date, address} = employeeFormData;
 
-            let res = !edit ? await axios.post(`/employees`, {
+            let res = !edit ? await axios.post(`${baseURL}/employees`, {
                 first_name, last_name, email, position,
                 certification, start_date
-            }) : await axios.put(`/employees/${id}`, {
+            }) : await axios.put(`${baseURL}/employees/${id}`, {
                 first_name, last_name, email, position,
             certification, start_date
             })
