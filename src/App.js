@@ -26,7 +26,7 @@ import baseURL from './helpers/constants';
 
 function App() {
   axios.defaults.withCredentials = true;
-
+  console.log('BASEURL', baseURL)
 
   const [loggedInUser, setLoggedInUser] = useState({
     employeeId: null,
@@ -43,7 +43,7 @@ function App() {
     async function whoAmI() {
       try {
         let res = await axios.get(`${baseURL}/auth/whoami`);
-       
+
         if (res.data.noUser) setLoggedInUser({
           employeeId: null,
           position: null,
@@ -73,13 +73,13 @@ function App() {
 
   }, [])
 
- console.log(loggedInUser)
+  console.log(loggedInUser)
 
   if (loggedInUser.employeeId === null && loggedInUser.userNotFound === false) return (
     <Spinner></Spinner>
   )
 
-  
+
 
   return (
     <div className="App">
@@ -96,15 +96,15 @@ function App() {
             <Route path="/employees/:id" element={<EmployeeDetail></EmployeeDetail>} ></Route>
             <Route path="/employees" element={<Employees></Employees>} ></Route>
             <Route path="/admin" element={<Admin></Admin>}></Route>
-            <Route path="/admin/password" element={<ResetPasswordInternal  loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}></ResetPasswordInternal>} ></Route>
+            <Route path="/admin/password" element={<ResetPasswordInternal loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}></ResetPasswordInternal>} ></Route>
             <Route path="/reset-password/:token" element={<ForgotPasswordReset setLoggedInUser={setLoggedInUser}></ForgotPasswordReset>} ></Route>
             <Route path="/accounts/password/reset" element={<ForgotPasswordModalForm></ForgotPasswordModalForm>} ></Route>
           </Routes>
 
         </UserContext.Provider>
       </BrowserRouter>
-      
-    {/* <div id='footer-logo-wrapper'>
+
+      {/* <div id='footer-logo-wrapper'>
     <img id='footer-logo' src={noBgLogo}></img>
     </div> */}
     </div>
