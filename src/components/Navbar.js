@@ -10,7 +10,7 @@ import baseURL from '../helpers/constants';
 
 
 function Navibar({setLoggedInUser}) {
-
+    axios.defaults.withCredentials = true;
     const { employeeId, position, firstName, lastName } = useContext(UserContext);
     const navigate = useNavigate();
     const [isExpanded, setIsExpanded] = useState(false)
