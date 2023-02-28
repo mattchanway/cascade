@@ -28,11 +28,11 @@ function EmployeeDetail() {
                 console.log(res.data)
                 setEmployee(res.data.userData);
                 setTimecardResults(res.data.timecardsData)
-                setIsLoading(false);  
+                setIsLoading(false);
             }
             catch (e) {
-                
-                setIsUnauthorized(true);   
+
+                setIsUnauthorized(true);
             }
         }
         getEmployee();
@@ -60,8 +60,8 @@ function EmployeeDetail() {
 
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
-     }
-   
+    }
+
 
     if (isUnauthorized === false && isLoading === false) {
 
@@ -72,41 +72,41 @@ function EmployeeDetail() {
                 {employee && <h5>{employee.certification_name}</h5>}
                 {employee && <p>{employee.employee_id}</p>}
                 <h2>{timecardResults && timecardResults.length ? 'All Timecards - Last 30 Days' : 'No timecards in last 30 days'}</h2>
-                {timecardResults && timecardResults.length >0 &&
-                <Table responsive>
-                    <thead>
-                        <tr>
-                        <th>Timecard Date</th>
-                            <th>Job Number</th>
-                            <th>Job Name</th>
-                            <th>Reg Time</th>
-                            <th>Overtime</th>
-                            <th>Expenses</th>
-                            <th>Notes</th>
-                            <th>Submitted At</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {timecardResults.map(t =>
+                {timecardResults && timecardResults.length > 0 &&
+                    <Table responsive>
+                        <thead>
                             <tr>
-                                <td>{t.timecard_date.slice(0, 10)}</td>
-                                <td>{t.job_id}</td>
-                                <td>{t.job_name}</td>
-                                
-                                <td>{t.reg_time}</td>
-                                <td>{t.overtime}</td>
-                                <td>${t.expenses ? t.expenses : 0}</td>
-                                <td>{t.notes}</td>
-                                <td>{t.time_submitted}</td>
-                                
+                                <th>Timecard Date</th>
+                                <th>Job Number</th>
+                                <th>Job Name</th>
+                                <th>Reg Time</th>
+                                <th>Overtime</th>
+                                <th>Expenses</th>
+                                <th>Notes</th>
+                                <th>Submitted At</th>
+
                             </tr>
-                        )}
+                        </thead>
+                        <tbody>
+                            {timecardResults.map(t =>
+                                <tr>
+                                    <td>{t.timecard_date.slice(0, 10)}</td>
+                                    <td>{t.job_id}</td>
+                                    <td>{t.job_name}</td>
 
-                    </tbody>
+                                    <td>{t.reg_time}</td>
+                                    <td>{t.overtime}</td>
+                                    <td>${t.expenses}</td>
+                                    <td>{t.notes}</td>
+                                    <td>{t.time_submitted}</td>
 
-                </Table>}
-                
+                                </tr>
+                            )}
+
+                        </tbody>
+
+                    </Table>}
+
             </div>
         )
     }
