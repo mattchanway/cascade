@@ -96,7 +96,7 @@ function EmployeeDetail() {
 
                                     <td>{t.reg_time}</td>
                                     <td>{t.overtime}</td>
-                                    <td>{`$${t.expenses}`}</td>
+                                    <td>$0</td>
                                     <td>{t.notes}</td>
                                     <td>{t.time_submitted}</td>
 
