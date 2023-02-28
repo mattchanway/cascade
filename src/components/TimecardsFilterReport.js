@@ -15,9 +15,13 @@ function TimecardsFilterReport() {
 
     const { employeeId, position, userNotFound } = useContext(UserContext);
     const [timecardResults, setTimecardResults] = useState([]);
+    const [summaryResults, setSummaryResults] = useState({});
 
     function populatePage(data) {
-        setTimecardResults(data);
+        setSummaryResults(data.summary)
+        setTimecardResults(data.table);
+        
+       
 
     }
 
@@ -28,7 +32,7 @@ function TimecardsFilterReport() {
     return (
         <div>
             <TimecardsFilterReportForm populatePage={populatePage} ></TimecardsFilterReportForm>
-            {timecardResults.length >0 &&
+            {summaryResults && timecardResults.length >0 &&
                 <Table hover ={true} className='table' responsive>
                     <thead>
                         <tr>
@@ -64,6 +68,31 @@ function TimecardsFilterReport() {
                         )}
 
                     </tbody>
+                    <tfoot>
+                        <tr>
+                        <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>Regular Hours</b></td>
+                            <td><b>Overtime Hours</b></td>
+                            <td><b>Expenses</b></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>Totals</b></td>
+                            <td>{summaryResults.totalReg}</td>
+                            <td>{summaryResults.totalOT}</td>
+                            <td>${summaryResults.totalExp}</td>
+                            <td></td>
+                        </tr>
+
+                    </tfoot>
 
                 </Table>
             }
