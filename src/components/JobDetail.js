@@ -84,13 +84,14 @@ function JobDetail({ }) {
             <AddTimecardForm showForm={showForm} handleClose={handleClose} job={job}
         employeeId = {employeeId} handleShowToast={handleShowToast} ></AddTimecardForm>
 
-            <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
-      <Toast.Body>Timecard added!</Toast.Body>
-    </Toast>
+            
             {job && position === 3 && <InactiveWarning id={job.job_id} showInactiveWarning={showInactiveWarning} 
             handleCloseInactiveWarning= {handleCloseInactiveWarning}></InactiveWarning>}
             {job && position === 3 && <JobEditModal job={job} setShowJobEdit={setShowJobEdit}
             handleCloseJobEdit={handleCloseJobEdit} showJobEdit={showJobEdit}></JobEditModal>}
+            <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
+      <Toast.Body>Timecard added!</Toast.Body>
+    </Toast>
         </div>
 
     )

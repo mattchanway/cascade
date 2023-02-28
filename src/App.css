@@ -169,13 +169,13 @@ select {
 
 
 
-@media (max-width: 570px) {
+@media (max-width: 700px) {
   #login-form {
     width: 90%;
 
   }
 
-  #job-list {
+  .job-list {
     width: 90%;
     margin: auto;
     margin-top: 20px;

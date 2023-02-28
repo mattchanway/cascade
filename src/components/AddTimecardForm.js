@@ -113,7 +113,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                         <Form.Group className="mb-3" controlId="expensesInput">
                             <Form.Label>Expenses</Form.Label>
                             <Form.Control
-                                prefix="$"
+                                type="number"
                                
                                 name="expenses"
                                 value={timecardFormData.expenses}
