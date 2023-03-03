@@ -10,6 +10,7 @@ import baseURL from '../helpers/constants';
 
 function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, description, link }) {
 
+    const [serverError, setServerError] = useState(false);
     const { employeeId, position, firstName, lastName, userNotFound } = useContext(UserContext);
     const BTN_VAL = edit === true ? "Edit Job" : "Add New Job";
     const navigate = useNavigate();
@@ -46,6 +47,7 @@ function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, d
 
         }
         catch (e) {
+            setServerError(true)
         }
     }
 
@@ -62,6 +64,8 @@ function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, d
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
      }
+
+     if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
         <div>

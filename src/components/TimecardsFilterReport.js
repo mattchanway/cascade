@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import {Navigate} from 'react-router-dom';
+import React, { useContext, useState, useEffect, useRef } from 'react';
+import { Navigate } from 'react-router-dom';
 import UserContext from './UserContext';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -17,84 +17,95 @@ function TimecardsFilterReport() {
     const [timecardResults, setTimecardResults] = useState([]);
     const [summaryResults, setSummaryResults] = useState({});
 
+    const reportBottom = useRef();
+
     function populatePage(data) {
         setSummaryResults(data.summary)
         setTimecardResults(data.table);
-        
-       
+
+        // reportBottom.current.scrollIntoView({ behavior: "smooth" });
+    
 
     }
-
+    
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
-     }
+    }
+
+    if (position !== 3) {
+        return <Navigate to="/unauthorized" replace={false}></Navigate>
+    }
 
     return (
         <div>
             <TimecardsFilterReportForm populatePage={populatePage} ></TimecardsFilterReportForm>
-            {summaryResults && timecardResults.length >0 &&
-                <Table hover ={true} className='table' responsive>
-                    <thead>
-                        <tr>
-                            
-                            <th>Employee ID</th>
-                            <th>Employee Name</th>
-                            <th>Job Number</th>
-                            <th>Job Name</th>
-                            <th>Timecard Date</th>
-                            <th>Reg Time</th>
-                            <th>Overtime</th>
-                            <th>Expenses</th>
-                            <th>Notes</th>
-                            
-                           
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {timecardResults.map(t =>
+            {summaryResults && timecardResults.length > 0 &&
+
+                <div className='report-table-wrapper'>
+                    <Table hover={true} className='table' responsive>
+                        <thead>
                             <tr>
-                                <td>{t.employee_id}</td>
-                                <td>{`${t.first_name} ${t.last_name}`}</td>
-                                <td>{t.job_id}</td>
-                                <td>{t.job_name}</td>
-                                <td>{t.timecard_date.slice(0, 10)}</td>
-                                <td>{t.reg_time}</td>
-                                <td>{t.overtime}</td>
-                                <td>${t.expenses}</td>
-                                <td>{t.notes}</td>
-                               
-                              
+
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Job Number</th>
+                                <th>Job Name</th>
+                                <th>Timecard Date</th>
+                                <th>Reg Time</th>
+                                <th>Overtime</th>
+                                <th>Expenses</th>
+                                <th>Notes</th>
+
+
                             </tr>
-                        )}
+                        </thead>
+                        <tbody>
+                            {timecardResults.map(t =>
+                                <tr>
+                                    <td>{t.employee_id}</td>
+                                    <td>{`${t.first_name} ${t.last_name}`}</td>
+                                    <td>{t.job_id}</td>
+                                    <td>{t.job_name}</td>
+                                    <td>{t.timecard_date.slice(0, 10)}</td>
+                                    <td>{t.reg_time}</td>
+                                    <td>{t.overtime}</td>
+                                    <td>${t.expenses}</td>
+                                    <td>{t.notes}</td>
 
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                        <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><b>Regular Hours</b></td>
-                            <td><b>Overtime Hours</b></td>
-                            <td><b>Expenses</b></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><b>Totals</b></td>
-                            <td>{summaryResults.totalReg}</td>
-                            <td>{summaryResults.totalOT}</td>
-                            <td>${summaryResults.totalExp}</td>
-                            <td></td>
-                        </tr>
 
-                    </tfoot>
+                                </tr>
+                            )}
 
-                </Table>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><b>Regular Hours</b></td>
+                                <td><b>Overtime Hours</b></td>
+                                <td><b>Expenses</b></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><b>Totals</b></td>
+                                <td>{summaryResults.totalReg}</td>
+                                <td>{summaryResults.totalOT}</td>
+                                <td>${summaryResults.totalExp}</td>
+                                <td></td>
+                            </tr>
+
+                        </tfoot>
+
+                    </Table>
+                    {/* <div ref={reportBottom}></div> */}
+                </div>
             }
 
 
@@ -102,12 +113,6 @@ function TimecardsFilterReport() {
 
     )
 
-    {
-        timecardResults && timecardResults.map(t => <TimecardPreview timecard_id={t.timecard_id}
-            job_id={t.job_id} employee_id={t.employee_id} timecard_date={t.timecard_date}
-            reg_time={t.reg_time} overtime={t.overtime} notes={t.notes} expenses={t.expenses} time_submitted={t.time_submitted}
-            location_submitted={t.location_submitted} ></TimecardPreview>)
-    }
 
 
 

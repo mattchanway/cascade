@@ -11,16 +11,22 @@ import baseURL from '../helpers/constants';
 
 
 function Employees() {
-
+    const [serverError, setServerError] = useState(false);
     const [employees, setEmployees] = useState([]);
     const { employeeId, position, userNotFound } = useContext(UserContext);
 
     useEffect(() => {
 
         async function getEmployees() {
+
+            try{
             let res = await axios.get(`${baseURL}/employees`);
-            console.log(res)
+           
             setEmployees(res.data);
+            }
+            catch(e){
+               
+            }
         }
         getEmployees();
 
@@ -29,6 +35,8 @@ function Employees() {
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
      }
+
+     if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
         <div>

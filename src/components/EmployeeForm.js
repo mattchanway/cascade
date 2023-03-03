@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import UserContext from './UserContext';
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, Link, useParams, Navigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
@@ -9,7 +9,7 @@ import baseURL from '../helpers/constants';
 
 function EmployeeForm({ edit, firstName, lastName, position, certification, start_date, address }) {
 
-
+    const [serverError, setServerError] = useState(false);
     const BTN_VAL = edit === true ? "Edit Employee" : "Add New Employee";
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +19,7 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
 
     const INIT_STATE = edit !== true ? {
         first_name: '', last_name: '', email:'', position: '',
-        certification: '', start_date: null
+        certification: '', start_date: ''
     } : {
         firstName, lastName, email:'', position, certification, start_date, address
     }
@@ -39,7 +39,7 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
             }
             
             catch(e){
-             console.log(e)
+             setServerError(true)
             }
 
         }
@@ -65,6 +65,7 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
 
         }
         catch (e) {
+            setServerError(true)
         }
     }
 
@@ -84,7 +85,7 @@ function EmployeeForm({ edit, firstName, lastName, position, certification, star
         </div>
     )
 
-
+    if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
         <div>

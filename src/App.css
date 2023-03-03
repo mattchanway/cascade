@@ -14,12 +14,32 @@ h1 {
   pointer-events: none;
 }
 
+.table-responsive{
+
+ margin-top: 20px;
+}
+
+
+
 #login-form-container {
   background-color: #fafbfc;
 
   overflow: auto;
 
 
+}
+
+.report-table-wrapper{
+  background-color: #fafbfc;
+  
+}
+
+.form-control{
+  background-color: #fafbfc;
+}
+
+.form-label{
+  float: left;
 }
 
 .buttons {
@@ -32,6 +52,14 @@ h1 {
   margin: auto;
   margin-top: 20px;
 
+}
+
+#from-date-input{
+  width: 100%;
+}
+
+#to-date-input{
+  width: 100%;
 }
 
 .cutout {
@@ -99,6 +127,10 @@ h1 {
 .report {
   width: 60%;
   margin: auto;
+  background-color: white;
+  padding: 15px;
+  border-radius: 15px;
+  border: 0.1px solid #0076bd;
 }
 
 .loader {
@@ -186,6 +218,11 @@ select {
     margin: auto;
     margin-top: 20px;
 
+  }
+
+  .report {
+    width: 90%;
+    margin: auto;
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import {redirect} from 'react-router-dom';
+import { redirect, Navigate } from 'react-router-dom';
 import UserContext from './UserContext';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -12,14 +12,14 @@ import baseURL from '../helpers/constants';
 
 
 
-function TimecardsFilterReportForm({populatePage}) {
- 
+function TimecardsFilterReportForm({ populatePage }) {
+
     const { employeeId, position, userNotFound } = useContext(UserContext);
 
     let INIT_STATE = {
         fromDate: '', toDate: '', employeeId: '', jobId: '', overtime: false
     };
-
+    const [serverError, setServerError] = useState(false);
     const [timecardReportFormData, setTimecardReportFormData] = useState(INIT_STATE);
     const [jobsDropdownData, setJobsDropdownData] = useState([]);
     const [employeeDropDownData, setEmployeeDropdownData] = useState([]);
@@ -28,10 +28,16 @@ function TimecardsFilterReportForm({populatePage}) {
     useEffect(() => {
 
         async function getJobsAndEmployees() {
-            let res = await axios.get(`${baseURL}/timecards/form-populate`);
+            try {
+                let res = await axios.get(`${baseURL}/timecards/form-populate`);
 
-            setJobsDropdownData(res.data.jobs);
-            setEmployeeDropdownData(res.data.employees);
+                setJobsDropdownData(res.data.jobs);
+                setEmployeeDropdownData(res.data.employees);
+            }
+            catch (e) {
+
+                setServerError(true);
+            }
         }
         getJobsAndEmployees();
 
@@ -40,76 +46,78 @@ function TimecardsFilterReportForm({populatePage}) {
     async function handleReportSubmit(evt) {
         evt.preventDefault();
         try {
-           
+
             let { fromDate, toDate, employeeId, jobId, overtime } = timecardReportFormData;
             if (jobId.length === 0) jobId = null;
             if (employeeId.length === 0) employeeId = null;
             if (fromDate === '') fromDate = undefined;
             if (toDate === '') toDate = undefined;
-           
+
             let res = await axios.get(`${baseURL}/timecards/filter`, {
                 params: {
                     fromDate, toDate, employeeId, jobId, overtime
                 }
             })
-            console.log(res.data)
+
             populatePage(res.data)
         }
         catch (e) {
-            console.log(e);
+            setServerError(true);
         }
 
     }
 
     const handleChange = evt => {
-     
+
         const { name, value } = evt.target;
         setTimecardReportFormData(fData => ({
             ...fData,
             [name]: value
         }))
         console.log(timecardReportFormData)
-        
+
 
 
     }
 
 
 
-
+    if (serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
         <div>
             <h1>Employee Timecard Report</h1>
 
-            
+
             <Form className='report' onSubmit={handleReportSubmit}>
-           
+
                 <Form.Group className="mb-3" controlId="from-date-input">
-                    <Form.Label className='date-caution'>From Date must be YYYY-MM-DD</Form.Label>
+                    <Form.Label >From Date</Form.Label>
                     <Form.Control
                         required
-                        
+
                         name="fromDate"
                         value={timecardReportFormData.fromDate}
                         onChange={handleChange}
+                        onKeyDown={(e) => { e.preventDefault() }}
                         type="date"
                         autoFocus
                     />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="to-date-input">
-                    <Form.Label className='date-caution'>To Date must be YYYY-MM-DD</Form.Label>
+                    <Form.Label>To Date</Form.Label>
                     <Form.Control
                         required
                         name="toDate"
                         value={timecardReportFormData.toDate}
-
+                        onKeyDown={(e) => { e.preventDefault() }}
                         onChange={handleChange}
                         type="date"
                         autoFocus
                     />
                 </Form.Group>
-                <Form.Group >
+                <Form.Group className="mb-3" >
+                    <Form.Label>Employee</Form.Label>
                     <Form.Control
                         as="select"
                         name="employeeId"
@@ -121,7 +129,8 @@ function TimecardsFilterReportForm({populatePage}) {
                     </Form.Control>
 
                 </Form.Group>
-                <Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Job Site</Form.Label>
                     <Form.Control
                         as="select"
                         name="jobId"

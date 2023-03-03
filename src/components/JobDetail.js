@@ -16,7 +16,7 @@ import baseURL from '../helpers/constants';
 
 function JobDetail({ }) {
     
-
+    const [serverError, setServerError] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const [showInvalidAlert, setShowInvalidAlert] = useState(false);
     const handleClose = () => setShowForm(false);
@@ -39,19 +39,25 @@ function JobDetail({ }) {
     useEffect(() => {
 
         async function getJob() {
+            try{
             let res = await axios.get(`${baseURL}/jobs/${id}`);
 
-            setJob(res.data);
+            setJob(res.data);}
+            catch(e){
+                setServerError(true)
+            }
         }
         getJob();
 
     }, [])
 
 
-
+   
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
      }
+
+     if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
         <div className='job-list-container'>
@@ -63,6 +69,7 @@ function JobDetail({ }) {
         {job.job_address_street_unit !== null && job.job_address_street_unit}
         <br></br>{job.job_address_street_city}
         <br></br>{job.job_description}<br></br>
+        </Card.Text>
         <ButtonGroup>
             
         <Button target="_blank" variant="outline-primary" href={job.shop_docs_link}>See Shop Docs</Button>
@@ -76,22 +83,22 @@ function JobDetail({ }) {
             <Button  variant="outline-warning" onClick={handleShowJobEdit}>Edit Job Details</Button>
             </ButtonGroup>}
       
-        </Card.Text>
+        
             </Card.Body>
 
             </Card>}
             
             <AddTimecardForm showForm={showForm} handleClose={handleClose} job={job}
         employeeId = {employeeId} handleShowToast={handleShowToast} ></AddTimecardForm>
-
+         <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
+      <Toast.Body>Timecard added!</Toast.Body>
+    </Toast>
             
             {job && position === 3 && <InactiveWarning id={job.job_id} showInactiveWarning={showInactiveWarning} 
             handleCloseInactiveWarning= {handleCloseInactiveWarning}></InactiveWarning>}
             {job && position === 3 && <JobEditModal job={job} setShowJobEdit={setShowJobEdit}
             handleCloseJobEdit={handleCloseJobEdit} showJobEdit={showJobEdit}></JobEditModal>}
-            <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
-      <Toast.Body>Timecard added!</Toast.Body>
-    </Toast>
+           
         </div>
 
     )

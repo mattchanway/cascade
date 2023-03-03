@@ -17,12 +17,10 @@ import Employees from './components/Employees';
 import ResetPasswordInternal from './components/ResetPasswordInternal';
 import ForgotPasswordReset from './components/ForgotPasswordReset';
 import ForgotPasswordModalForm from './components/ForgotPasswordModalForm';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col'
-import Container from 'react-bootstrap/Container'
-import noBgLogo from './assets/no_white_logo.png';
+import FourOhFour from './components/FourOhFour';
 import Spinner from './components/Spinner';
 import baseURL from './helpers/constants';
+import Unauthorized from './components/Unauthorized';
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -99,6 +97,8 @@ function App() {
             <Route path="/admin/password" element={<ResetPasswordInternal loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}></ResetPasswordInternal>} ></Route>
             <Route path="/reset-password/:token" element={<ForgotPasswordReset setLoggedInUser={setLoggedInUser}></ForgotPasswordReset>} ></Route>
             <Route path="/accounts/password/reset" element={<ForgotPasswordModalForm></ForgotPasswordModalForm>} ></Route>
+            <Route path="/404" element={<FourOhFour></FourOhFour>}></Route>
+            <Route path="/unauthorized" element={<Unauthorized></Unauthorized>}></Route>
           </Routes>
 
         </UserContext.Provider>

@@ -12,8 +12,7 @@ function Admin() {
         return <Navigate to="/login" replace={true}></Navigate>
      }
        
-      
-
+    
     return (
         <div>
             <h1>Admin</h1>

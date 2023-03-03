@@ -5,12 +5,13 @@ import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import baseURL from '../helpers/constants';
 
 
 function Navibar({setLoggedInUser}) {
     axios.defaults.withCredentials = true;
+    const [loggedOut, setLoggedOut] = useState(false)
     const { employeeId, position, firstName, lastName } = useContext(UserContext);
     const navigate = useNavigate();
     const [isExpanded, setIsExpanded] = useState(false)
@@ -19,6 +20,8 @@ function Navibar({setLoggedInUser}) {
   
 
     async function doLogout() {
+
+        
 
         await axios.post(`${baseURL}/auth/logout`);
         setLoggedInUser({
@@ -29,8 +32,10 @@ function Navibar({setLoggedInUser}) {
             userNotFound: true
           })
           setIsExpanded(false);
-         
+         setLoggedOut(true)
     }
+
+    // if(loggedOut === true) return <Navigate to="/login" replace={false}></Navigate>
 
     return (
         <Navbar sticky = "top" style={{backgroundColor:'#0076bd'}} expanded={isExpanded} variant="dark" expand={breakpoint} onToggle={()=> setIsExpanded(!isExpanded)}>

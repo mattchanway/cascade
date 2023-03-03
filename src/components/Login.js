@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Navigate} from 'react-router-dom';
 import axios from "axios";
 import ForgotPasswordModalForm from './ForgotPasswordModalForm';
 import Modal from 'react-bootstrap/Modal';
@@ -9,12 +9,12 @@ import Image from 'react-bootstrap/Image';
 import cascadeLogo from '../assets/cascade_logo.png'
 import '../App.css';
 import baseURL from '../helpers/constants';
-
+import Alert from 'react-bootstrap/Alert';
 
 function Login({ setLoggedInUser }) {
 
-   
-
+    const [serverError, setServerError] = useState(false);
+    const [passwordErrors, setPasswordErrors] = useState([]);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -40,10 +40,11 @@ function Login({ setLoggedInUser }) {
 
             let { id, password } = loginFormData;
             let totalUrl = `${baseURL}/auth`
-            console.log(totalUrl)
+           
             let res = await axios.post(totalUrl, {
                 id, password
             })
+         
             if (res.data && res.data.employee_id) {
                 setLoggedInUser({
                     employeeId: res.data.employee_id, position: res.data.position, firstName: res.data.first_name,
@@ -51,21 +52,24 @@ function Login({ setLoggedInUser }) {
                     userNotFound: false,
                     firstLogin: res.data.first_login
                 });
+                setPasswordErrors([])
                 navigate('/');
             }
             else {
-                alert('false');
+                setPasswordErrors(['Incorrect password or user not found.'])
+              
             }
         }
         catch (e) {
-            console.log(e);
+            setServerError(true);
+            
         }
 
     }
 
    
 
-
+if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
         <div id='login-form-container'>
@@ -96,16 +100,18 @@ function Login({ setLoggedInUser }) {
                 </Form.Group>
             <Button className='buttons' type="submit">Login</Button>
 
+            {passwordErrors && passwordErrors.map((err)=><Alert variant ="danger">{err}</Alert>)}
+
             </Form>
 
             <Button className='buttons' href="/accounts/password/reset">Forgot Password</Button>
-            <Modal
+            {/* <Modal
                 show={show}
                 onHide={handleClose}
             >
                 <ForgotPasswordModalForm handleClose={handleClose}></ForgotPasswordModalForm>
 
-            </Modal>
+            </Modal> */}
 
 
 

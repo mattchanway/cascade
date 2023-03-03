@@ -18,6 +18,7 @@ import baseURL from '../helpers/constants';
 function Jobs({ setLoggedInUser }) {
     const location = useLocation();
     const flash = location.state && location.state.message === 'success' ? true : false;
+    const [serverError, setServerError] = useState(false);
     const [jobs, setJobs] = useState([]);
     const { employeeId, userNotFound, firstName, lastName, firstLogin } = useContext(UserContext);
     const [jobAddedAlert, setJobAddedAlert] = useState(flash);
@@ -25,10 +26,16 @@ function Jobs({ setLoggedInUser }) {
     useEffect(() => {
 
         async function getJobs() {
+
+            try{
             
             let res = await axios.get(`${baseURL}/jobs`, { withCredentials: true });
             let newJobs = res.data.noUser ? [] : res.data;
-            setJobs(newJobs);
+            setJobs(newJobs);}
+
+            catch(e){
+                setServerError(true);
+            }
         }
         getJobs();
 
@@ -48,6 +55,8 @@ function Jobs({ setLoggedInUser }) {
     if (employeeId  && firstLogin === true) {
         return <Navigate to="/admin/password" replace={true}></Navigate>
      }
+
+     if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
         <div className='job-list-container'>

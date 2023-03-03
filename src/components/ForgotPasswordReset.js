@@ -7,7 +7,7 @@ import baseURL from '../helpers/constants';
 
 function ForgotPasswordReset({setLoggedInUser}) {
 
-
+    const [serverError, setServerError] = useState(false);
     const {token} = useParams();
     let navigate = useNavigate();
 
@@ -46,7 +46,7 @@ function ForgotPasswordReset({setLoggedInUser}) {
 
         }
         catch (e) {
-            console.log(e);
+            setServerError(true)
         }
 
     }

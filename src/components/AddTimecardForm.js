@@ -1,5 +1,6 @@
 
 import {React, useState} from 'react';
+import {Navigate} from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -11,7 +12,7 @@ import CurrencyInput from 'react-currency-input-field';
 import baseURL from '../helpers/constants';
 
 function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToast }) {
-
+    const [serverError, setServerError] = useState(false);
     const [formErrors, setFormErrors] = useState([]);
     const date = new Date();
     let isoStr = toISOLocal(date);
@@ -32,13 +33,19 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
             let res = await axios.post(`${baseURL}/timecards/`, {
                 job_id, employee_id, timecard_date, reg_time, overtime, expenses, notes
             })
+           
+            if(res.data && res.data.duplicateTimecard){
+                setFormErrors([...formErrors, 'You have already submitted a timecard for that date.'])
+            }
+            else{
+            setFormErrors([])
             setTimecardFormData(INIT_STATE);
             handleShowToast();
             handleClose();
-            
+            }
         }
         catch (e) {
-            console.log(e);
+            setServerError(true);
         }
 
     }
@@ -54,12 +61,13 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
 
     function validateFormData(evt) {
         evt.preventDefault();
-        let { timecard_date, reg_time, overtime, expenses } = timecardFormData;
+        let { timecard_date, reg_time, overtime, expenses, notes } = timecardFormData;
         let errors = [];
         if (typeof Date.parse(timecard_date) === NaN) errors.push("Please enter a valid date.")
         if (reg_time < 1 || reg_time > 8) errors.push("Regular time must be at least 1, and no more than 8.");
         if (overtime < 0) errors.push("Overtime cannot be a negative number.");
         if (expenses.length > 0 && isNaN(+expenses) === true) errors.push("Expenses must be blank, or a number(example: 7.50)");
+        if (notes.length > 200) errors.push("Notes must be 200 characters or less.")
 
         if (errors.length) {
             setFormErrors([...errors]);
@@ -70,6 +78,8 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
         }
     }
    
+
+    if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return(
         <Modal show={showForm} onHide={handleClose}>
@@ -85,7 +95,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
 
                                 name="timecard_date"
                                 value={timecardFormData.timecard_date}
-
+                                onKeyDown={(e)=> {e.preventDefault()}}
                                 onChange={handleChange}
                                 type="date"
                                 autoFocus
