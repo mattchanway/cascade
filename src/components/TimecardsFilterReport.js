@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Table from 'react-bootstrap/Table';
 import TimecardsFilterReportForm from './TimecardsFilterReportForm';
-import TimecardPreview from './TimecardPreview';
+import TimecardPreview from './MyTimecards';
 import Login from './Login';
 
 
@@ -17,14 +17,11 @@ function TimecardsFilterReport() {
     const [timecardResults, setTimecardResults] = useState([]);
     const [summaryResults, setSummaryResults] = useState({});
 
-    const reportBottom = useRef();
+
 
     function populatePage(data) {
         setSummaryResults(data.summary)
         setTimecardResults(data.table);
-
-        // reportBottom.current.scrollIntoView({ behavior: "smooth" });
-    
 
     }
     
@@ -35,6 +32,8 @@ function TimecardsFilterReport() {
     if (position !== 3) {
         return <Navigate to="/unauthorized" replace={false}></Navigate>
     }
+
+    
 
     return (
         <div>
@@ -69,7 +68,7 @@ function TimecardsFilterReport() {
                                     <td>{t.timecard_date.slice(0, 10)}</td>
                                     <td>{t.reg_time}</td>
                                     <td>{t.overtime}</td>
-                                    <td>${t.expenses}</td>
+                                    <td>{'$'+t.expenses.toFixed(2)}</td>
                                     <td>{t.notes}</td>
 
 
@@ -97,18 +96,17 @@ function TimecardsFilterReport() {
                                 <td><b>Totals</b></td>
                                 <td>{summaryResults.totalReg}</td>
                                 <td>{summaryResults.totalOT}</td>
-                                <td>${summaryResults.totalExp}</td>
+                                <td>{'$'+summaryResults.totalExp.toFixed(2)}</td>
                                 <td></td>
                             </tr>
 
                         </tfoot>
 
                     </Table>
-                    {/* <div ref={reportBottom}></div> */}
+                   
                 </div>
             }
-
-
+        
         </div>
 
     )

@@ -11,10 +11,12 @@ import baseURL from '../helpers/constants';
 
 function ForgotPasswordModalForm() {
 
-    const SERVICE_ID = 'service_oiiez3e';
+    const SERVICE_ID = 'service_uj3e4ws';
     const TEMPLATE_ID = 'template_l8jr3ja';
     const USER_ID = 'wZz95RyY_sSyuMVhA';
     const PUBLIC_KEY = 'wZz95RyY_sSyuMVhA';
+
+    const PASSWORD_RESET_BASEURL = process.env.NODE_ENV === 'production' ? 'https://cascademetaldesign.work' : 'http://localhost:3000'
 
 
     let INIT_STATE = {
@@ -46,7 +48,7 @@ function ForgotPasswordModalForm() {
             let { id } = passwordFormData;
 
             let res = await axios.get(`${baseURL}/auth/password-token/${id}`);
-            const resetLink = `http://localhost:3000/reset-password/${res.data.passwordToken}`;
+            const resetLink = `${PASSWORD_RESET_BASEURL}/reset-password/${res.data.passwordToken}`;
             if(!res.data.email) throw new Error()
             setFeedbackEmail(res.data.email);
             setShowToast(true);

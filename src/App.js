@@ -21,10 +21,11 @@ import FourOhFour from './components/FourOhFour';
 import Spinner from './components/Spinner';
 import baseURL from './helpers/constants';
 import Unauthorized from './components/Unauthorized';
+import MyTimecards from './components/MyTimecards';
 
 function App() {
   axios.defaults.withCredentials = true;
-  console.log('BASEURL', baseURL)
+  
 
   const [loggedInUser, setLoggedInUser] = useState({
     employeeId: null,
@@ -71,7 +72,7 @@ function App() {
 
   }, [])
 
-  console.log(loggedInUser)
+ 
 
   if (loggedInUser.employeeId === null && loggedInUser.userNotFound === false) return (
     <Spinner></Spinner>
@@ -98,6 +99,7 @@ function App() {
             <Route path="/reset-password/:token" element={<ForgotPasswordReset setLoggedInUser={setLoggedInUser}></ForgotPasswordReset>} ></Route>
             <Route path="/accounts/password/reset" element={<ForgotPasswordModalForm></ForgotPasswordModalForm>} ></Route>
             <Route path="/404" element={<FourOhFour></FourOhFour>}></Route>
+            <Route path="/my-profile" element={<MyTimecards></MyTimecards>}></Route>
             <Route path="/unauthorized" element={<Unauthorized></Unauthorized>}></Route>
           </Routes>
 

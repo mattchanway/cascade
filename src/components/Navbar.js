@@ -56,6 +56,7 @@ function Navibar({setLoggedInUser}) {
                 {position === 3 && <Nav.Link href="/admin">Admin</Nav.Link>}
                  
                 {position === 3 &&<Nav.Link href="/employees">Employees</Nav.Link>}
+                <Nav.Link href="/my-profile">My Timecards</Nav.Link>
                 {firstName && <Nav.Link onClick={doLogout}>Logout</Nav.Link>} 
                
                 

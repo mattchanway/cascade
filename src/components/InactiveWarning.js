@@ -3,14 +3,22 @@ import Button from 'react-bootstrap/Button';
 import { useNavigate } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
+import baseURL from '../helpers/constants';
 
-function InactiveWarning({ id,showInactiveWarning, handleCloseInactiveWarning }) {
+function InactiveWarning({ id,showInactiveWarning, handleCloseInactiveWarning, setServerError }) {
    
 
     async function makeJobInactive() {
-        // BACKEND ROUTE DOES NOT EXIST YET
-        // await axios.post(`/jobs/complete/${id}`)
-        alert(id)
+
+        try{
+        let res = await axios.patch(`${baseURL}/jobs/${id}`,{status:false});
+        handleCloseInactiveWarning();
+
+        }
+        catch(e){
+            setServerError(true);
+
+        }
     }
 
     return (

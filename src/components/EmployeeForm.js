@@ -4,7 +4,6 @@ import { useNavigate, Link, useParams, Navigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import ResourceErrorAlert from './ResourceErrorAlert';
 import baseURL from '../helpers/constants';
 
 function EmployeeForm({ edit, firstName, lastName, position, certification, start_date, address }) {

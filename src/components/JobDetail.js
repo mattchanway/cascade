@@ -94,7 +94,8 @@ function JobDetail({ }) {
       <Toast.Body>Timecard added!</Toast.Body>
     </Toast>
             
-            {job && position === 3 && <InactiveWarning id={job.job_id} showInactiveWarning={showInactiveWarning} 
+            {job && position === 3 && <InactiveWarning id={job.job_id} setServerError={setServerError} 
+            showInactiveWarning={showInactiveWarning} 
             handleCloseInactiveWarning= {handleCloseInactiveWarning}></InactiveWarning>}
             {job && position === 3 && <JobEditModal job={job} setShowJobEdit={setShowJobEdit}
             handleCloseJobEdit={handleCloseJobEdit} showJobEdit={showJobEdit}></JobEditModal>}

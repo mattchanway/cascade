@@ -12,7 +12,7 @@ import baseURL from '../helpers/constants';
 
 
 
-function TimecardsFilterReportForm({ populatePage }) {
+function TimecardsFilterReportForm({ populatePage, reportBottom }) {
 
     const { employeeId, position, userNotFound } = useContext(UserContext);
 

@@ -1,15 +1,18 @@
 import React, { useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import axios from "axios";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import baseURL from '../helpers/constants';
+import Alert from 'react-bootstrap/Alert';
 
 function ForgotPasswordReset({setLoggedInUser}) {
 
+    const [passwordErrors, setPasswordErrors] = useState([])
     const [serverError, setServerError] = useState(false);
     const {token} = useParams();
     let navigate = useNavigate();
+
 
 
     let INIT_STATE = {
@@ -26,11 +29,15 @@ function ForgotPasswordReset({setLoggedInUser}) {
         }))
     }
 
-    async function handlePasswordSubmit(password) {
+    async function handlePasswordSubmit(evt) {
        
         try {
-            let res = await axios.post(`${baseURL}/auth/password-forgotten-update/${token}`, {password});
-            console.log('SUBMIT RESP', res.data)
+            evt.preventDefault();
+            let check = validatePasswords(passwordFormData.password, passwordFormData.confirmPassword);
+
+            if(check === true){
+            let res = await axios.post(`${baseURL}/auth/password-forgotten-update/${token}`, {password: passwordFormData.password});
+            
             setLoggedInUser({employeeId: res.data.employee_id,
                 position: res.data.position,
                 firstName: res.data.first_name,
@@ -38,11 +45,8 @@ function ForgotPasswordReset({setLoggedInUser}) {
                 userNotFound: false,
                 firstLogin: res.data.first_login});
             navigate('/');
-
-            // post to "/password-update/:token"
-            // useParams - should make one call to server upon page load to check that token is still valid,
-            // if not, can redirect to 404 page. then, if valid, will validate token again.
-
+                setPasswordErrors([])
+            }
 
         }
         catch (e) {
@@ -51,22 +55,30 @@ function ForgotPasswordReset({setLoggedInUser}) {
 
     }
 
-    function validatePasswords(evt) {
-        evt.preventDefault();
-        let { password, confirmPassword } = passwordFormData;
-        if (password !== confirmPassword) {alert('no');}
-        else{
-        handlePasswordSubmit(password);
+    function validatePasswords(str1, str2) {
+        
+        if (str1 !== str2) {
+            let passwordsDontMatchError = 'Passwords do not match.';
+                setPasswordErrors([passwordsDontMatchError])
+            return false;}
+        if(str1 === str2 && str1.length < 8){
+            let shortError = 'Password must be at least 8 characters';
+                setPasswordErrors([shortError])
+            return false;
+
         }
+        
+        return true
 
 
     }
 
-
-
+    
+    if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
-        <Form onSubmit={validatePasswords}>
+        <Form onSubmit={handlePasswordSubmit}>
+            {passwordErrors && passwordErrors.map((err)=><Alert variant ="danger">{err}</Alert>)}
             <Form.Group className="mb-3" controlId="expensesInput">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
