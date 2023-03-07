@@ -3,11 +3,12 @@ import axios from "axios";
 import Form from 'react-bootstrap/Form';
 import emailjs from '@emailjs/browser';
 import Button from 'react-bootstrap/Button';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import Image from 'react-bootstrap/Image';
 import Toast from 'react-bootstrap/Toast';
 import cascadeLogo from '../assets/cascade_logo.png'
 import baseURL from '../helpers/constants';
+import Alert from 'react-bootstrap/Alert';
 
 function ForgotPasswordModalForm() {
 
@@ -15,6 +16,8 @@ function ForgotPasswordModalForm() {
     const TEMPLATE_ID = 'template_l8jr3ja';
     const USER_ID = 'wZz95RyY_sSyuMVhA';
     const PUBLIC_KEY = 'wZz95RyY_sSyuMVhA';
+    const [serverError, setServerError] = useState(false);
+    const [formErrors, setFormErrors] = useState([])
 
     const PASSWORD_RESET_BASEURL = process.env.NODE_ENV === 'production' ? 'https://cascademetaldesign.work' : 'http://localhost:3000'
 
@@ -47,26 +50,31 @@ function ForgotPasswordModalForm() {
 
             let { id } = passwordFormData;
 
-            let res = await axios.get(`${baseURL}/auth/password-token/${id}`);
+            let res = await axios.post(`${baseURL}/auth/password-token/${id}`);
+          
+            if(res.data.userNotFound){
+                setFormErrors(['No user exists with that ID.']);
+            }
+            else{
             const resetLink = `${PASSWORD_RESET_BASEURL}/reset-password/${res.data.passwordToken}`;
-            if(!res.data.email) throw new Error()
+            setFormErrors([])
             setFeedbackEmail(res.data.email);
             setShowToast(true);
             let TEMPLATE_PARAMS = { resetLink: resetLink, userEmail: res.data.email };
           
-            emailjs.send(SERVICE_ID, TEMPLATE_ID, TEMPLATE_PARAMS, PUBLIC_KEY).then(function (res) {
-                console.log(res.status, res.text)
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, TEMPLATE_PARAMS, PUBLIC_KEY);
 
-            })
             setPasswordFormData(INIT_STATE);
+            }
             
         }
         catch (e) {
-            console.log('Bad request - no user found');
+            setServerError(true)
         }
 
     }
 
+    if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
     
     return (
 
@@ -74,6 +82,7 @@ function ForgotPasswordModalForm() {
             <p>Enter employee ID to receive password reset link</p>
             
             <Form onSubmit={handleIdSubmit} id='login-form'>
+            {formErrors &&  formErrors.map((e)=> <Alert variant="danger">{e}</Alert>)}
             <Image id="test" src={cascadeLogo} fluid="true"></Image>
                 
                 <Form.Group className = "mb-3">
