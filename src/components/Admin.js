@@ -11,6 +11,10 @@ function Admin() {
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
      }
+
+     if (employeeId !== null && position === 3) {
+        return <Navigate to="/unauthorized" replace={true}></Navigate>
+     }
        
     
     return (
