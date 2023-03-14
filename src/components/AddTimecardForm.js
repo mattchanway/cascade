@@ -25,6 +25,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
     const [timecardFormData, setTimecardFormData] = useState(INIT_STATE);
 
     async function handleTimecardSubmit(evt) {
+        console.log('its here', timecardFormData)
 
         try {
             let job_id = job.job_id;
@@ -51,11 +52,14 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
     }
 
     const handleChange = evt => {
+        console.log('change', timecardFormData)
         const { name, value } = evt.target;
         setTimecardFormData(fData => ({
             ...fData,
             [name]: value
         }))
+        
+       
 
     }
 
@@ -101,9 +105,10 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                                 autoFocus
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="regTimeInput" data-testid="regTimeInput">
+                        <Form.Group className="mb-3" controlId="regTimeInput" >
                             <Form.Label>Reg Time</Form.Label>
                             <Form.Control
+                                data-testid="regTimeInput"
                                 type="number"
                                 name="reg_time"
                                 value={timecardFormData.reg_time}
@@ -111,20 +116,21 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                                 autoFocus
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="overtimeInput" data-testid="overtimeInput">
+                        <Form.Group className="mb-3" controlId="overtimeInput" >
                             <Form.Label>Overtime</Form.Label>
                             <Form.Control
+                                data-testid="overtimeInput"
                                 type="number"
                                 name="overtime"
                                 value={timecardFormData.overtime}
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="expensesInput" data-testid="expensesInput">
+                        <Form.Group className="mb-3" controlId="expensesInput" >
                             <Form.Label>Expenses</Form.Label>
                             <Form.Control
                                 type="number"
-                               
+                                data-testid="expensesInput"
                                 name="expenses"
                                 value={timecardFormData.expenses}
                                 onChange={handleChange}

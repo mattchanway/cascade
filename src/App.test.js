@@ -401,7 +401,7 @@ it('Shows the job detail when the employee accesses', async () => {
       });
 
     expect(screen.getByText(/69 Sewage St/)).toBeInTheDocument();
-
+    const user = userEvent.setup()
     await act(async () => {
 
         let showTimecardBtn = screen.getByTestId('showAddTimecardForm');
@@ -417,10 +417,12 @@ it('Shows the job detail when the employee accesses', async () => {
         let overtimeInput = screen.getByTestId('overtimeInput');
         let expensesInput = screen.getByTestId('expensesInput');
         let submitBtn = screen.getByTestId('submitTimecardButton');
-        userEvent.type(regTimeInput, 8);
-        userEvent.type(overtimeInput, 0);
-        userEvent.type(expensesInput, 0);
-        userEvent.click(submitBtn);
+        console.log(regTimeInput.value)
+         await user.type(regTimeInput, 8);
+         console.log('again',regTimeInput.value)
+     await user.type(overtimeInput, 0);
+        await user.type(expensesInput, 0);
+        await user.click(submitBtn);
       });
 
       expect(screen.getByText(/Timecard added for Sewage Plant/)).toBeInTheDocument()
