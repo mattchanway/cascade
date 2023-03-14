@@ -33,7 +33,7 @@ function TimecardsFilterReportForm() {
         async function getJobsAndEmployees() {
             try {
                 let res = await axios.get(`${baseURL}/timecards/form-populate`);
-
+             
                 setJobsDropdownData(res.data.jobs);
                 setEmployeeDropdownData(res.data.employees);
             }
@@ -87,6 +87,7 @@ function TimecardsFilterReportForm() {
     }
 
     if (position !== 3) {
+       
         return <Navigate to="/unauthorized" replace={false}></Navigate>
     }
 
