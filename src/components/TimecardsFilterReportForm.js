@@ -47,6 +47,7 @@ function TimecardsFilterReportForm() {
     }, [])
 
     async function handleReportSubmit(evt) {
+       
         evt.preventDefault();
         try {
 
@@ -150,7 +151,7 @@ function TimecardsFilterReportForm() {
 
                 </Form.Group>
 
-                <Button variant="primary" type="submit">Search</Button>
+                <Button variant="primary" type="submit" data-testid='reportSubmit'>Search</Button>
 
             </Form>
             {timecardResults.length > 0 && <TimecardsFilterReportResults timecardResults={timecardResults} summaryResults={summaryResults}></TimecardsFilterReportResults>}

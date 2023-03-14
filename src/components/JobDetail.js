@@ -73,7 +73,7 @@ function JobDetail({ }) {
         <ButtonGroup>
             
         <Button target="_blank" variant="outline-primary" href={job.shop_docs_link}>See Shop Docs</Button>
-        <Button variant="outline-primary" onClick={handleShow}>
+        <Button variant="outline-primary" onClick={handleShow} data-testid='showAddTimecardForm'>
                 New Timecard
             </Button>
           

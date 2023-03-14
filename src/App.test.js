@@ -9,6 +9,10 @@ import Admin from './components/Admin';
 import EmployeeDetail from './components/EmployeeDetail';
 import TimecardsFilterReport from './components/TimecardsFilterReport';
 import TimecardsFilterReportForm from './components/TimecardsFilterReportForm';
+import baseURL from './helpers/constants';
+import userEvent from '@testing-library/user-event';
+import Navibar from './components/Navbar';
+import JobDetail from './components/JobDetail';
 
 jest.mock('axios')
 
@@ -212,92 +216,213 @@ it('Shows the appropriate jobs and employees when managers are preparing reports
 })
 
 
-// it('Shows the appropriate timecards report', async () => {
+it('Shows the appropriate timecards report', async () => {
+    const mockManager = {
+        employeeId: 1,
+            position: 3,
+            firstName: 'Shawn',
+            lastName: 'Rostas',
+            userNotFound: false,
+            firstLogin: false
+    }
 
-//     const mockManager = {data: {
-//         employeeId: 1,
-//             position: 3,
-//             firstName: 'Shawn',
-//             lastName: 'Rostas',
-//             userNotFound: false,
-//             firstLogin: false
-//     }}
+    const mockParams = {
+        jobs: [{
+            job_id: 'A1',
+            job_name: 'Sewage'
+        },
+        {
+            job_id: 'A2',
+            job_name: 'Candy Store'
+        }
+    ],
+        employees: [{
+            employee_id: 25,
+            first_name: 'Bud',
+            last_name: 'Gormley'
+        },
+            {
+                employee_id: 26,
+                first_name: 'Tad',
+                last_name: 'Gormley'
 
-//     const mockParams = {
-//         jobs: [{
-//             job_id: 'A1',
-//             job_name: 'Sewage'
-//         },
-//         {
-//             job_id: 'A2',
-//             job_name: 'Candy Store'
-//         }
-//     ],
-//         employees: [{
-//             employee_id: 25,
-//             first_name: 'Bud',
-//             last_name: 'Gormley'
-//         },
-//             {
-//                 employee_id: 26,
-//                 first_name: 'Tad',
-//                 last_name: 'Gormley'
+            }
+        ] }
 
-//             }
-//         ] }
+    const mockTimecards = {
+        table: [{
+            job_id: 'A1',
+            job_name: 'Sewage',
+            employee_id: 25,
+            timecard_date: '2023-01-01',
+            reg_time: 8,
+            overtime: 0,
+            expenses: 1.0,
+            notes: 'Stubbed my toe'
+        },
+        {
+            job_id: 'A1',
+            job_name: 'Sewage',
+            employee_id: 25,
+            timecard_date: '2023-01-02',
+            reg_time: 8,
+            overtime: 0,
+            expenses: 0,
+            notes: 'Toe is doing better'
+        }
+    ],
+        summary: {
+            totalReg: 16,
+            totalOT: 0,
+            totalExp: 1
+        }  
+         }
 
-//     const mockTimecards = {
-//         table: [{
-//             job_id: 'A1',
-//             job_name: 'Sewage',
-//             employee_id: 25,
-//             timecard_date: '2023-01-01',
-//             reg_time: 8,
-//             overtime: 0,
-//             expenses: 1.0,
-//             notes: 'Stubbed my toe'
-//         },
-//         {
-//             job_id: 'A1',
-//             job_name: 'Sewage',
-//             employee_id: 25,
-//             timecard_date: '2023-01-02',
-//             reg_time: 8,
-//             overtime: 0,
-//             expenses: 0,
-//             notes: 'Toe is doing better'
-//         }
-//     ],
-//         summary: {
-//             totalReg: 16,
-//             totalOT: 0,
-//             totalExp: 1
-//         }  
-//          }
-
-//          let popPage = jest.fn(() => mockTimecards )
+         axios.get.mockImplementation((url) =>{
+            switch(url){
+                case `${baseURL}/timecards/filter`:
+                    return Promise.resolve({data: mockTimecards})
+                case `${baseURL}/timecards/form-populate`:
+                    return Promise.resolve({data: mockParams})
+            }
+         }
+         )
+    axios.get(`${baseURL}/timecards/form-populate`)
+   
     
-//          axios.get = jest.fn().mockResolvedValueOnce({data : mockParams})
-
-//     axios.get = jest.fn().mockResolvedValueOnce({data : mockTimecards})
-
-  
-
-  
-//     await act(async () => {
         
-//         render(
-//             <BrowserRouter>
-//         <UserContext.Provider value={mockManager}>
-//             <TimecardsFilterReportForm populatePage={popPage}>
+        render(
+            <BrowserRouter>
+        <UserContext.Provider value={mockManager}>
+            <TimecardsFilterReportForm>
       
-//             </TimecardsFilterReportForm>
-//         </UserContext.Provider>
-//         </BrowserRouter>
-//         )
-        
-//       });
-//     expect(screen.getByText(/Candy/)).toBeInTheDocument();
-//     expect(screen.getByText(/Tad/)).toBeInTheDocument();
+            </TimecardsFilterReportForm>
+        </UserContext.Provider>
+        </BrowserRouter>
+        ) 
+    
+   
+    await act(async () => {
+        axios.get(`${baseURL}/timecards/filter`)
+        let submitBtn = screen.getByTestId('reportSubmit')
+        userEvent.click(submitBtn)
+       
+    
+      });
+      
+    expect(screen.getByText(/Candy/)).toBeInTheDocument();
+    expect(screen.getByText(/Tad/)).toBeInTheDocument();
+    expect(screen.getByText(/Toe/)).toBeInTheDocument();
+    expect(screen.getByText(/2023-01-01/)).toBeInTheDocument();
 
-// })
+})
+
+it('Shows the admin navbar when the manager accesses', async () => {
+
+    const mockUser =  {
+        employeeId: 1,
+            position: 3,
+            firstName: 'Shawn',
+            lastName: 'Rostas',
+            userNotFound: false,
+            firstLogin: false
+    }
+    await act(async () => {
+        
+        render(
+            <BrowserRouter>
+        <UserContext.Provider value={mockUser}>
+           <Navibar></Navibar>
+        </UserContext.Provider>
+        </BrowserRouter>
+        )
+        
+      });
+    expect(screen.getByText(/Report/)).toBeInTheDocument();
+    expect(screen.getByText(/Employees/)).toBeInTheDocument();
+
+})
+
+it('Shows the employee navbar when the employee accesses', async () => {
+
+    const mockUser =  {
+        employeeId: 1,
+            position: 1,
+            firstName: 'Bub',
+            lastName: 'Jones',
+            userNotFound: false,
+            firstLogin: false
+    }
+    await act(async () => {
+        
+        render(
+            <BrowserRouter>
+        <UserContext.Provider value={mockUser}>
+           <Navibar></Navibar>
+        </UserContext.Provider>
+        </BrowserRouter>
+        )
+        
+      });
+      expect(screen.queryByText(/Report/)).toBeNull()
+    expect(screen.queryByText(/Employees/)).toBeNull()
+    expect(screen.getByText(/All Jobs/)).toBeInTheDocument();
+})
+
+it('Shows the job detail when the employee accesses', async () => {
+
+    const mockUser = {
+        employeeId: 1,
+            position: 1,
+            firstName: 'Bud',
+            lastName: 'Gomley',
+            userNotFound: false,
+            firstLogin: false
+    }
+    const mockJob = {
+            job_id: '123abc',
+            job_name: 'Sewage Plant',
+            job_address_street_line1: '69 Sewage St',
+            job_address_street_unit: '#69',
+            job_address_street_city: 'Sewerland',
+            job_description: 'Clean up'
+       }
+
+    axios.get = jest.fn().mockResolvedValue({data : mockJob})
+    await act(async () => {
+        
+        render(
+            <MemoryRouter initialEntries={["/jobs/123abc"]}>
+        <UserContext.Provider value={mockUser}>
+            <JobDetail></JobDetail>
+        </UserContext.Provider>
+        </MemoryRouter>
+        )
+      });
+
+    expect(screen.getByText(/69 Sewage St/)).toBeInTheDocument();
+
+    await act(async () => {
+
+        let showTimecardBtn = screen.getByTestId('showAddTimecardForm');
+        userEvent.click(showTimecardBtn);
+      });
+
+      expect(screen.getByText(/Reg Time/)).toBeInTheDocument();
+      expect(screen.getByText(/New Timecard: Sewage Plant 123abc/)).toBeInTheDocument();
+
+      await act(async () => {
+
+        let regTimeInput = screen.getByTestId('regTimeInput');
+        let overtimeInput = screen.getByTestId('overtimeInput');
+        let expensesInput = screen.getByTestId('expensesInput');
+        let submitBtn = screen.getByTestId('submitTimecardButton');
+        userEvent.type(regTimeInput, 8);
+        userEvent.type(overtimeInput, 0);
+        userEvent.type(expensesInput, 0);
+        userEvent.click(submitBtn);
+      });
+
+      expect(screen.getByText(/Timecard added for Sewage Plant/)).toBeInTheDocument()
+      
+})

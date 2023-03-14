@@ -101,7 +101,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                                 autoFocus
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="regTimeInput">
+                        <Form.Group className="mb-3" controlId="regTimeInput" data-testid="regTimeInput">
                             <Form.Label>Reg Time</Form.Label>
                             <Form.Control
                                 type="number"
@@ -111,7 +111,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                                 autoFocus
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="overtimeInput">
+                        <Form.Group className="mb-3" controlId="overtimeInput" data-testid="overtimeInput">
                             <Form.Label>Overtime</Form.Label>
                             <Form.Control
                                 type="number"
@@ -120,7 +120,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="expensesInput">
+                        <Form.Group className="mb-3" controlId="expensesInput" data-testid="expensesInput">
                             <Form.Label>Expenses</Form.Label>
                             <Form.Control
                                 type="number"
@@ -130,7 +130,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="notesInput">
+                        <Form.Group className="mb-3" controlId="notesInput" >
                             <Form.Label>Notes</Form.Label>
                             <Form.Control
                                 as="textarea"
@@ -141,7 +141,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Button variant="primary" type="submit">Submit Timecard</Button>
+                        <Button variant="primary" type="submit" data-testid="submitTimecardButton">Submit Timecard</Button>
                     </Form>
 
                 </Modal.Body>
