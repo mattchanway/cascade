@@ -69,7 +69,7 @@ function Jobs({ setLoggedInUser }) {
            
             {jobs && <ListGroup as="ul" className="job-list">
 
-                {jobs.map((j) => <ListGroup.Item className='jobs-listgroup' action href={`/jobs/${j.job_id}`}>
+                {jobs.map((j) => <ListGroup.Item className='jobs-listgroup' action href={`/jobs/${j.job_id}`} key={j.job_id} >
                     <Container>
                         <Row className="align-items-center">
                         <Col className='badge-col' xs={2}><BadgeIcon fontSize='medium' className='jobs-arrowcircle'></BadgeIcon></Col>

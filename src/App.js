@@ -7,6 +7,7 @@ import UserContext from './components/UserContext';
 import JobDetail from './components/JobDetail';
 import Navibar from './components/Navbar';
 import TimecardsFilterReport from './components/TimecardsFilterReport';
+import TimecardsFilterReportForm from './components/TimecardsFilterReportForm';
 import axios from "axios";
 import EmployeeDetail from './components/EmployeeDetail';
 import Admin from "./components/Admin"
@@ -90,7 +91,7 @@ function App() {
             <Route path="/" element={<Jobs setLoggedInUser={setLoggedInUser}></Jobs>}></Route>
             <Route path="/jobs/new-job" element={<JobForm ></JobForm>} ></Route>
             <Route path="/jobs/:id" element={<JobDetail></JobDetail>} ></Route>
-            <Route path="/report" element={<TimecardsFilterReport></TimecardsFilterReport>}></Route>
+            <Route path="/report" element={<TimecardsFilterReportForm></TimecardsFilterReportForm>}></Route>
             <Route path="/employees/new-employee" element={<EmployeeForm></EmployeeForm>} ></Route>
             <Route path="/employees/:id" element={<EmployeeDetail></EmployeeDetail>} ></Route>
             <Route path="/employees" element={<Employees></Employees>} ></Route>

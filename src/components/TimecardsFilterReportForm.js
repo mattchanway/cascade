@@ -8,11 +8,13 @@ import Login from './Login';
 import Alert from 'react-bootstrap/Alert';
 import Container from 'react-bootstrap/Container';
 import baseURL from '../helpers/constants';
+import TimecardsFilterReport from './TimecardsFilterReport';
+import TimecardsFilterReportResults from './TimecardsFilterReportResults';
 
 
 
 
-function TimecardsFilterReportForm({ populatePage, reportBottom }) {
+function TimecardsFilterReportForm() {
 
     const { employeeId, position, userNotFound } = useContext(UserContext);
 
@@ -23,7 +25,8 @@ function TimecardsFilterReportForm({ populatePage, reportBottom }) {
     const [timecardReportFormData, setTimecardReportFormData] = useState(INIT_STATE);
     const [jobsDropdownData, setJobsDropdownData] = useState([]);
     const [employeeDropDownData, setEmployeeDropdownData] = useState([]);
-
+    const [timecardResults, setTimecardResults] = useState([]);
+    const [summaryResults, setSummaryResults] = useState({});
 
     useEffect(() => {
 
@@ -58,13 +61,12 @@ function TimecardsFilterReportForm({ populatePage, reportBottom }) {
                     fromDate, toDate, employeeId, jobId, overtime
                 }
             })
-
-            populatePage(res.data)
+            setSummaryResults(res.data.summary)
+            setTimecardResults(res.data.table);
         }
         catch (e) {
             setServerError(true);
         }
-
     }
 
     const handleChange = evt => {
@@ -74,15 +76,19 @@ function TimecardsFilterReportForm({ populatePage, reportBottom }) {
             ...fData,
             [name]: value
         }))
-        console.log(timecardReportFormData)
-
-
-
     }
 
 
 
     if (serverError === true) return <Navigate to="/404" replace={false}></Navigate>
+
+    if (employeeId === null && userNotFound === true) {
+        return <Navigate to="/login" replace={true}></Navigate>
+    }
+
+    if (position !== 3) {
+        return <Navigate to="/unauthorized" replace={false}></Navigate>
+    }
 
     return (
         <div>
@@ -142,17 +148,11 @@ function TimecardsFilterReportForm({ populatePage, reportBottom }) {
                     </Form.Control>
 
                 </Form.Group>
-                {/* <Form.Group >
-                    <Form.Check
-                        name="overtime"
-                        onChange={handleChange}
-                        value={timecardReportFormData.overtime}
-                        label="Show Overtime Timecards Only">
-                    </Form.Check>
-                </Form.Group> */}
+
                 <Button variant="primary" type="submit">Search</Button>
 
             </Form>
+            {timecardResults.length > 0 && <TimecardsFilterReportResults timecardResults={timecardResults} summaryResults={summaryResults}></TimecardsFilterReportResults>}
 
 
         </div>

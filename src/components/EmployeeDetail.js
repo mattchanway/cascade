@@ -25,7 +25,7 @@ function EmployeeDetail() {
         async function getEmployee() {
             try {
                 let res = await axios.get(`${baseURL}/employees/${id}`);
-                console.log(res.data)
+              
                 setEmployee(res.data.userData);
                 setTimecardResults(res.data.timecardsData)
                 setIsLoading(false);
