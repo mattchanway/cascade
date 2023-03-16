@@ -88,6 +88,7 @@ function ForgotPasswordModalForm() {
                 <Form.Group className = "mb-3">
                 <Form.Label>Employee ID</Form.Label>
                 <Form.Control
+                data-testid="forgotPasswordModalFormEmployeeId"
                 type="text"
                 name="id"
                 value={passwordFormData.id}
@@ -95,7 +96,7 @@ function ForgotPasswordModalForm() {
                 >
                 </Form.Control>
                 </Form.Group>
-            <Button type="submit">Send Password Reset Link</Button>
+            <Button type="submit" data-testid="forgotPasswordModalFormSubmit">Send Password Reset Link</Button>
             </Form>
 
             <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>

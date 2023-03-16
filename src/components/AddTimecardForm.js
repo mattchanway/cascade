@@ -35,15 +35,11 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                 job_id, employee_id, timecard_date, reg_time, overtime, expenses, notes
             })
            
-            if(res.data && res.data.duplicateTimecard){
-                setFormErrors([...formErrors, 'You have already submitted a timecard for that date.'])
-            }
-            else{
             setFormErrors([])
             setTimecardFormData(INIT_STATE);
             handleShowToast();
             handleClose();
-            }
+            
         }
         catch (e) {
             setServerError(true);
@@ -52,13 +48,14 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
     }
 
     const handleChange = evt => {
-        console.log('change', timecardFormData)
-        const { name, value } = evt.target;
+        
+        let { name, value } = evt.target;
+    
         setTimecardFormData(fData => ({
             ...fData,
             [name]: value
         }))
-        
+       
        
 
     }
@@ -74,6 +71,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
         if (notes.length > 200) errors.push("Notes must be 200 characters or less.")
 
         if (errors.length) {
+         
             setFormErrors([...errors]);
         }
         else {
@@ -108,6 +106,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                         <Form.Group className="mb-3" controlId="regTimeInput" >
                             <Form.Label>Reg Time</Form.Label>
                             <Form.Control
+                              
                                 data-testid="regTimeInput"
                                 type="number"
                                 name="reg_time"
@@ -119,6 +118,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                         <Form.Group className="mb-3" controlId="overtimeInput" >
                             <Form.Label>Overtime</Form.Label>
                             <Form.Control
+                             
                                 data-testid="overtimeInput"
                                 type="number"
                                 name="overtime"
@@ -129,6 +129,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                         <Form.Group className="mb-3" controlId="expensesInput" >
                             <Form.Label>Expenses</Form.Label>
                             <Form.Control
+                            
                                 type="number"
                                 data-testid="expensesInput"
                                 name="expenses"
@@ -140,6 +141,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                             <Form.Label>Notes</Form.Label>
                             <Form.Control
                                 as="textarea"
+                                data-testid="notesInput"
                                 rows={3}
                                 name="notes"
                                 maxLength = {150}

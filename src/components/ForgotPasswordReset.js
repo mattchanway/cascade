@@ -37,7 +37,12 @@ function ForgotPasswordReset({setLoggedInUser}) {
 
             if(check === true){
             let res = await axios.post(`${baseURL}/auth/password-forgotten-update/${token}`, {password: passwordFormData.password});
-            
+
+            if(res.data.invalidToken){
+                setPasswordErrors(['Invalid request. Ensure you are submitting the password reset request within 10 minutes.'])
+                
+            }
+            else{
             setLoggedInUser({employeeId: res.data.employee_id,
                 position: res.data.position,
                 firstName: res.data.first_name,
@@ -46,6 +51,7 @@ function ForgotPasswordReset({setLoggedInUser}) {
                 firstLogin: res.data.first_login});
             navigate('/');
                 setPasswordErrors([])
+            }
             }
 
         }
@@ -82,6 +88,7 @@ function ForgotPasswordReset({setLoggedInUser}) {
             <Form.Group className="mb-3" controlId="expensesInput">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
+                    data-testid='ForgotPasswordResetPassword'
                     type="password"
                     name="password"
                     value={passwordFormData.password}
@@ -91,13 +98,14 @@ function ForgotPasswordReset({setLoggedInUser}) {
             <Form.Group className="mb-3" controlId="notesInput">
                 <Form.Label>Confirm Password</Form.Label>
                 <Form.Control
+                data-testid='ForgotPasswordResetPasswordConfirm'
                     type="password"
                     name="confirmPassword"
                     value={passwordFormData.confirmPassword}
                     onChange={handleChange}
                 />
             </Form.Group>
-            <Button variant="primary" type="submit">Submit Password</Button>
+            <Button variant="primary" type="submit" data-testid='ForgotPasswordResetPasswordSubmit' >Submit Password</Button>
         </Form>
 
     )

@@ -74,7 +74,7 @@ if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
     return (
         <div id='login-form-container'>
         
-            <Form onSubmit={handleLoginSubmit} id='login-form' >
+            <Form onSubmit={handleLoginSubmit} id='login-form' data-testid='loginForm' >
                 <Image id="test" src={cascadeLogo} fluid="true"></Image>
                 
                 <Form.Group className = "mb-3">

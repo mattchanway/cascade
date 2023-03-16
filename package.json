@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.2",
     "bootstrap": "^5.2.3",
+    "jest": "^27.5.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
     "react-currency-input-field": "^3.6.9",
