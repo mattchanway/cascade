@@ -23,6 +23,7 @@ import Spinner from './components/Spinner';
 import baseURL from './helpers/constants';
 import Unauthorized from './components/Unauthorized';
 import MyTimecards from './components/MyTimecards';
+import MultiSiteTimecardForm from './components/MultiSiteTimecardForm';
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -89,6 +90,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login setLoggedInUser={setLoggedInUser}></Login>}></Route>
             <Route path="/" element={<Jobs setLoggedInUser={setLoggedInUser}></Jobs>}></Route>
+            <Route path="/add-multiple-timecards" element={<MultiSiteTimecardForm></MultiSiteTimecardForm>}></Route>
             <Route path="/jobs/new-job" element={<JobForm ></JobForm>} ></Route>
             <Route path="/jobs/:id" element={<JobDetail></JobDetail>} ></Route>
             <Route path="/report" element={<TimecardsFilterReportForm></TimecardsFilterReportForm>}></Route>
