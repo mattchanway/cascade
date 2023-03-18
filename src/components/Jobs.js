@@ -46,7 +46,7 @@ function Jobs({ setLoggedInUser }) {
         window.history.replaceState({}, document.title)
 
     }
-
+    
 
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>

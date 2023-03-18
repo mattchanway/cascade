@@ -19,7 +19,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
     let iso = isoStr.slice(0,10)
 
     let INIT_STATE = {
-        timecard_date: iso, reg_time: '', overtime: '', expenses: '', notes: ''
+        timecard_date: iso, reg_time: 0, overtime: 0, expenses: 0, notes: ''
     };
 
     const [timecardFormData, setTimecardFormData] = useState(INIT_STATE);
@@ -31,6 +31,8 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
             let job_id = job.job_id;
             let employee_id = employeeId
             let { timecard_date, reg_time, overtime, expenses, notes } = timecardFormData;
+            if(!overtime) overtime = 0;
+            if(!expenses) expenses = 0
             let res = await axios.post(`${baseURL}/timecards/`, {
                 job_id, employee_id, timecard_date, reg_time, overtime, expenses, notes
             })
@@ -65,7 +67,8 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
         let { timecard_date, reg_time, overtime, expenses, notes } = timecardFormData;
         let errors = [];
         if (typeof Date.parse(timecard_date) === NaN) errors.push("Please enter a valid date.")
-        if (reg_time < 1 || reg_time > 8) errors.push("Regular time must be at least 1, and no more than 8.");
+        if(!reg_time.length) errors.push('Regular time cannot be blank.')
+        if (reg_time.length && reg_time < 1 || reg_time > 8) errors.push("Regular time must be at least 1, and no more than 8.");
         if (overtime < 0) errors.push("Overtime cannot be a negative number.");
         if (expenses.length > 0 && isNaN(+expenses) === true) errors.push("Expenses must be blank, or a number(example: 7.50)");
         if (notes.length > 200) errors.push("Notes must be 200 characters or less.")

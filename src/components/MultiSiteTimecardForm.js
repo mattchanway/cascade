@@ -1,5 +1,5 @@
 import { React, useState, useContext, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import UserContext from './UserContext';
 import Form from 'react-bootstrap/Form';
@@ -13,10 +13,12 @@ import baseURL from '../helpers/constants';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import errors from '../helpers/constants'
 
 function MultiSiteTimecardForm() {
     axios.defaults.withCredentials = true;
     const date = new Date();
+    const navigate = useNavigate()
     let isoStr = toISOLocal(date);
     let iso = isoStr.slice(0, 10)
     const { employeeId, position, userNotFound } = useContext(UserContext);
@@ -25,18 +27,15 @@ function MultiSiteTimecardForm() {
     const [nextRowId, setNextRowId] = useState(3);
 
     const [timecardDate, setTimecardDate] = useState(iso);
-    const [rows, setRows] = useState([{ rowId: 1, job_id: '', reg_time: '', overtime: '', expenses: '', notes: '' },
-    { rowId: 2, job_id: '', reg_time: '', overtime: '', expenses: '', notes: '' }])
+
+    const [rows, setRows] = useState([{ rowId: 1, job_id: '', reg_time: 0, overtime: 0, expenses: 0, notes: '' },
+    { rowId: 2, job_id: '', reg_time: 0, overtime: 0, expenses: 0, notes: ''}])
     const [jobs, setJobs] = useState([]);
+    const [showToast, setShowToast] = useState(false);
+    const handleCloseToast = () => setShowToast(false);
+    const handleShowToast = () => setShowToast(true);
 
-    let errors = {
-        1: "Please enter a valid date.",
-        2: "Regular time must be at least 1, and no more than 8.",
-        3: "Overtime cannot be a negative number.",
-        4: "Expenses must be blank, or a positive number",
-        5: "Notes must be 150 characters or less."
-    }
-
+    
 
 
     useEffect(() => {
@@ -46,6 +45,7 @@ function MultiSiteTimecardForm() {
             try {
 
                 let res = await axios.get(`${baseURL}/jobs`, { withCredentials: true });
+                console.log(res)
                 let newJobs = res.data.noUser ? [] : res.data;
                 setJobs(newJobs);
             }
@@ -61,34 +61,47 @@ function MultiSiteTimecardForm() {
 
     async function handleTimecardSubmit(evt) {
 
-        //     try {
-        //         let job_id = job.job_id;
-        //         let employee_id = employeeId
-        //         let { timecard_date, reg_time, overtime, expenses, notes } = timecardFormData;
-        //         let res = await axios.post(`${baseURL}/timecards/`, {
-        //             job_id, employee_id, timecard_date, reg_time, overtime, expenses, notes
-        //         })
+            try {
+                let submit = [];
+                rows.forEach((r,i)=> {submit[i] = 
+                    {...r, timecard_date:timecardDate, employee_id:employeeId}
+                if(submit[i].overtime ==='') submit[i].overtime = 0;
+                if(submit[i].expenses ==='') submit[i].expenses = 0;
+                })
+          
+                
+                let res = await axios.post(`${baseURL}/timecards/multi`, {
+                rows: submit})
+                    console.log(res.data)
+                setFormErrors([])
+                setRows([{ rowId: 1, job_id: '', reg_time: 0, overtime: 0, expenses: 0, notes: '' },
+                { rowId: 2, job_id: '', reg_time: 0, overtime: 0, expenses: 0, notes: ''}])
 
-        //         setFormErrors([])
-        //         setTimecardFormData(INIT_STATE);
-        //         // handleShowToast();
-
-        //     }
-        //     catch (e) {
-        //         setServerError(true);
-        //     }
+                handleShowToast();
+                setNextRowId(3);
+                setFormErrors([])
+            }
+            catch (e) {
+                setServerError(true);
+            }
 
     }
 
     const handleNewRow = () => {
 
-        if (nextRowId > 12) {
+        if (rows.length > 12) {
             setFormErrors([...formErrors, 'Maximum 12 timecards for one daily entry.'])
         }
         else {
-            setRows([...rows, { rowId: nextRowId, job_id: '', reg_time: '', overtime: '', expenses: '', notes: '' }])
+            setRows([...rows, { rowId: nextRowId, job_id: '', reg_time: 0, overtime: 0, expenses: 0, notes: ''}])
             setNextRowId(rowId => rowId + 1);
         }
+
+    }
+
+    const handleRowDelete = (id, evt) => {
+
+        setRows(rows.filter(r=> r.rowId !== id))
 
     }
 
@@ -96,11 +109,10 @@ function MultiSiteTimecardForm() {
     const handleChange = (id, evt) => {
 
         let { name, value } = evt.target;
-
-
-
         if (name === 'timecard_date') {
+           
             setTimecardDate(value);
+        
         }
         else {
 
@@ -108,55 +120,55 @@ function MultiSiteTimecardForm() {
             let editRow = rows[editRowInd];
             editRow = { ...editRow, [name]: value }
             setRows([...rows.slice(0, editRowInd), editRow, ...rows.slice(editRowInd + 1)])
-            console.log(rows)
+            
 
         }
     }
 
     function validateFormData(evt) {
         evt.preventDefault();
-        let errors = [];
+      
         let set = new Set();
         if (typeof Date.parse(timecardDate) === NaN) set.add(1);
 
         rows.forEach(r => {
-
-            if (r.reg_time < 1 || r.reg_time > 8) set.add(2);
-            if (r.overtime < 0) set.add(3)
+            if (r.reg_time !== '' && r.reg_time < 0.5 || r.reg_time > 8) set.add(2);
+            if (r.overtime && r.overtime < 0) set.add(3)
             if (r.expenses.length > 0 && isNaN(+r.expenses) === true) set.add(4);
             if (r.notes.length > 150) set.add(5);
+            if (r.job_id === '')set.add(6)
+            if(r.reg_time ==='')set.add(7)
         })
-
         if (set.size === 0) handleTimecardSubmit(evt);
         else {
-
-            setFormErrors()
-
+            const errors = {
+                1: "Please enter a valid date.",
+                2: "Regular time must be at least 0.5, and no more than 8.",
+                3: "Overtime cannot be a negative number.",
+                4: "Expenses must be blank, or a positive number",
+                5: "Notes must be 150 characters or less.",
+                6: "Ensure you have selected a job site for all timecards.",
+                7: "Reg time cannot be blank."
+            }
+            
+            setFormErrors([...set].map(code=> errors[code]));
+          
         }
 
-
-
-
-
-        if (errors.length) {
-
-            setFormErrors([...errors]);
-        }
-        else {
-
-            handleTimecardSubmit(evt);
-        }
     }
 
 
-    // if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
+    if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
         <div className='job-list-container'>
+             <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
+      <Toast.Body>Timecard added!</Toast.Body>
+    </Toast>
             <Form onSubmit={validateFormData} className='multi-form'>
                 {formErrors && formErrors.map(e => <Alert variant="danger">{e}</Alert>)}
                 <Form.Group className="mb-3" controlId="dateInput">
-                    <Form.Label>Date *must be YYYY-MM-DD*</Form.Label>
+                    <Form.Label>Date</Form.Label>
                     <Form.Control
 
                         name="timecard_date"
@@ -182,7 +194,7 @@ function MultiSiteTimecardForm() {
                                 value={r.job_id}
                                 onChange={(evt) => handleChange(r.rowId, evt)}
                             >
-
+                                <option value=''>Select Job</option>
                                 {jobs && jobs.map(job => <option value={job.job_id}>{job.job_id} - {job.job_name}</option>)}
                             </Form.Control>
                         </Form.Group>
@@ -242,7 +254,9 @@ function MultiSiteTimecardForm() {
                             />
                         </Form.Group>
                     </Col>
-
+                    <Col>
+                    <Button variant="danger" onClick={(evt) =>handleRowDelete(r.rowId, evt)}>X</Button>
+                    </Col>
 
                 </Row>)}
 
@@ -250,6 +264,7 @@ function MultiSiteTimecardForm() {
                 <Button onClick={handleNewRow} type="button">Add Jobsite</Button>
                 <Button variant="primary" type="submit" data-testid="submitTimecardButton">Submit Timecard</Button>
             </Form>
+
         </div>
 
 

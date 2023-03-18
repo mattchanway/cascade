@@ -15,6 +15,7 @@ import Navibar from './components/Navbar';
 import JobDetail from './components/JobDetail';
 import ForgotPasswordModalForm from './components/ForgotPasswordModalForm';
 import ForgotPasswordReset from './components/ForgotPasswordReset';
+import MultiSiteTimecardForm from './components/MultiSiteTimecardForm';
 
 jest.mock('axios')
 
@@ -439,14 +440,11 @@ it('Shows the job detail when the employee accesses and allows timecard creation
         let expensesInput = screen.getByTestId('expensesInput');
         let notesInput = screen.getByTestId('notesInput');
         let submitBtn = screen.getByTestId('submitTimecardButton');
-        // userEvent.type(notesInput, 'hello')
+        userEvent.type(regTimeInput, '{backspace}');
         userEvent.type(regTimeInput, '8');
-        //  fireEvent.change(regTimeInput, { target: { value: '8' } });
-        // expect(screen.getByText(/8/)).toBeInTheDocument()
+      
         expect(regTimeInput.value).toBe('8');
-        //      console.log('again',regTimeInput.value)
-        userEvent.type(overtimeInput, '0');
-        userEvent.type(expensesInput, '0');
+       
         userEvent.click(submitBtn);
         await axios.get()
     });
@@ -558,5 +556,58 @@ it('Password reset token submit form correctly rejects invalid token', async () 
 
     })
     expect(screen.getByText(/Invalid request. Ensure you are submitting the password reset request within 10 minutes./)).toBeInTheDocument()
+
+})
+
+it('Multisite timecard allows three valid timecards', async () => {
+
+    const mockUser = {
+        employeeId: 1,
+        position: 1,
+        firstName: 'Bud',
+        lastName: 'Gomley',
+        userNotFound: false,
+        firstLogin: false
+    }
+
+    render(
+        <BrowserRouter>
+             <UserContext.Provider value={mockUser}>
+                    <MultiSiteTimecardForm></MultiSiteTimecardForm>
+                </UserContext.Provider>
+        </BrowserRouter>
+    )
+    axios.get = jest.fn().mockResolvedValue({ data: [{
+        job_id:'a1',
+        job_name: 'sewage plant'
+    },
+{
+   job_id:'a2',
+   job_name: 'skyscraper' 
+},{
+    job_id:'a3',
+    job_name: 'ski hill' 
+ }
+
+] })
+await axios.get()
+ await act(async () => {
+
+        
+
+    })
+ 
+expect(screen.getByText(/ski hill/)).toBeInTheDocument()
+
+    // await act(async () => {
+
+    //     userEvent.type(password, 'kekkekkek');
+    //     userEvent.type(confirm, 'kekkekkek');
+    //     expect(password.value).toBe('kekkekkek');
+    //     userEvent.click(submit);
+    //     await axios.post()
+
+    // })
+    // expect(screen.getByText(/Timecard added!/)).toBeInTheDocument()
 
 })
