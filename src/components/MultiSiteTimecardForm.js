@@ -45,7 +45,7 @@ function MultiSiteTimecardForm() {
             try {
 
                 let res = await axios.get(`${baseURL}/jobs`, { withCredentials: true });
-                console.log(res)
+              
                 let newJobs = res.data.noUser ? [] : res.data;
                 setJobs(newJobs);
             }
@@ -190,12 +190,13 @@ function MultiSiteTimecardForm() {
                             <Form.Control
                                 key={`jobId-${r.rowId}`}
                                 as="select"
+                                data-testid={`jobSite-${r.rowId}`}
                                 name="job_id"
                                 value={r.job_id}
                                 onChange={(evt) => handleChange(r.rowId, evt)}
                             >
                                 <option value=''>Select Job</option>
-                                {jobs && jobs.map(job => <option value={job.job_id}>{job.job_id} - {job.job_name}</option>)}
+                                {jobs && jobs.map(job => <option data-testid={`jobOption-${r.rowId}-${job.job_id}`} value={job.job_id}>{job.job_id} - {job.job_name}</option>)}
                             </Form.Control>
                         </Form.Group>
                     </Col>
@@ -204,7 +205,7 @@ function MultiSiteTimecardForm() {
                             <Form.Label>Reg Time</Form.Label>
                             <Form.Control
                                 key={`regTime-${r.rowId}`}
-                                data-testid="regTimeInput"
+                                data-testid={`regTimeInput-${r.rowId}`}
                                 type="number"
                                 name="reg_time"
                                 value={r.reg_time}
@@ -218,7 +219,7 @@ function MultiSiteTimecardForm() {
                             <Form.Label>Overtime</Form.Label>
                             <Form.Control
                                 key={`overtime-${r.rowId}`}
-                                data-testid="overtimeInput"
+                                data-testid={`overtimeInput-${r.rowId}`}
                                 type="number"
                                 name="overtime"
                                 value={r.overtime}
@@ -261,8 +262,8 @@ function MultiSiteTimecardForm() {
                 </Row>)}
 
 
-                <Button onClick={handleNewRow} type="button">Add Jobsite</Button>
-                <Button variant="primary" type="submit" data-testid="submitTimecardButton">Submit Timecard</Button>
+                <Button onClick={handleNewRow} type="button" data-testid="AddMultiTimecardButton">Add Jobsite</Button>
+                <Button variant="primary" type="submit" data-testid="submitMultiTimecardButton">Submit Timecard</Button>
             </Form>
 
         </div>
