@@ -479,26 +479,26 @@ it('Forgot Password form returns an error if user is not found', async () => {
 
 })
 
-it('Forgot Password form shows further instructions if user is found', async () => {
+// it('Forgot Password form shows further instructions if user is found', async () => {
+//   commenting out to avoid unncessary use of emailJs
+//     render(
+//         <BrowserRouter>
+//             <ForgotPasswordModalForm></ForgotPasswordModalForm>
+//         </BrowserRouter>
+//     )
+//     axios.post = jest.fn().mockResolvedValue({ data: { passwordToken: '123', email: 'matthewchanway@gmail.com' } })
+//     let input = screen.getByTestId("forgotPasswordModalFormEmployeeId");
+//     let submit = screen.getByTestId("forgotPasswordModalFormSubmit");
+//     await act(async () => {
 
-    render(
-        <BrowserRouter>
-            <ForgotPasswordModalForm></ForgotPasswordModalForm>
-        </BrowserRouter>
-    )
-    axios.post = jest.fn().mockResolvedValue({ data: { passwordToken: '123', email: 'matthewchanway@gmail.com' } })
-    let input = screen.getByTestId("forgotPasswordModalFormEmployeeId");
-    let submit = screen.getByTestId("forgotPasswordModalFormSubmit");
-    await act(async () => {
+//         userEvent.type(input, '22');
+//         expect(input.value).toBe('22');
+//         userEvent.click(submit);
+//         await axios.post()
 
-        userEvent.type(input, '22');
-        expect(input.value).toBe('22');
-        userEvent.click(submit);
-        await axios.post()
-
-    })
-    expect(screen.getByText(/A link to reset your password has been sent/)).toBeInTheDocument()
-})
+//     })
+//     expect(screen.getByText(/A link to reset your password has been sent/)).toBeInTheDocument()
+// })
 
 it('Password reset token submit form correctly validates new password', async () => {
 
@@ -649,9 +649,7 @@ it('Multisite timecard gives errors if invalid input', async () => {
         firstName: 'Bud',
         lastName: 'Gomley',
         userNotFound: false,
-        firstLogin: false
-
-        
+        firstLogin: false  
     }
     axios.get = jest.fn().mockResolvedValue({ data: [{
         job_id:'a1',
@@ -667,8 +665,6 @@ it('Multisite timecard gives errors if invalid input', async () => {
 
 ] })
     
-    
-
     render(
         <BrowserRouter>
              <UserContext.Provider value={mockUser}>
@@ -679,34 +675,24 @@ it('Multisite timecard gives errors if invalid input', async () => {
     await act(async()=>{
 
         await axios.get()
-      
     })
-
-
     await act(async () => {
 
         let firstJobInput = screen.getByTestId("jobSite-1");
     
         userEvent.selectOptions(firstJobInput, 'a1');
         let overtimeInput = screen.getByTestId(`overtimeInput-1`);
-
-
         let firstRegInput = screen.getByTestId("regTimeInput-1");
         let secondRegInput = screen.getByTestId("regTimeInput-2");
-
-
         let submitBtn = screen.getByTestId("submitMultiTimecardButton");
-
         userEvent.type(firstRegInput, '{backspace}');
         userEvent.type(firstRegInput, '8');
-        userEvent.type(overtimeInput, '{backspace');
+        userEvent.type(overtimeInput, '{backspace}');
         userEvent.type(secondRegInput, '{backspace}');
-        
-        
-     
         userEvent.click(submitBtn)
 
     })
     expect(screen.getByText(/Reg time cannot be blank./)).toBeInTheDocument()
+    expect(screen.getByText(/Ensure you have selected a job site for all timecards./)).toBeInTheDocument()
 
 })

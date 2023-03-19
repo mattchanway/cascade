@@ -161,7 +161,7 @@ function MultiSiteTimecardForm() {
     if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
-        <div className='job-list-container'>
+        <div className='multi-form'>
              <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
       <Toast.Body>Timecard added!</Toast.Body>
     </Toast>
@@ -184,7 +184,7 @@ function MultiSiteTimecardForm() {
 
                 </Container>
                 {rows.map((r, i) => <Row>
-                    <Col >
+                    <Col xs={12}  >
                         <Form.Group>
                             <Form.Label>Job Site</Form.Label>
                             <Form.Control
@@ -200,7 +200,7 @@ function MultiSiteTimecardForm() {
                             </Form.Control>
                         </Form.Group>
                     </Col>
-                    <Col >
+                    <Col xs={6} m={4} >
                         <Form.Group className="mb-3" controlId="regTimeInput" >
                             <Form.Label>Reg Time</Form.Label>
                             <Form.Control
@@ -214,7 +214,7 @@ function MultiSiteTimecardForm() {
                             />
                         </Form.Group>
                     </Col>
-                    <Col >
+                    <Col xs={6} m={4}>
                         <Form.Group className="mb-3" controlId="overtimeInput" >
                             <Form.Label>Overtime</Form.Label>
                             <Form.Control
@@ -227,7 +227,7 @@ function MultiSiteTimecardForm() {
                             />
                         </Form.Group>
                     </Col>
-                    <Col >
+                    <Col xs={12} m={4} >
                         <Form.Group className="mb-3" controlId="expensesInput" >
                             <Form.Label>Expenses</Form.Label>
                             <Form.Control
@@ -240,13 +240,14 @@ function MultiSiteTimecardForm() {
                             />
                         </Form.Group>
                     </Col>
-                    <Col >
+                    <Col xs = {12} >
                         <Form.Group className="mb-3" controlId="notesInput" >
                             <Form.Label>Notes</Form.Label>
                             <Form.Control
                                 key={`notesInput-${r.rowId}`}
                                 as="textarea"
                                 data-testid="notesInput"
+                                maxlength="150"
                                 rows={1}
                                 name="notes"
                                 maxLength={150}
@@ -255,7 +256,7 @@ function MultiSiteTimecardForm() {
                             />
                         </Form.Group>
                     </Col>
-                    <Col>
+                    <Col xs={12}>
                     <Button variant="danger" onClick={(evt) =>handleRowDelete(r.rowId, evt)}>X</Button>
                     </Col>
 

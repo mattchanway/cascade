@@ -168,7 +168,15 @@ h1 {
 }
 
 .job-list {
+  background-color: white;
   width: 50%;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.multi-form {
+  background-color: white;
+  width: 80%;
   margin: auto;
   margin-top: 20px;
 }
