@@ -179,6 +179,9 @@ h1 {
   width: 80%;
   margin: auto;
   margin-top: 20px;
+  border-radius: 15px;
+  border: 0.1px solid #0076bd;
+  padding: 20px;
 }
 
 .job-list-container {

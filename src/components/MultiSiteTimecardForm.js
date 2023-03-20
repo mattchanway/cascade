@@ -157,7 +157,7 @@ function MultiSiteTimecardForm() {
 
     }
 
-
+    console.log(rows)
     if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
@@ -165,7 +165,7 @@ function MultiSiteTimecardForm() {
              <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
       <Toast.Body>Timecard added!</Toast.Body>
     </Toast>
-            <Form onSubmit={validateFormData} className='multi-form'>
+            <Form onSubmit={validateFormData}>
                 {formErrors && formErrors.map(e => <Alert variant="danger">{e}</Alert>)}
                 <Form.Group className="mb-3" controlId="dateInput">
                     <Form.Label>Date</Form.Label>
@@ -240,14 +240,14 @@ function MultiSiteTimecardForm() {
                             />
                         </Form.Group>
                     </Col>
-                    <Col xs = {12} >
+                    <Col xs = {12} m={4} >
                         <Form.Group className="mb-3" controlId="notesInput" >
                             <Form.Label>Notes</Form.Label>
                             <Form.Control
                                 key={`notesInput-${r.rowId}`}
                                 as="textarea"
                                 data-testid="notesInput"
-                                maxlength="150"
+                               
                                 rows={1}
                                 name="notes"
                                 maxLength={150}
