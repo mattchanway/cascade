@@ -1,6 +1,6 @@
 // import '../css/App.css';
 import React, { useEffect, useState, useContext } from 'react';
-import { useLocation, redirect, Navigate } from "react-router-dom";
+import { useLocation, Navigate, Link} from "react-router-dom";
 import axios from 'axios';
 import Login from './Login';
 import UserContext from './UserContext';
@@ -46,6 +46,8 @@ function Jobs({ setLoggedInUser }) {
         window.history.replaceState({}, document.title)
 
     }
+
+
     
 
     if (employeeId === null && userNotFound === true) {
@@ -65,7 +67,7 @@ function Jobs({ setLoggedInUser }) {
                 <h1 className='jobs-heading'>Select A Job To Get Started.</h1>
                 </div>
             </div>
-           
+           <p>Did you work at multiple job sites today? Try the <Link to='/add-multiple-timecards'>multi-site timecard tool.</Link></p>
            
             {jobs && <ListGroup as="ul" className="job-list">
 

@@ -125,6 +125,8 @@ function MultiSiteTimecardForm() {
         }
     }
 
+
+
     function validateFormData(evt) {
         evt.preventDefault();
       
@@ -157,16 +159,23 @@ function MultiSiteTimecardForm() {
 
     }
 
-    console.log(rows)
+    
     if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
         <div className='multi-form'>
+            <h4>This form will allow you to submit a timecard for multiple job sites on the <u>same day</u>, saving you from having
+                to click on multiple job sites, and individually creating a timecard for each one. It will <u>not</u> allow
+                you to submit more than one day of work at a time.
+            </h4><br></br>
+            
              <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
       <Toast.Body>Timecard added!</Toast.Body>
     </Toast>
             <Form onSubmit={validateFormData}>
                 {formErrors && formErrors.map(e => <Alert variant="danger">{e}</Alert>)}
+                <Row>
+                    <Col xs={12} sm={8}>
                 <Form.Group className="mb-3" controlId="dateInput">
                     <Form.Label>Date</Form.Label>
                     <Form.Control
@@ -179,14 +188,19 @@ function MultiSiteTimecardForm() {
                         autoFocus
                     />
                 </Form.Group>
-                <Container>
-
-
-                </Container>
+                </Col>
+                <Col className='multi-form-buttons' xs={12} sm={4}>
+                
+                <Button onClick={handleNewRow} type="button" data-testid="AddMultiTimecardButton">Add Jobsite</Button>
+                    <Button variant="primary" type="submit" data-testid="submitMultiTimecardButton">Submit Timecard</Button>
+                    
+                </Col>
+                </Row>
+                
                 {rows.map((r, i) => <Row>
                     <Col xs={12}  >
                         <Form.Group>
-                            <Form.Label>Job Site</Form.Label>
+                            <Form.Label><b>Timecard</b> <Button variant="danger" onClick={(evt) =>handleRowDelete(r.rowId, evt)}>X</Button></Form.Label>
                             <Form.Control
                                 key={`jobId-${r.rowId}`}
                                 as="select"
@@ -208,9 +222,10 @@ function MultiSiteTimecardForm() {
                                 data-testid={`regTimeInput-${r.rowId}`}
                                 type="number"
                                 name="reg_time"
+                               
                                 value={r.reg_time}
                                 onChange={(evt) => handleChange(r.rowId, evt)}
-                                autoFocus
+                               
                             />
                         </Form.Group>
                     </Col>
@@ -256,15 +271,12 @@ function MultiSiteTimecardForm() {
                             />
                         </Form.Group>
                     </Col>
-                    <Col xs={12}>
-                    <Button variant="danger" onClick={(evt) =>handleRowDelete(r.rowId, evt)}>X</Button>
-                    </Col>
+                    {/* <Col xs={12}>
+                    <Button variant="danger" onClick={(evt) =>handleRowDelete(r.rowId, evt)}>Remove Job</Button>
+                    </Col> */}
 
                 </Row>)}
-
-
-                <Button onClick={handleNewRow} type="button" data-testid="AddMultiTimecardButton">Add Jobsite</Button>
-                <Button variant="primary" type="submit" data-testid="submitMultiTimecardButton">Submit Timecard</Button>
+                
             </Form>
 
         </div>

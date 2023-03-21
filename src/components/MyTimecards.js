@@ -3,116 +3,123 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import UserContext from './UserContext';
 import baseURL from '../helpers/constants';
-import { Table } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import MyTimecardsReportResults from './MyTimecardsReportResults';
+import Alert from 'react-bootstrap/Alert';
 
 
 
 function MyTimecards() {
 
-    const { employeeId, position, userNotFound, firstName } = useContext(UserContext);
+    const { employeeId, position, userNotFound } = useContext(UserContext);
+
+    let INIT_STATE = {
+        fromDate: '', toDate: ''
+    };
     const [serverError, setServerError] = useState(false);
-    const [timecardTable, setTimecardTable] = useState([]);
-    // const [timecardsData, setTimecardsData] = useState([]);
-    const WEEKDAYS = {0: 'Monday', 1:'Tuesday', 2:'Wednesday',3:'Thursday',4: 'Friday'}
-    
+    const [formErrors, setFromErrors] = useState([])
+    const [timecardReportFormData, setTimecardReportFormData] = useState(INIT_STATE);
+    const [timecardResults, setTimecardResults] = useState([]);
 
-    useEffect(() => {
 
-        async function getIndividualTimecards() {
-            try {
-            let res = await axios.get(`${baseURL}/timecards/reports/weekly/${employeeId}`);
-                console.log('resdata', [...res.data])
-            // let table = generateTable(res.data)
-            // setTimecardTable(table);
-            }
-            catch (e) {
-                setServerError(true)
-            }
-        }
-        getIndividualTimecards()
-
-    }, [])
-
-    
-
-    function generateTable(table){
-        let res = []
-        
-        let today = new Date().getDay();
-        let firstRow = new Array(today+1).fill(false);
-        while(today >= 0){
-            let curr = table.pop();
-            firstRow[today] = curr === null ? null : curr;
-            today--;
-        }
-        let secondRow = new Array(7).fill(false);
-        let counter = 6;
-        while(counter >= 0){
-            let curr = table.pop();
-            secondRow[counter] = curr === null ? null : curr;
-            counter--;
-        }
-        counter = 6;
-        let lastRow = new Array(7).fill(false);
-        while(counter >= 0){
-            let curr = table.pop();
-            lastRow[counter] = curr === null ? null : curr;
-            counter--;
-        }
-       res= [lastRow, secondRow, firstRow]
-        return res
+    async function handleReportSubmit(fromDate, toDate) {
        
+        
+        try {
+            let res = await axios.get(`${baseURL}/timecards/filter`, {
+                params: {
+                    fromDate: fromDate, toDate: toDate, employeeId: employeeId, jobId: null, overtime: null
+                }
+            })
+            console.log(res.data)
+            setTimecardResults(res.data.table)
+        }
+        catch (e) {
+            setServerError(true);
+        }
+    }
+
+    const handleChange = evt => {
+
+        const { name, value } = evt.target;
+        setTimecardReportFormData(fData => ({
+            ...fData,
+            [name]: value
+        }))
+    }
+
+    function validateForm(evt){
+        evt.preventDefault();
+
+        let { fromDate, toDate} = timecardReportFormData;
+        let dateA = new Date(fromDate);
+        let dateB = new Date(toDate);
+
+        if(dateA > dateB){
+            setFromErrors([...formErrors, 'From date cannot be greater than to date.'])
+        }
+        else{
+            setFromErrors([]);
+            handleReportSubmit(fromDate, toDate)
+        }
+      
+
     }
 
 
-    if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
+
+    if (serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
     }
- 
+
+    console.log(timecardResults)
+
     return (
         <div>
-            <h2>{firstName}, these are the timecards you've been submitted over the past 2 weeks.</h2>
-            {/* {timecardTable && <Table>
-                <thead>
-                    <tr>
-                    <th>Monday</th>
-                    <th>Tuesday</th>
-                    <th>Wednesday</th>
-                    <th>Thursday</th>
-                    <th>Friday</th>
-                    <th>Saturday</th>
-                    <th>Sunday</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                {timecardTable[0] && timecardTable[0].map(cell=> <td>{cell&&cell.job_id}</td>)
+            <h1>My Timecards</h1>
 
-                }
-                </tr>
-                <tr>
-                {timecardTable[1] && timecardTable[1].map(cell=> <td>{cell&&cell.job_id}</td>)
 
-                }
-                </tr>
-                <tr>
-                {timecardTable[2] && timecardTable[2].map(cell=> <td>{cell&&cell.job_id}</td>)
+            <Form className='report' onSubmit={validateForm}>
+            {formErrors && formErrors.map(err=><Alert variant='danger'>{err}</Alert>)}
+                <Form.Group className="mb-3" controlId="from-date-input">
+                    <Form.Label >From Date</Form.Label>
+                    <Form.Control
+                        required
+                        data-testId='myTimecardsFromDate'
+                        name="fromDate"
+                        value={timecardReportFormData.fromDate}
+                        onChange={handleChange}
+                        onKeyDown={(e) => { e.preventDefault() }}
+                        type="date"
+                        autoFocus
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="to-date-input">
+                    <Form.Label>To Date</Form.Label>
+                    <Form.Control
+                        required
+                        name="toDate"
+                        data-testId='myTimecardsToDate'
+                        value={timecardReportFormData.toDate}
+                        onKeyDown={(e) => { e.preventDefault() }}
+                        onChange={handleChange}
+                        type="date"
+                        autoFocus
+                    />
+                </Form.Group>
+                
+                <Button variant="primary" type="submit" data-testid='myTimecardsReportSubmit'>Get Timecards</Button>
 
-                }
-                </tr>
-                    </tbody>
-                
-                
-                
-                </Table>} */}
-            
+            </Form>
+            {timecardResults && <MyTimecardsReportResults timecardResults={timecardResults}></MyTimecardsReportResults>}
+
 
         </div>
 
     )
-
 
 
 

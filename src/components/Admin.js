@@ -5,8 +5,9 @@ import Login from './Login';
 
 function Admin() {
 
+
     const { employeeId, position, firstName, lastName, userNotFound } = useContext(UserContext);
-    console.log('ADMIN CONTEXT', employeeId)
+
 
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
@@ -14,6 +15,7 @@ function Admin() {
 
      if (employeeId !== null && position !== 3) {
         return <Navigate to="/unauthorized" replace={true}></Navigate>
+  
      }
        
     

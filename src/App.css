@@ -209,6 +209,17 @@ select {
   margin: auto;
 }
 
+@media (max-width: 576px) {
+
+  .multi-form-buttons{
+    margin-bottom: 20px;
+   
+
+  }
+
+
+}
+
 
 
 
