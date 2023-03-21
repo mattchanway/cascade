@@ -7,6 +7,7 @@ import { useLocation, useParams, useNavigate, redirect, Navigate } from "react-r
 import axios from 'axios';
 import Login from './Login';
 import baseURL from '../helpers/constants';
+import Unauthorized from './Unauthorized';
 
 
 
@@ -15,9 +16,10 @@ function EmployeeDetail() {
     let { id } = useParams();
     const { employeeId, position, userNotFound } = useContext(UserContext);
     const [employee, setEmployee] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isUnauthorized, setIsUnauthorized] = useState(false);
     const [timecardResults, setTimecardResults] = useState([]);
+    const [serverError, setServerError] = useState(false);
+
+   
 
 
     useEffect(() => {
@@ -28,42 +30,34 @@ function EmployeeDetail() {
               
                 setEmployee(res.data.userData);
                 setTimecardResults(res.data.timecardsData)
-                setIsLoading(false);
+           
             }
             catch (e) {
 
-                setIsUnauthorized(true);
+                setServerError(true);
             }
         }
         getEmployee();
     }, []);
 
-    if (isUnauthorized === true) {
 
-        return (
-            <div>
-                <h1>Bad request. Either the resource you requested does not exist, or you do not have permission to view this page</h1>
-            </div>
-        )
-
-    }
-
-    // if (isUnauthorized === false && isLoading === true) {
-
-    //     return (
-    //         <div>
-    //             <h1>Loading!</h1>
-    //         </div>
-    //     )
-
-    // }
 
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
     }
 
+    if(serverError === true){
+  
+        return <Navigate to="/404" replace={true}></Navigate>
+    }
 
-    if (isUnauthorized === false && isLoading === false) {
+    if(employeeId !== null && position !== 3 && employeeId !== +id){
+        console.log('oops')
+        return <Navigate to="/unauthorized" replace ={true}></Navigate>
+    }
+
+
+  
 
         return (
             <div>
@@ -109,7 +103,7 @@ function EmployeeDetail() {
 
             </div>
         )
-    }
+    
 
 
 }
