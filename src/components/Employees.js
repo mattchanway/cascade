@@ -25,6 +25,7 @@ function Employees() {
             setEmployees(res.data);
             }
             catch(e){
+                setServerError(true)
                
             }
         }
@@ -32,8 +33,8 @@ function Employees() {
 
     }, [])
 
-    if (employeeId === null && userNotFound === true) {
-        return <Navigate to="/login" replace={true}></Navigate>
+    if (position !== 3) {
+        return <Navigate to="/unauthorized" replace={true}></Navigate>
      }
 
      if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>

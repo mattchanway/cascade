@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, fireEvent, screen, act, waitFor } from "@testing-library/react";
-
+import FourOhFour from './FourOhFour';
 import axios from 'axios'
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import ForgotPasswordModalForm from './ForgotPasswordModalForm';
 
@@ -48,6 +48,31 @@ it('Forgot Password form shows further instructions if user is found', async () 
         expect(input.value).toBe('22');
         userEvent.click(submit);
         await axios.post()
+
+    })
+    expect(screen.getByText(/A link to reset your password has been sent/)).toBeInTheDocument()
+})
+
+it('Shows server error when API throws', async () => {
+
+    render(
+        <MemoryRouter initialEntries={["/accounts/password/reset"]}>
+             <Routes>
+                    <Route path="/accounts/password/reset" element={<ForgotPasswordModalForm></ForgotPasswordModalForm>} ></Route>
+                    <Route path ="/404" element={<FourOhFour></FourOhFour>}></Route>
+                    </Routes>
+        </MemoryRouter>
+    )
+    axios.post = jest.fn().mockRejectedValue(new Error('err'))
+    let input = screen.getByTestId("forgotPasswordModalFormEmployeeId");
+    let submit = screen.getByTestId("forgotPasswordModalFormSubmit");
+    await act(async () => {
+
+        userEvent.type(input, '22');
+        expect(input.value).toBe('22');
+        await axios.post()
+        userEvent.click(submit);
+        
 
     })
     expect(screen.getByText(/A link to reset your password has been sent/)).toBeInTheDocument()
