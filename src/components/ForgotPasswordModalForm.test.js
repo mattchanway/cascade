@@ -5,6 +5,7 @@ import axios from 'axios'
 import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import ForgotPasswordModalForm from './ForgotPasswordModalForm';
+import Jobs from './Jobs';
 
 jest.mock('axios')
 
@@ -60,20 +61,19 @@ it('Shows server error when API throws', async () => {
              <Routes>
                     <Route path="/accounts/password/reset" element={<ForgotPasswordModalForm></ForgotPasswordModalForm>} ></Route>
                     <Route path ="/404" element={<FourOhFour></FourOhFour>}></Route>
+                    
                     </Routes>
         </MemoryRouter>
     )
-    axios.post = jest.fn().mockRejectedValue(new Error('err'))
+    axios.post = jest.fn().mockResolvedValue(new Error('err'))
+    // axios.mockRejectedValue(new Error('err'))
     let input = screen.getByTestId("forgotPasswordModalFormEmployeeId");
     let submit = screen.getByTestId("forgotPasswordModalFormSubmit");
     await act(async () => {
 
         userEvent.type(input, '22');
         expect(input.value).toBe('22');
-        await axios.post()
         userEvent.click(submit);
-        
-
     })
-    expect(screen.getByText(/A link to reset your password has been sent/)).toBeInTheDocument()
+    expect(screen.getByText(/404. That's an error./)).toBeInTheDocument()
 })

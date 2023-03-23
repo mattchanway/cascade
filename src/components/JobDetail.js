@@ -18,7 +18,9 @@ function JobDetail({ }) {
     
     const [serverError, setServerError] = useState(false);
     const [showForm, setShowForm] = useState(false);
-    const [showInvalidAlert, setShowInvalidAlert] = useState(false);
+    const [showServerErrorToast, setShowServerErrorToast] = useState(false);
+    const handleErrorClose = () => setShowServerErrorToast(false);
+    const handleErrorShow = () => setShowServerErrorToast(true)
     const handleClose = () => setShowForm(false);
     const handleShow = () => setShowForm(true);
     const [job, setJob] = useState(null);
@@ -89,8 +91,10 @@ function JobDetail({ }) {
             </Card>}
             
             <AddTimecardForm showForm={showForm} handleClose={handleClose} job={job}
-        employeeId = {employeeId} handleShowToast={handleShowToast} ></AddTimecardForm>
+        employeeId = {employeeId} handleShowToast={handleShowToast} 
+         handleErrorShow={handleErrorShow} ></AddTimecardForm>
          <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
+        <Toast onClose={handleErrorClose} show={showServerErrorToast} delay={5000} autohide></Toast>
       <Toast.Body>Timecard added!</Toast.Body>
     </Toast>
             

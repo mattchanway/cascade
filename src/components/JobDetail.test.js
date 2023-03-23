@@ -2,9 +2,11 @@ import React from 'react';
 import { render, fireEvent, screen, act, waitFor } from "@testing-library/react";
 import axios from 'axios'
 import UserContext from './UserContext';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import JobDetail from './JobDetail';
+import FourOhFour from './FourOhFour';
+import Login from './Login';
 
 jest.mock('axios')
 
@@ -78,5 +80,71 @@ it('Shows the job detail when the employee accesses and allows timecard creation
     });
 
     expect(screen.getByText(/Timecard added!/)).toBeInTheDocument()
+
+})
+
+it('Shows a server error if API throws on job load', async () => {
+
+    const mockUser = {
+        employeeId: 1,
+        position: 1,
+        firstName: 'Bud',
+        lastName: 'Gomley',
+        userNotFound: false,
+        firstLogin: false
+    }
+
+    render(
+        <MemoryRouter initialEntries={["/jobs/job1"]}>
+            <UserContext.Provider value={mockUser}>
+            <Routes>
+            
+                <Route>
+                <Route path="/404" element={<FourOhFour></FourOhFour>}></Route>
+                <Route path="/jobs/:id" element={<JobDetail></JobDetail>} ></Route>
+                </Route>
+            </Routes>
+            </UserContext.Provider>
+        </MemoryRouter>
+    )
+    axios.get = jest.fn().mockRejectedValue(new Error('err'));
+   
+   
+
+    await act(async () => {
+
+    })
+    expect(screen.getByText(/404. That's an error./)).toBeInTheDocument()
+
+})
+
+it('Redirects to login page for unauthenticated user', async () => {
+
+    const mockUser = {
+        employeeId: null,
+        position: null,
+        firstName: null,
+        lastName: null,
+        userNotFound: true,
+        firstLogin: null
+    }
+
+    render(
+        <MemoryRouter initialEntries={["/jobs/job1"]}>
+            <UserContext.Provider value={mockUser}>
+            <Routes>
+                <Route>
+                <Route path="/jobs/:id" element={<JobDetail></JobDetail>} ></Route>
+                <Route path="/login" element={<Login></Login>}></Route>
+                </Route>
+            </Routes>
+            </UserContext.Provider>
+        </MemoryRouter>
+    )
+    axios.get = jest.fn().mockRejectedValue(new Error('err'));
+    await act(async () => {
+
+    })
+    expect(screen.getByText(/Login/)).toBeInTheDocument()
 
 })

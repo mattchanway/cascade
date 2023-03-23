@@ -13,8 +13,6 @@ function ForgotPasswordReset({setLoggedInUser}) {
     const {token} = useParams();
     let navigate = useNavigate();
 
-
-
     let INIT_STATE = {
         password: '', confirmPassword: ''
     };
