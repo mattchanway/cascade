@@ -11,7 +11,7 @@ import axios from 'axios';
 import CurrencyInput from 'react-currency-input-field';
 import baseURL from '../helpers/constants';
 
-function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToast }) {
+function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToast, handleErrorShow }) {
     const [serverError, setServerError] = useState(false);
     const [formErrors, setFormErrors] = useState([]);
     const date = new Date();
@@ -19,13 +19,13 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
     let iso = isoStr.slice(0,10)
 
     let INIT_STATE = {
-        timecard_date: iso, reg_time: 0, overtime: 0, expenses: 0, notes: ''
+        timecard_date: iso, reg_time: '', overtime: 0, expenses: 0, notes: ''
     };
 
     const [timecardFormData, setTimecardFormData] = useState(INIT_STATE);
 
     async function handleTimecardSubmit(evt) {
-        console.log('its here', timecardFormData)
+
 
         try {
             let job_id = job.job_id;
@@ -44,7 +44,9 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
             
         }
         catch (e) {
-            setServerError(true);
+            // setServerError(true);
+            handleErrorShow(true)
+            handleClose()
         }
 
     }
@@ -103,7 +105,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                                 onKeyDown={(e)=> {e.preventDefault()}}
                                 onChange={handleChange}
                                 type="date"
-                                autoFocus
+                                
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="regTimeInput" >

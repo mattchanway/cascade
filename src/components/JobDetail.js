@@ -53,7 +53,7 @@ function JobDetail({ }) {
 
     }, [])
 
-
+   
    
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
@@ -93,10 +93,15 @@ function JobDetail({ }) {
             <AddTimecardForm showForm={showForm} handleClose={handleClose} job={job}
         employeeId = {employeeId} handleShowToast={handleShowToast} 
          handleErrorShow={handleErrorShow} ></AddTimecardForm>
-         <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
-        <Toast onClose={handleErrorClose} show={showServerErrorToast} delay={5000} autohide></Toast>
-      <Toast.Body>Timecard added!</Toast.Body>
+         <Toast bg='success' onClose={handleCloseToast} show={showToast} delay={5000} autohide>
+        
+      <Toast.Body className='text-white'>Timecard added!</Toast.Body>
     </Toast>
+    <Toast bg="danger" onClose={handleErrorClose} show={showServerErrorToast} delay={5000} autohide>
+        <Toast.Body className='text-white' >
+        There was an error and your timecard was not added.
+        </Toast.Body>
+        </Toast>
             
             {job && position === 3 && <InactiveWarning id={job.job_id} setServerError={setServerError} 
             showInactiveWarning={showInactiveWarning} 

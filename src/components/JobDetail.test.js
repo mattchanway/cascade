@@ -141,10 +141,78 @@ it('Redirects to login page for unauthenticated user', async () => {
             </UserContext.Provider>
         </MemoryRouter>
     )
-    axios.get = jest.fn().mockRejectedValue(new Error('err'));
+    // axios.get = jest.fn().mockRejectedValue(new Error('err'));
     await act(async () => {
 
     })
     expect(screen.getByText(/Login/)).toBeInTheDocument()
+
+})
+
+it('Shows the appropriate notification if error in submitting timecard', async () => {
+
+    const mockUser = {
+        employeeId: 1,
+        position: 1,
+        firstName: 'Bud',
+        lastName: 'Gomley',
+        userNotFound: false,
+        firstLogin: false
+    }
+    const mockJob = {
+        job_id: '123abc',
+        job_name: 'Sewage Plant',
+        job_address_street_line1: '69 Sewage St',
+        job_address_street_unit: '#69',
+        job_address_street_city: 'Sewerland',
+        job_description: 'Clean up'
+    }
+
+    axios.get = jest.fn().mockResolvedValueOnce({ data: mockJob })
+    await act(async () => {
+
+        render(
+            <MemoryRouter initialEntries={["/jobs/123abc"]}>
+                <UserContext.Provider value={mockUser}>
+                    <JobDetail></JobDetail>
+                </UserContext.Provider>
+            </MemoryRouter>
+        )
+    });
+
+  
+
+    await act(async () => {
+
+        let showTimecardBtn = screen.getByTestId('showAddTimecardForm');
+        userEvent.click(showTimecardBtn);
+    });
+
+    // axios.get.mockImplementation(() => {
+
+    //     return Promise.reject(new Error('error'))
+
+    // }
+    // )
+    axios.post = jest.fn().mockRejectedValueOnce(new Error('err'))
+
+
+    await act(async () => {
+
+        let regTimeInput = screen.getByTestId('regTimeInput');
+        let overtimeInput = screen.getByTestId('overtimeInput');
+        let expensesInput = screen.getByTestId('expensesInput');
+        let notesInput = screen.getByTestId('notesInput');
+        let submitBtn = screen.getByTestId('submitTimecardButton');
+        userEvent.type(regTimeInput, '{backspace}');
+        userEvent.type(regTimeInput, '8');
+      
+        expect(regTimeInput.value).toBe('8');
+       
+        userEvent.click(submitBtn);
+       
+    });
+
+    expect(screen.getByText(/There was an error and your timecard was not added./)).toBeInTheDocument()
 
 })
