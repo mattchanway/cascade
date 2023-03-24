@@ -2,9 +2,11 @@ import React from 'react';
 import { render, fireEvent, screen, act, waitFor } from "@testing-library/react";
 import axios from 'axios'
 import UserContext from './UserContext';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import MultiSiteTimecardForm from './MultiSiteTimecardForm';
+import FourOhFour from './FourOhFour';
+import Login from './Login';
 
 jest.mock('axios')
 
@@ -141,5 +143,36 @@ it('Multisite timecard gives errors if invalid input', async () => {
     })
     expect(screen.getByText(/Reg time cannot be blank./)).toBeInTheDocument()
     expect(screen.getByText(/Ensure you have selected a job site for all timecards./)).toBeInTheDocument()
+
+})
+
+it('Redirects login if context user is null', async () => {
+
+    const mockUser = {
+        employeeId: null,
+        position: null,
+        firstName: null,
+        lastName: null,
+        userNotFound: true,
+        firstLogin: false
+    }
+
+    await act(async () => {
+
+        render(
+            <MemoryRouter initialEntries={["/add-multiple-timecards"]}>
+                <UserContext.Provider value={mockUser}>
+                    <Routes>
+                <Route path="/404" element={<FourOhFour></FourOhFour>}></Route>
+           
+                <Route path="/login" element={<Login></Login>}></Route>
+                <Route path="/add-multiple-timecards" element={<MultiSiteTimecardForm></MultiSiteTimecardForm>}></Route>
+                </Routes>
+                </UserContext.Provider>
+            </MemoryRouter>
+        )
+
+    });
+    expect(screen.getByText(/Login/)).toBeInTheDocument()
 
 })

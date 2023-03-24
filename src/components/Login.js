@@ -44,8 +44,10 @@ function Login({ setLoggedInUser }) {
             let res = await axios.post(totalUrl, {
                 id, password
             })
+           
          
             if (res.data && res.data.employee_id) {
+                console.log('made it to end of if')
                 setLoggedInUser({
                     employeeId: res.data.employee_id, position: res.data.position, firstName: res.data.first_name,
                     lastName: res.data.last_name,
@@ -54,6 +56,7 @@ function Login({ setLoggedInUser }) {
                 });
                 setPasswordErrors([])
                 navigate('/');
+                
             }
             else {
                 setPasswordErrors(['Incorrect password or user not found.'])
@@ -61,6 +64,7 @@ function Login({ setLoggedInUser }) {
             }
         }
         catch (e) {
+            console.log(e)
             setServerError(true);
             
         }
@@ -98,7 +102,7 @@ if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
                 >
                 </Form.Control>
                 </Form.Group>
-            <Button className='buttons' type="submit" data-testid="init-login-btn">Login</Button>
+            <Button className='buttons' type="submit" data-testid='init-login-btn'>Login</Button>
 
             {passwordErrors && passwordErrors.map((err)=><Alert variant ="danger">{err}</Alert>)}
 
