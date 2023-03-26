@@ -32,7 +32,7 @@ function MyTimecards() {
                     fromDate: fromDate, toDate: toDate, employeeId: employeeId, jobId: null, overtime: null
                 }
             })
-            console.log(res.data)
+           
             setTimecardResults(res.data.table)
         }
         catch (e) {
@@ -75,7 +75,7 @@ function MyTimecards() {
         return <Navigate to="/login" replace={true}></Navigate>
     }
 
-    console.log(timecardResults)
+    
 
     return (
         <div>
@@ -88,7 +88,7 @@ function MyTimecards() {
                     <Form.Label >From Date</Form.Label>
                     <Form.Control
                         required
-                        data-testId='myTimecardsFromDate'
+                        data-testid='myTimecardsFromDate'
                         name="fromDate"
                         value={timecardReportFormData.fromDate}
                         onChange={handleChange}
@@ -102,7 +102,7 @@ function MyTimecards() {
                     <Form.Control
                         required
                         name="toDate"
-                        data-testId='myTimecardsToDate'
+                        data-testid='myTimecardsToDate'
                         value={timecardReportFormData.toDate}
                         onKeyDown={(e) => { e.preventDefault() }}
                         onChange={handleChange}

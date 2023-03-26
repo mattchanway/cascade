@@ -58,7 +58,7 @@ function Navibar({setLoggedInUser}) {
                 {position === 3 &&<Nav.Link href="/employees">Employees</Nav.Link>}
                 {position && <Nav.Link href="/my-profile">My Timecards</Nav.Link>}
                 {position && <Nav.Link href="/add-multiple-timecards">Multi-Site</Nav.Link>}
-                {firstName && <Nav.Link onClick={doLogout}>Logout</Nav.Link>} 
+                {firstName && <Nav.Link onClick={doLogout} data-testid="logout-test-btn">Logout</Nav.Link>} 
                
                 
                

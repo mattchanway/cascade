@@ -15,7 +15,7 @@ function Admin() {
      }
 
      if (employeeId !== null && position !== 3) {
-        console.log('admin UNAUTH')
+     
         return <Navigate to="/unauthorized" replace={true}></Navigate>
  
      }

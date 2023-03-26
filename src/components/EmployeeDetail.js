@@ -8,6 +8,8 @@ import axios from 'axios';
 import Login from './Login';
 import baseURL from '../helpers/constants';
 import Unauthorized from './Unauthorized';
+import Card from 'react-bootstrap/Card';
+import EmployeeEditModal from './EmployeeEditModal';
 
 
 
@@ -18,9 +20,9 @@ function EmployeeDetail() {
     const [employee, setEmployee] = useState([]);
     const [timecardResults, setTimecardResults] = useState([]);
     const [serverError, setServerError] = useState(false);
-
-   
-
+    const [showEmployeeEdit, setShowEmployeeEdit] = useState(false);
+    const handleCloseEmployeeEdit = () => setShowEmployeeEdit(false);
+    const handleShowEmployeeEdit = () => setShowEmployeeEdit(true);
 
     useEffect(() => {
 
@@ -52,21 +54,27 @@ function EmployeeDetail() {
     }
 
     if(employeeId !== null && position !== 3 && employeeId !== +id){
-        console.log('oops')
+       
         return <Navigate to="/unauthorized" replace ={true}></Navigate>
     }
 
-
+console.log(employee)
   
 
         return (
             <div>
-                {employee && <h1>{employee.first_name} {employee.last_name}</h1>}
-                {employee && <h5>{employee.position_name}</h5>}
-                {employee && <h5>{employee.certification_name}</h5>}
-                {employee && <p>{employee.employee_id}</p>}
+                {employee && <Card className='job-detail-card'>
+                    <Card.Body>
+                <Card.Title>{employee.first_name} {employee.last_name}</Card.Title>
+                <Card.Text>
+                Employee ID: {employee.employee_id}
+                </Card.Text> 
+                {position === 3 && <Button variant='warning' onClick={handleShowEmployeeEdit}>Edit Employee</Button>}
+                 </Card.Body>
+                    </Card>}
+      
                 <h2>{timecardResults && timecardResults.length ? 'All Timecards - Last 30 Days' : 'No timecards in last 30 days'}</h2>
-                {timecardResults && timecardResults.length > 0 &&
+                {timecardResults && 
                     <Table responsive>
                         <thead>
                             <tr>
@@ -78,7 +86,6 @@ function EmployeeDetail() {
                                 <th>Expenses</th>
                                 <th>Notes</th>
                                 <th>Submitted At</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -87,19 +94,18 @@ function EmployeeDetail() {
                                     <td>{t.timecard_date.slice(0, 10)}</td>
                                     <td>{t.job_id}</td>
                                     <td>{t.job_name}</td>
-
                                     <td>{t.reg_time}</td>
                                     <td>{t.overtime}</td>
                                     <td>$0</td>
                                     <td>{t.notes}</td>
                                     <td>{t.time_submitted}</td>
-
                                 </tr>
                             )}
-
                         </tbody>
-
                     </Table>}
+                        {employee && position === 3 && <EmployeeEditModal employee={employee} 
+                        handleCloseEmployeeEdit={handleCloseEmployeeEdit} 
+                        showEmployeeEdit={showEmployeeEdit}></EmployeeEditModal>}
 
             </div>
         )

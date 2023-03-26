@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 
-import Login from './Login';
 import baseURL from '../helpers/constants';
 
 function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, description, link }) {
@@ -64,6 +63,7 @@ function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, d
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
      }
+     if(position !== 3) return <Navigate to="/unauthorized" replace={false}></Navigate>
 
      if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 

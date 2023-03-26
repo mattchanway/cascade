@@ -20,32 +20,34 @@ it('Multisite timecard allows three valid timecards', async () => {
         userNotFound: false,
         firstLogin: false
 
-        
-    }
-    axios.get = jest.fn().mockResolvedValue({ data: [{
-        job_id:'a1',
-        job_name: 'sewage plant'
-    },
-{
-   job_id:'a2',
-   job_name: 'skyscraper' 
-},{
-    job_id:'a3',
-    job_name: 'ski hill' 
- }
 
-] })
-    
-    
+    }
+    axios.get = jest.fn().mockResolvedValue({
+        data: [{
+            job_id: 'a1',
+            job_name: 'sewage plant'
+        },
+        {
+            job_id: 'a2',
+            job_name: 'skyscraper'
+        }, {
+            job_id: 'a3',
+            job_name: 'ski hill'
+        }
+
+        ]
+    })
+
+
 
     render(
         <BrowserRouter>
-             <UserContext.Provider value={mockUser}>
-                    <MultiSiteTimecardForm></MultiSiteTimecardForm>
-                </UserContext.Provider>
+            <UserContext.Provider value={mockUser}>
+                <MultiSiteTimecardForm></MultiSiteTimecardForm>
+            </UserContext.Provider>
         </BrowserRouter>
     )
-    await act(async()=>{
+    await act(async () => {
 
         await axios.get()
         let addRowBtn = screen.getByTestId("AddMultiTimecardButton");
@@ -54,10 +56,10 @@ it('Multisite timecard allows three valid timecards', async () => {
     })
 
 
-let arr = screen.getAllByText(/a3 - ski hill/)
-expect(arr[0].value).toBe('a3')
+    let arr = screen.getAllByText(/a3 - ski hill/)
+    expect(arr[0].value).toBe('a3')
 
-axios.post = jest.fn().mockResolvedValue({ data: [{1: 'good'}, {2: 'good'}, {3:'good'}] })
+    axios.post = jest.fn().mockResolvedValue({ data: [{ 1: 'good' }, { 2: 'good' }, { 3: 'good' }] })
 
     await act(async () => {
 
@@ -65,9 +67,9 @@ axios.post = jest.fn().mockResolvedValue({ data: [{1: 'good'}, {2: 'good'}, {3:'
         let secondJobInput = screen.getByTestId("jobSite-2");
         let thirdJobInput = screen.getByTestId("jobSite-3");
         userEvent.selectOptions(firstJobInput, 'a1');
-        userEvent.selectOptions(secondJobInput,'a2');
-        userEvent.selectOptions(thirdJobInput,'a3');
-        
+        userEvent.selectOptions(secondJobInput, 'a2');
+        userEvent.selectOptions(thirdJobInput, 'a3');
+
 
         let firstRegInput = screen.getByTestId("regTimeInput-1");
         let secondRegInput = screen.getByTestId("regTimeInput-2");
@@ -81,7 +83,7 @@ axios.post = jest.fn().mockResolvedValue({ data: [{1: 'good'}, {2: 'good'}, {3:'
         userEvent.type(secondRegInput, '8');
         userEvent.type(thirdRegInput, '{backspace}');
         userEvent.type(thirdRegInput, '8');
-        
+
         await axios.post()
         userEvent.click(submitBtn)
 
@@ -98,37 +100,39 @@ it('Multisite timecard gives errors if invalid input', async () => {
         firstName: 'Bud',
         lastName: 'Gomley',
         userNotFound: false,
-        firstLogin: false  
+        firstLogin: false
     }
-    axios.get = jest.fn().mockResolvedValue({ data: [{
-        job_id:'a1',
-        job_name: 'sewage plant'
-    },
-{
-   job_id:'a2',
-   job_name: 'skyscraper' 
-},{
-    job_id:'a3',
-    job_name: 'ski hill' 
- }
+    axios.get = jest.fn().mockResolvedValue({
+        data: [{
+            job_id: 'a1',
+            job_name: 'sewage plant'
+        },
+        {
+            job_id: 'a2',
+            job_name: 'skyscraper'
+        }, {
+            job_id: 'a3',
+            job_name: 'ski hill'
+        }
 
-] })
-    
+        ]
+    })
+
     render(
         <BrowserRouter>
-             <UserContext.Provider value={mockUser}>
-                    <MultiSiteTimecardForm></MultiSiteTimecardForm>
-                </UserContext.Provider>
+            <UserContext.Provider value={mockUser}>
+                <MultiSiteTimecardForm></MultiSiteTimecardForm>
+            </UserContext.Provider>
         </BrowserRouter>
     )
-    await act(async()=>{
+    await act(async () => {
 
         await axios.get()
     })
     await act(async () => {
 
         let firstJobInput = screen.getByTestId("jobSite-1");
-    
+
         userEvent.selectOptions(firstJobInput, 'a1');
         let overtimeInput = screen.getByTestId(`overtimeInput-1`);
         let firstRegInput = screen.getByTestId("regTimeInput-1");
@@ -163,11 +167,10 @@ it('Redirects login if context user is null', async () => {
             <MemoryRouter initialEntries={["/add-multiple-timecards"]}>
                 <UserContext.Provider value={mockUser}>
                     <Routes>
-                <Route path="/404" element={<FourOhFour></FourOhFour>}></Route>
-           
-                <Route path="/login" element={<Login></Login>}></Route>
-                <Route path="/add-multiple-timecards" element={<MultiSiteTimecardForm></MultiSiteTimecardForm>}></Route>
-                </Routes>
+                        <Route path="/404" element={<FourOhFour></FourOhFour>}></Route>
+                        <Route path="/login" element={<Login></Login>}></Route>
+                        <Route path="/add-multiple-timecards" element={<MultiSiteTimecardForm></MultiSiteTimecardForm>}></Route>
+                    </Routes>
                 </UserContext.Provider>
             </MemoryRouter>
         )
@@ -176,3 +179,120 @@ it('Redirects login if context user is null', async () => {
     expect(screen.getByText(/Login/)).toBeInTheDocument()
 
 })
+
+it('shows server error if useEffect throws on page load', async () => {
+
+    const mockUser = {
+        employeeId: 1,
+        position: 1,
+        firstName: 'Bud',
+        lastName: 'Gomley',
+        userNotFound: false,
+        firstLogin: false
+    }
+
+    axios.get = jest.fn().mockRejectedValue(new Error('err'))
+
+    await act(async () => {
+
+        render(
+            <MemoryRouter initialEntries={["/add-multiple-timecards"]}>
+                <UserContext.Provider value={mockUser}>
+                    <Routes>
+                        <Route path="/404" element={<FourOhFour></FourOhFour>}></Route>
+                        <Route path="/add-multiple-timecards" element={<MultiSiteTimecardForm></MultiSiteTimecardForm>}></Route>
+                    </Routes>
+                </UserContext.Provider>
+            </MemoryRouter>
+        )
+
+    });
+    expect(screen.getByText(/404. That's an error./)).toBeInTheDocument()
+
+})
+
+it('Multisite timecard redirects if form submission throws', async () => {
+
+    const mockUser = {
+        employeeId: 1,
+        position: 1,
+        firstName: 'Bud',
+        lastName: 'Gomley',
+        userNotFound: false,
+        firstLogin: false
+
+
+    }
+    axios.get = jest.fn().mockResolvedValue({
+        data: [{
+            job_id: 'a1',
+            job_name: 'sewage plant'
+        },
+        {
+            job_id: 'a2',
+            job_name: 'skyscraper'
+        }, {
+            job_id: 'a3',
+            job_name: 'ski hill'
+        }
+
+        ]
+    })
+
+
+
+    render(
+        <MemoryRouter initialEntries={["/add-multiple-timecards"]}>
+            <UserContext.Provider value={mockUser}>
+                <Routes>
+                    <Route path="/404" element={<FourOhFour></FourOhFour>}></Route>
+                    <Route path="/add-multiple-timecards" element={<MultiSiteTimecardForm></MultiSiteTimecardForm>}></Route>
+                </Routes>
+            </UserContext.Provider>
+        </MemoryRouter>
+    )
+    await act(async () => {
+
+        await axios.get()
+        let addRowBtn = screen.getByTestId("AddMultiTimecardButton");
+        userEvent.click(addRowBtn)
+
+    })
+
+
+
+
+    axios.post = jest.fn().mockRejectedValue(new Error('err'))
+
+    await act(async () => {
+
+        let firstJobInput = screen.getByTestId("jobSite-1");
+        let secondJobInput = screen.getByTestId("jobSite-2");
+        let thirdJobInput = screen.getByTestId("jobSite-3");
+        userEvent.selectOptions(firstJobInput, 'a1');
+        userEvent.selectOptions(secondJobInput, 'a2');
+        userEvent.selectOptions(thirdJobInput, 'a3');
+
+
+        let firstRegInput = screen.getByTestId("regTimeInput-1");
+        let secondRegInput = screen.getByTestId("regTimeInput-2");
+        let thirdRegInput = screen.getByTestId("regTimeInput-3");
+
+        let submitBtn = screen.getByTestId("submitMultiTimecardButton");
+
+        userEvent.type(firstRegInput, '{backspace}');
+        userEvent.type(firstRegInput, '8');
+        userEvent.type(secondRegInput, '{backspace}');
+        userEvent.type(secondRegInput, '8');
+        userEvent.type(thirdRegInput, '{backspace}');
+        userEvent.type(thirdRegInput, '8');
+
+        userEvent.click(submitBtn)
+
+    })
+    expect(screen.getByText(/404. That's an error./)).toBeInTheDocument()
+
+})
+
+
+

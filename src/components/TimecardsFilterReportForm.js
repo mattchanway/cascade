@@ -8,7 +8,6 @@ import Login from './Login';
 import Alert from 'react-bootstrap/Alert';
 import Container from 'react-bootstrap/Container';
 import baseURL from '../helpers/constants';
-import TimecardsFilterReport from './TimecardsFilterReport';
 import TimecardsFilterReportResults from './TimecardsFilterReportResults';
 
 
@@ -22,6 +21,7 @@ function TimecardsFilterReportForm() {
         fromDate: '', toDate: '', employeeId: '', jobId: '', overtime: false
     };
     const [serverError, setServerError] = useState(false);
+    const [formErrors, setFormErrors] = useState([])
     const [timecardReportFormData, setTimecardReportFormData] = useState(INIT_STATE);
     const [jobsDropdownData, setJobsDropdownData] = useState([]);
     const [employeeDropDownData, setEmployeeDropdownData] = useState([]);
@@ -50,20 +50,28 @@ function TimecardsFilterReportForm() {
        
         evt.preventDefault();
         try {
+            let dateA = new Date(timecardReportFormData.fromDate);
+            let dateB = new Date(timecardReportFormData.toDate);
+            if(dateA > dateB){
+                setFormErrors([...formErrors, 'From date must not be greater than to date.'])
+            }
 
+            else{
             let { fromDate, toDate, employeeId, jobId, overtime } = timecardReportFormData;
             if (jobId.length === 0) jobId = null;
             if (employeeId.length === 0) employeeId = null;
             if (fromDate === '') fromDate = undefined;
             if (toDate === '') toDate = undefined;
-
+            console.log(fromDate, toDate, employeeId, jobId, overtime)
             let res = await axios.get(`${baseURL}/timecards/filter`, {
                 params: {
                     fromDate, toDate, employeeId, jobId, overtime
                 }
             })
+            setFormErrors([]);
             setSummaryResults(res.data.summary)
             setTimecardResults(res.data.table);
+        }
         }
         catch (e) {
             setServerError(true);
@@ -98,7 +106,7 @@ function TimecardsFilterReportForm() {
 
 
             <Form className='report' onSubmit={handleReportSubmit}>
-
+            {formErrors && formErrors.map(err=><Alert variant='danger'>{err}</Alert>)}
                 <Form.Group className="mb-3" controlId="from-date-input">
                     <Form.Label >From Date</Form.Label>
                     <Form.Control

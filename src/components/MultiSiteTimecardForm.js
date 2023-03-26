@@ -72,7 +72,7 @@ function MultiSiteTimecardForm() {
                 
                 let res = await axios.post(`${baseURL}/timecards/multi`, {
                 rows: submit})
-                    console.log(res.data)
+                   
                 setFormErrors([])
                 setRows([{ rowId: 1, job_id: '', reg_time: 0, overtime: 0, expenses: 0, notes: '' },
                 { rowId: 2, job_id: '', reg_time: 0, overtime: 0, expenses: 0, notes: ''}])
@@ -157,6 +157,12 @@ function MultiSiteTimecardForm() {
           
         }
 
+    }
+
+ 
+
+    if (employeeId === null && userNotFound === true) {
+        return <Navigate to="/login" replace={true}></Navigate>
     }
 
     
