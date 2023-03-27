@@ -58,9 +58,7 @@ function EmployeeDetail() {
         return <Navigate to="/unauthorized" replace ={true}></Navigate>
     }
 
-console.log(employee)
-  
-
+ 
         return (
             <div>
                 {employee && <Card className='job-detail-card'>
@@ -69,7 +67,7 @@ console.log(employee)
                 <Card.Text>
                 Employee ID: {employee.employee_id}
                 </Card.Text> 
-                {position === 3 && <Button variant='warning' onClick={handleShowEmployeeEdit}>Edit Employee</Button>}
+                {position === 3 && <Button variant='warning' onClick={handleShowEmployeeEdit} data-testid='emp-edit-btn' >Edit Employee</Button>}
                  </Card.Body>
                     </Card>}
       

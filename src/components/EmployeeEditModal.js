@@ -14,7 +14,7 @@ function EmployeeEditModal({employee, showEmployeeEdit, handleCloseEmployeeEdit}
 
  
     let sliceDate = start_date ? start_date.slice(0,10) : ''
-    console.log('modal paretn', employee)
+    
 
     return (
         <>

@@ -4,7 +4,7 @@ import { useNavigate, Link, useParams, Navigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import { Alert } from 'bootstrap';
+import Alert from 'react-bootstrap/Alert'
 import baseURL from '../helpers/constants';
 import Unauthorized from './Unauthorized';
 
@@ -18,12 +18,11 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
     const { employeeId, userNotFound, position } = useContext(UserContext);
 
     function validateEmail(mail){
- if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
-  {
-    return (true)
+ if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+    return true
   }
     
-    return (false)
+    return false
 }
 
 
@@ -60,6 +59,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
 
     }, []);
 
+
     async function processForm() {
         
         try {
@@ -74,8 +74,8 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
             certification, start_date
             })
            
-            navigate(`/`);
-
+            navigate(`/employees`);
+          
         }
         catch (e) {
             setServerError(true)
@@ -86,9 +86,12 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
 
         evt.preventDefault();
         let errors = [];
-        if(employeeFormData.position === '') errors.push('Select a position.')
+        let validEmail = validateEmail(employeeFormData.email)
+       
+
+        if(employeeFormData.empPosition === '') errors.push('Select a position.')
         if(employeeFormData.certification === '') errors.push('Select a certification.')
-        if(validateEmail(employeeFormData.email)=== false) errors.push('Enter a valid email address.')
+        if(!validEmail) errors.push('Enter a valid email address.')
         if(errors.length){
             setFormErrors([...errors])
 
@@ -123,15 +126,18 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
 
     if(position !== 3) return <Navigate to="/unauthorized" replace={false}></Navigate>
 
+   
+
     return (
         <div>
             <h1>{BTN_VAL}</h1>
             <Form onSubmit={validateFormData}>
-            {formErrors && formErrors.map(err=><Alert>{err}</Alert>)}
+            {formErrors && formErrors.map(err=><Alert variant='danger'>{err}</Alert>)}
                 <Form.Group className="mb-3" controlId="first-name">
                     <Form.Label>First Name</Form.Label>
                     <Form.Control
                         // disabled={edit === true ? true : false}
+                        data-testid="first_name_test"
                         type="text"
                         name="first_name"
                         value={employeeFormData.first_name}
@@ -143,6 +149,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
                     <Form.Label>Last Name</Form.Label>
                     <Form.Control
                         type="text"
+                        data-testid="last_name_test"
                         name="last_name"
                         value={employeeFormData.last_name}
                         onChange={handleChange}
@@ -152,6 +159,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                         type="email"
+                        data-testid="email_test"
                         name="email"
                         value={employeeFormData.email}
                         onChange={handleChange}
@@ -159,8 +167,9 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Control
+                        data-testid='posSelect'
                         as="select"
-                        name="position"
+                        name="empPosition"
                         value={employeeFormData.empPosition}
                         onChange={(e) => handleChange(e)}
                     >
@@ -171,6 +180,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Control
+                        data-testid='certSelect'
                         as="select"
                         name="certification"
                         value={employeeFormData.certification}
@@ -185,6 +195,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
                     <Form.Label>Start Date *must be YYYY-MM-DD*</Form.Label>
                     <Form.Control
                         onKeyDown={(e)=> {e.preventDefault()}}
+                        data-testid='dateSelect'
                         name="start_date"
                         value={employeeFormData.start_date}
                         onChange={handleChange}
@@ -193,7 +204,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
                     />
                 </Form.Group>
 
-                <Button variant="primary" type="submit">{BTN_VAL}</Button>
+                <Button data-testid='emp-form-submit' variant="primary" type="submit">{BTN_VAL}</Button>
             </Form>
 
         </div>
