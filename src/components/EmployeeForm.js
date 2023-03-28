@@ -14,7 +14,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
     const [formErrors, setFormErrors] = useState([])
     const BTN_VAL = edit === true ? "Edit Employee" : "Add New Employee";
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true);
+    
     const { employeeId, userNotFound, position } = useContext(UserContext);
 
     function validateEmail(mail){
@@ -24,9 +24,6 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
     
     return false
 }
-
-
-
 
     const INIT_STATE = edit !== true ? {
         first_name: '', last_name: '', email:'', empPosition: '',
@@ -45,7 +42,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
         async function getPositionsAndCertifications() {
             try{
             let res = await axios.get(`${baseURL}/employees/params`);
-            setIsLoading(false);
+           
             setCertificationOptions(res.data.certifications);
             setPositionOptions(res.data.positions);
             }
@@ -116,11 +113,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
        
     }
 
-    if(isLoading === true) return (
-        <div>
-            Loading
-        </div>
-    )
+ 
 
     if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 

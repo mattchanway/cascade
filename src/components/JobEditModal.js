@@ -13,7 +13,7 @@ function JobEditModal({job, showJobEdit, handleCloseJobEdit}) {
         job_address_street_line2, job_address_street_city, job_description,
         shop_docs_link } = job;
 
- 
+      
 
 
 

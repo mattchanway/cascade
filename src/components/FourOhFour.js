@@ -9,6 +9,8 @@ function FourOhFour() {
     return (
         <div>
             <h1>404. That's an error.</h1>
+
+            <p>There was a problem processing your request. That's all we know.</p>
         </div>
 
     )

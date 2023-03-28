@@ -82,7 +82,7 @@ function JobDetail({ }) {
         </ButtonGroup>
         {position === 3 && <ButtonGroup>
             <Button variant="outline-warning" onClick={handleShowInactiveWarning}>Mark Job Complete</Button>
-            <Button  variant="outline-warning" onClick={handleShowJobEdit}>Edit Job Details</Button>
+            <Button  variant="outline-warning" data-testid="job-edit-btn" onClick={handleShowJobEdit}>Edit Job Details</Button>
             </ButtonGroup>}
       
         
