@@ -411,3 +411,33 @@ it('Redirects to 404 if put request throws.', async () => {
     expect(screen.getByText(/404. That's an error/)).toBeInTheDocument();
 
 })
+
+it('Shows the appropriate message when the server does not find a job', async () => {
+
+    const mockUser = {
+        employeeId: 1,
+        position: 1,
+        firstName: 'Bud',
+        lastName: 'Gomley',
+        userNotFound: false,
+        firstLogin: false
+    }
+    
+
+    axios.get = jest.fn().mockResolvedValue({ data: false })
+    await act(async () => {
+
+        render(
+            <MemoryRouter initialEntries={["/jobs/123abc"]}>
+                <UserContext.Provider value={mockUser}>
+                    <JobDetail></JobDetail>
+                </UserContext.Provider>
+            </MemoryRouter>
+        )
+    });
+
+   
+
+    expect(screen.getByText(/Job Not Found/)).toBeInTheDocument()
+
+})

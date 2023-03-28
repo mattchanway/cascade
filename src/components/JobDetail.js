@@ -43,8 +43,9 @@ function JobDetail({ }) {
         async function getJob() {
             try{
             let res = await axios.get(`${baseURL}/jobs/${id}`);
-
-            setJob(res.data);}
+            if(res.data === false) setJob(false)
+            else{
+            setJob(res.data)};}
             catch(e){
                 setServerError(true)
             }
@@ -60,6 +61,10 @@ function JobDetail({ }) {
      }
 
      if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
+
+     if(job === false){
+        return (<div><h1>Job Not Found</h1></div>)
+     }
 
     return (
         <div className='job-list-container'>

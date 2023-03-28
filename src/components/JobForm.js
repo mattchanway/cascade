@@ -48,7 +48,7 @@ function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, d
 
         }
         catch (e) {
-            console.log(e)
+            
             setServerError(true)
         }
     }
