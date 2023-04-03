@@ -78,11 +78,12 @@ it('Internal password reset handles valid passwords', async () => {
         userNotFound: false,
         firstLogin: false
     }
+    let mockSetLoggedInUser = jest.fn()
 
     render(
         <UserContext.Provider value={mockManager}>
         <BrowserRouter>
-            <ResetPasswordInternal></ResetPasswordInternal>
+            <ResetPasswordInternal setLoggedInUser={mockSetLoggedInUser}></ResetPasswordInternal>
         </BrowserRouter>
         </UserContext.Provider>
     )

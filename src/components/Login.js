@@ -64,7 +64,7 @@ function Login({ setLoggedInUser }) {
             }
         }
         catch (e) {
-            console.log(e)
+          
             setServerError(true);
             
         }

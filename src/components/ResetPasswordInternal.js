@@ -33,24 +33,24 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
         evt.preventDefault();
         try {
             let check = validatePasswords(passwordFormData.password, passwordFormData.confirmPassword);
-            console.log('innn', check, passwordFormData.password, passwordFormData.confirmPassword)
+        
             if (check === true) {
                 let res = await axios.patch(`${baseURL}/employees/${employeeId}`, {
                     password: passwordFormData.password,
                     firstLogin: firstLogin
                 })
-                console.log('should worj', res.data)
+                
                 setPasswordFormData(INIT_STATE);
                 setPasswordErrors([]);
 
-                // setLoggedInUser({
-                //     employeeId: res.data.employee_id,
-                //     position: res.data.position,
-                //     firstName: res.data.first_name,
-                //     lastName: res.data.last_name,
-                //     userNotFound: false,
-                //     firstLogin: res.data.first_login
-                // })
+                setLoggedInUser({
+                    employeeId: res.data.employee_id,
+                    position: res.data.position,
+                    firstName: res.data.first_name,
+                    lastName: res.data.last_name,
+                    userNotFound: false,
+                    firstLogin: res.data.first_login
+                })
                 
                 navigate('/');
             }
