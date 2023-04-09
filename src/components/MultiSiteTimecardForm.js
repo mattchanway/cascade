@@ -179,7 +179,7 @@ function MultiSiteTimecardForm() {
       <Toast.Body>Timecard added!</Toast.Body>
     </Toast>
             <Form onSubmit={validateFormData}>
-                {formErrors && formErrors.map(e => <Alert variant="danger">{e}</Alert>)}
+                {formErrors && formErrors.map(e => <Alert key={e} variant="danger">{e}</Alert>)}
                 <Row>
                     <Col xs={12} sm={8}>
                 <Form.Group className="mb-3" controlId="dateInput">
@@ -203,8 +203,8 @@ function MultiSiteTimecardForm() {
                 </Col>
                 </Row>
                 
-                {rows.map((r, i) => <Row>
-                    <Col xs={12}  >
+                {rows.map((r, i) => <Row key={`${r.rowId}-parentRow`}>
+                    <Col  xs={12}  >
                         <Form.Group>
                             <Form.Label><b>Timecard</b> <Button variant="danger" onClick={(evt) =>handleRowDelete(r.rowId, evt)}>X</Button></Form.Label>
                             <Form.Control
@@ -216,7 +216,7 @@ function MultiSiteTimecardForm() {
                                 onChange={(evt) => handleChange(r.rowId, evt)}
                             >
                                 <option value=''>Select Job</option>
-                                {jobs && jobs.map(job => <option data-testid={`jobOption-${r.rowId}-${job.job_id}`} value={job.job_id}>{job.job_id} - {job.job_name}</option>)}
+                                {jobs && jobs.map(job => <option key={`jobOption-${r.rowId}-${job.job_id}`} data-testid={`jobOption-${r.rowId}-${job.job_id}`} value={job.job_id}>{job.job_id} - {job.job_name}</option>)}
                             </Form.Control>
                         </Form.Group>
                     </Col>

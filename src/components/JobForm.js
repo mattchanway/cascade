@@ -94,7 +94,7 @@ function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, d
         <div>
             <h1 data-testid="edit-heading">{BTN_VAL}</h1>
             <Form onSubmit={validateFormData}>
-                {formErrors && formErrors.map(err=><Alert variant='danger'>{err}</Alert>)}
+                {formErrors && formErrors.map(err=><Alert key={err} variant='danger'>{err}</Alert>)}
                 <Form.Group className="mb-3" controlId="jobNumber">
                     <Form.Label>Job Number</Form.Label>
                     <Form.Control

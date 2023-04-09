@@ -104,7 +104,7 @@ if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
                 </Form.Group>
             <Button className='buttons' type="submit" data-testid='init-login-btn'>Login</Button>
 
-            {passwordErrors && passwordErrors.map((err)=><Alert variant ="danger">{err}</Alert>)}
+            {passwordErrors && passwordErrors.map((err)=><Alert key={err} variant ="danger">{err}</Alert>)}
 
             </Form>
 

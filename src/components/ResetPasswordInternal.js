@@ -91,7 +91,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
 
     return (
         <Form onSubmit={handlePasswordSubmit}>
-            {passwordErrors && passwordErrors.map(err => <Alert variant="danger">{err}</Alert>)}
+            {passwordErrors && passwordErrors.map(err => <Alert key={err} variant="danger">{err}</Alert>)}
 
             <Form.Group className="mb-3">
                 <Form.Label>Set New Password</Form.Label>

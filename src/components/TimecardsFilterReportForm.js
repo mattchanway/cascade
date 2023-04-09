@@ -106,7 +106,7 @@ function TimecardsFilterReportForm() {
 
 
             <Form className='report' onSubmit={handleReportSubmit}>
-            {formErrors && formErrors.map(err=><Alert variant='danger'>{err}</Alert>)}
+            {formErrors && formErrors.map(err=><Alert key ={err}variant='danger'>{err}</Alert>)}
                 <Form.Group className="mb-3" controlId="from-date-input">
                     <Form.Label >From Date</Form.Label>
                     <Form.Control
@@ -141,7 +141,7 @@ function TimecardsFilterReportForm() {
                         onChange={(e) => handleChange(e)}
                     >
                         <option value={''}>All Employees</option>
-                        {employeeDropDownData && employeeDropDownData.map(emp => <option value={emp.employee_id}>{emp.first_name} {emp.last_name}</option>)}
+                        {employeeDropDownData && employeeDropDownData.map(emp => <option key={`empOption-${emp.employee_id}`} value={emp.employee_id}>{emp.first_name} {emp.last_name}</option>)}
                     </Form.Control>
 
                 </Form.Group>
@@ -154,7 +154,7 @@ function TimecardsFilterReportForm() {
                         onChange={handleChange}
                     >
                         <option value={''}>All Jobs</option>
-                        {jobsDropdownData && jobsDropdownData.map(job => <option value={job.job_id}>{job.job_id} - {job.job_name}</option>)}
+                        {jobsDropdownData && jobsDropdownData.map(job => <option key={`jobOption-${job.job_id}`} value={job.job_id}>{job.job_id} - {job.job_name}</option>)}
                     </Form.Control>
 
                 </Form.Group>

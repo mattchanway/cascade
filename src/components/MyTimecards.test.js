@@ -60,6 +60,7 @@ it('My timecards form shows timecards for valid input', async () => {
         firstLogin: false  
     }
     axios.get = jest.fn().mockResolvedValue({ data:{ table:[{
+        timecard_id:1,
         job_id:'a1',
         job_name: 'sewage plant',
         timecard_date: '2023-03-17',
@@ -69,6 +70,7 @@ it('My timecards form shows timecards for valid input', async () => {
         notes: 'Cold'
     },
 {
+    timecard_id:2,
    job_id:'a2',
    job_name: 'skyscraper',
    timecard_date: '2023-03-18',
@@ -77,6 +79,7 @@ it('My timecards form shows timecards for valid input', async () => {
         expenses: 0,
         notes: null 
 },{
+    timecard_id:3,
     job_id:'a3',
     job_name: 'ski hill',
     timecard_date: '2023-03-19',

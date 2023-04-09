@@ -82,7 +82,7 @@ function ForgotPasswordModalForm() {
             <p>Enter employee ID to receive password reset link</p>
             
             <Form onSubmit={handleIdSubmit} id='login-form'>
-            {formErrors &&  formErrors.map((e)=> <Alert variant="danger">{e}</Alert>)}
+            {formErrors &&  formErrors.map((e)=> <Alert key={e} variant="danger">{e}</Alert>)}
             <Image id="test" src={cascadeLogo} fluid="true"></Image>
                 
                 <Form.Group className = "mb-3">

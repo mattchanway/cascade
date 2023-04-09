@@ -82,7 +82,7 @@ function ForgotPasswordReset({setLoggedInUser}) {
 
     return (
         <Form onSubmit={handlePasswordSubmit}>
-            {passwordErrors && passwordErrors.map((err)=><Alert variant ="danger">{err}</Alert>)}
+            {passwordErrors && passwordErrors.map((err)=><Alert key={err} variant ="danger">{err}</Alert>)}
             <Form.Group className="mb-3" controlId="expensesInput">
                 <Form.Label>Password</Form.Label>
                 <Form.Control

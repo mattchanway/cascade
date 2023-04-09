@@ -125,7 +125,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
         <div>
             <h1>{BTN_VAL}</h1>
             <Form onSubmit={validateFormData}>
-            {formErrors && formErrors.map(err=><Alert variant='danger'>{err}</Alert>)}
+            {formErrors && formErrors.map(err=><Alert key={err} variant='danger'>{err}</Alert>)}
                 <Form.Group className="mb-3" controlId="first-name">
                     <Form.Label>First Name</Form.Label>
                     <Form.Control
@@ -167,7 +167,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
                         onChange={(e) => handleChange(e)}
                     >
                         <option value={''}>Position</option>
-                        {positionOptions && positionOptions.map(pos => <option value={pos.position_id}>{pos.position_name}</option>)}
+                        {positionOptions && positionOptions.map(pos => <option key={`${pos.position_id}-posOption`} value={pos.position_id}>{pos.position_name}</option>)}
                     </Form.Control>
 
                 </Form.Group>
@@ -180,7 +180,7 @@ function EmployeeForm({ edit, employee_id ,first_name, last_name, email, empPosi
                         onChange={(e) => handleChange(e)}
                     >
                         <option value={''}>Certification</option>
-                        {certificationOptions && certificationOptions.map(c => <option value={c.certification_id}>{c.certification_name}</option>)}
+                        {certificationOptions && certificationOptions.map(c => <option key={`${c.certification_id}-certOption`} value={c.certification_id}>{c.certification_name}</option>)}
                     </Form.Control>
 
                 </Form.Group>

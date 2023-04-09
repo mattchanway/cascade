@@ -44,7 +44,7 @@ function Employees() {
                 <h1>Employee Directory</h1>
             {employees && <ListGroup className='job-list' as="ul">
 
-                {employees.map((e) => <ListGroup.Item action href={`/employees/${e.employee_id}`}>{e.last_name}, {e.first_name} </ListGroup.Item>)}
+                {employees.map((e) => <ListGroup.Item key={e.employee_id} action href={`/employees/${e.employee_id}`}>{e.last_name}, {e.first_name} </ListGroup.Item>)}
 
             </ListGroup>}
 

@@ -100,6 +100,7 @@ it('Shows the appropriate timecards report results', async () => {
 
     const mockTimecards = {
         table: [{
+            timecard_id:1,
             job_id: 'A1',
             job_name: 'Sewage',
             employee_id: 25,
@@ -110,6 +111,7 @@ it('Shows the appropriate timecards report results', async () => {
             notes: 'Stubbed my toe'
         },
         {
+            timecard_id:2,
             job_id: 'A1',
             job_name: 'Sewage',
             employee_id: 25,
