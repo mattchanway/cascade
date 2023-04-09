@@ -18,7 +18,7 @@ function TimecardsFilterReportForm() {
     const { employeeId, position, userNotFound } = useContext(UserContext);
 
     let INIT_STATE = {
-        fromDate: '', toDate: '', employeeId: '', jobId: '', overtime: false
+        fromDate: '', toDate: '', employeeId: '', jobId: ''
     };
     const [serverError, setServerError] = useState(false);
     const [formErrors, setFormErrors] = useState([])
@@ -57,15 +57,15 @@ function TimecardsFilterReportForm() {
             }
 
             else{
-            let { fromDate, toDate, employeeId, jobId, overtime } = timecardReportFormData;
+            let { fromDate, toDate, employeeId, jobId } = timecardReportFormData;
             if (jobId.length === 0) jobId = null;
             if (employeeId.length === 0) employeeId = null;
             if (fromDate === '') fromDate = undefined;
             if (toDate === '') toDate = undefined;
-            console.log(fromDate, toDate, employeeId, jobId, overtime)
+            console.log(fromDate, toDate, employeeId, jobId)
             let res = await axios.get(`${baseURL}/timecards/filter`, {
                 params: {
-                    fromDate, toDate, employeeId, jobId, overtime
+                    fromDate, toDate, employeeId, jobId
                 }
             })
             setFormErrors([]);
