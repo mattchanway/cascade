@@ -8,7 +8,6 @@ import Toast from 'react-bootstrap/Toast';
 import Button from 'react-bootstrap/Button';
 import toISOLocal from '../helpers/toISOLocal';
 import axios from 'axios';
-import CurrencyInput from 'react-currency-input-field';
 import baseURL from '../helpers/constants';
 
 function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToast, handleErrorShow }) {
@@ -68,9 +67,9 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
         evt.preventDefault();
         let { timecard_date, reg_time, overtime, expenses, notes } = timecardFormData;
         let errors = [];
-        if (typeof Date.parse(timecard_date) === NaN) errors.push("Please enter a valid date.")
+        if (isNaN(timecard_date)) errors.push("Please enter a valid date.")
         if(!reg_time.length) errors.push('Regular time cannot be blank.')
-        if (reg_time.length && reg_time < 1 || reg_time > 8) errors.push("Regular time must be at least 1, and no more than 8.");
+        if (reg_time.length && reg_time < 1 || reg_time.length && reg_time > 8) errors.push("Regular time must be at least 1, and no more than 8.");
         if (overtime < 0) errors.push("Overtime cannot be a negative number.");
         if (expenses.length > 0 && isNaN(+expenses) === true) errors.push("Expenses must be blank, or a number(example: 7.50)");
         if (notes.length > 200) errors.push("Notes must be 200 characters or less.")
@@ -95,7 +94,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={validateFormData}>
-                        {formErrors && formErrors.map(e => <Alert key={err} variant="danger">{e}</Alert>)}
+                        {formErrors && formErrors.map(e => <Alert key={e} variant="danger">{e}</Alert>)}
                         <Form.Group className="mb-3" controlId="dateInput">
                             <Form.Label>Date *must be YYYY-MM-DD*</Form.Label>
                             <Form.Control
