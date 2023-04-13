@@ -9,7 +9,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import baseURL from '../helpers/constants';
 
 
-function Navibar({setLoggedInUser}) {
+function Navibar({setLoggedInUser, doLogout}) {
     axios.defaults.withCredentials = true;
     const [loggedOut, setLoggedOut] = useState(false)
     const { employeeId, position, firstName, lastName } = useContext(UserContext);
@@ -18,20 +18,12 @@ function Navibar({setLoggedInUser}) {
     let welcome = firstName ? `Welcome, ${firstName} ${lastName}` : 'Cascade Metal Design'
     let breakpoint = position === 3 ? 'md' : 'sm' ;
   
+    async function handleLogout(){
 
-    async function doLogout() {
+        setIsExpanded(false);
+        setLoggedOut(true);
+        doLogout();
 
-    
-        await axios.post(`${baseURL}/auth/logout`);
-        setLoggedInUser({
-            employeeId: null,
-            position: null,
-            firstName: null,
-            lastName: null,
-            userNotFound: true
-          })
-          setIsExpanded(false);
-         setLoggedOut(true)
     }
 
     // if(loggedOut === true) return <Navigate to="/login" replace={false}></Navigate>
@@ -57,7 +49,7 @@ function Navibar({setLoggedInUser}) {
                 {position === 3 &&<Nav.Link href="/employees">Employees</Nav.Link>}
                 {position && <Nav.Link href="/my-profile">My Timecards</Nav.Link>}
                 {position && <Nav.Link href="/add-multiple-timecards">Multi-Site</Nav.Link>}
-                {firstName && <Nav.Link onClick={doLogout} data-testid="logout-test-btn">Logout</Nav.Link>} 
+                {firstName && <Nav.Link onClick={handleLogout} data-testid="logout-test-btn">Logout</Nav.Link>} 
                
                 
                

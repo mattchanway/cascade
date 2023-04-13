@@ -73,6 +73,21 @@ function App() {
 
   }, [])
 
+
+  async function doLogout() {
+
+    await axios.post(`${baseURL}/auth/logout`);
+    setLoggedInUser({
+        employeeId: null,
+        position: null,
+        firstName: null,
+        lastName: null,
+        userNotFound: true
+      })
+
+      return (<Navigate to="/login"></Navigate>)
+      
+}
  
 
   if (loggedInUser.employeeId === null && loggedInUser.userNotFound === false) return (
@@ -85,7 +100,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <UserContext.Provider value={loggedInUser}>
-          <Navibar setLoggedInUser={setLoggedInUser} />
+          <Navibar setLoggedInUser={setLoggedInUser} doLogout={doLogout} />
           <Routes>
             <Route path="/login" element={<Login setLoggedInUser={setLoggedInUser}></Login>}></Route>
             <Route path="/" element={<Jobs setLoggedInUser={setLoggedInUser}></Jobs>}></Route>

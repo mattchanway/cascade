@@ -76,9 +76,9 @@ function Login({ setLoggedInUser }) {
 if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
-        <div id='login-form-container'>
+        <div className='login-form-container'>
         
-            <Form onSubmit={handleLoginSubmit} id='login-form' data-testid='loginForm' >
+            <Form onSubmit={handleLoginSubmit} className='login-form' data-testid='loginForm' >
                 <Image id="test" src={cascadeLogo} fluid="true"></Image>
                 
                 <Form.Group className = "mb-3">

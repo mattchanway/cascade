@@ -41,7 +41,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
                 })
                 
                 setPasswordFormData(INIT_STATE);
-                setPasswordErrors([]);
+              
 
                 setLoggedInUser({
                     employeeId: res.data.employee_id,
@@ -57,7 +57,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
 
         }
         catch (e) {
-            
+            console.log(e)
             setServerError(true);
         }
 
@@ -65,18 +65,21 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
 
     function validatePasswords(str1, str2) {
 
+        let errors = []
+
         if (str1 !== str2) {
             let passwordsDontMatchError = 'Passwords do not match.';
-            setPasswordErrors([passwordsDontMatchError])
-            return false;
+            errors.push(passwordsDontMatchError)
+            
         }
-        if (str1 === str2 && str1.length < 8) {
+        if (str1.length < 8) {
             let shortError = 'Password must be at least 8 characters';
-            setPasswordErrors([shortError])
-            return false;
+            errors.push(shortError)
+            
 
         }
-
+        setPasswordErrors([...errors])
+        if(errors.length) return false
         return true
 
 
@@ -90,8 +93,11 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
     if (serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
-        <div id='login-form-container'>
+        <div className ='reset-password-internal-container' >
+            <h2>Set Your New Password Below</h2>
+            
         <Form onSubmit={handlePasswordSubmit}>
+      
             {passwordErrors && passwordErrors.map(err => <Alert key={err} variant="danger">{err}</Alert>)}
 
             <Form.Group className="mb-3">
