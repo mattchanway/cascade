@@ -21,8 +21,7 @@ function Navibar({setLoggedInUser}) {
 
     async function doLogout() {
 
-        
-
+    
         await axios.post(`${baseURL}/auth/logout`);
         setLoggedInUser({
             employeeId: null,

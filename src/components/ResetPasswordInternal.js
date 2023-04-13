@@ -90,6 +90,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
     if (serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
+        <div id='login-form-container'>
         <Form onSubmit={handlePasswordSubmit}>
             {passwordErrors && passwordErrors.map(err => <Alert key={err} variant="danger">{err}</Alert>)}
 
@@ -115,6 +116,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
             </Form.Group>
             <Button variant="primary" type="submit" data-testid="reset-pw-submit">Submit Password</Button>
         </Form>
+        </div>
 
     )
 
