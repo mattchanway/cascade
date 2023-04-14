@@ -57,7 +57,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
 
         }
         catch (e) {
-            console.log(e)
+            
             setServerError(true);
         }
 
@@ -94,14 +94,14 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
 
     return (
         <div className ='reset-password-internal-container' >
-            <h2>Set Your New Password Below</h2>
+            <p><b>Set Your New Password Below</b></p>
             
         <Form onSubmit={handlePasswordSubmit}>
       
             {passwordErrors && passwordErrors.map(err => <Alert key={err} variant="danger">{err}</Alert>)}
 
             <Form.Group className="mb-3">
-                <Form.Label>Set New Password</Form.Label>
+                <Form.Label>Set New Password<b>*</b></Form.Label>
                 <Form.Control
                     data-testid="reset-pw-input"
                     type="password"
@@ -111,7 +111,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
                 />
             </Form.Group>
             <Form.Group className="mb-3">
-                <Form.Label>Confirm New Password</Form.Label>
+                <Form.Label>Confirm New Password<b>*</b></Form.Label>
                 <Form.Control
                     data-testid="reset-confirm-input"
                     type="password"
@@ -120,7 +120,7 @@ function ResetPassword({ loggedInUser, setLoggedInUser }) {
                     onChange={handleChange}
                 />
             </Form.Group>
-            <Button variant="primary" type="submit" data-testid="reset-pw-submit">Submit Password</Button>
+            <Button className='cascade-color-button' type="submit" data-testid="reset-pw-submit">Submit Password</Button>
         </Form>
         </div>
 

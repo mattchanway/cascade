@@ -5,6 +5,12 @@
 
 }
 
+.cascade-color-button{
+  background-color: #0076bd;
+  border-color: #0076bd;
+
+}
+
 h1 {
   font-family: Verdana, Geneva, Tahoma, sans-serif
 }
@@ -193,7 +199,7 @@ h1 {
 .login-form {
   background-color: white;
   width: 50%;
- 
+  padding: 15px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 100px;
@@ -207,10 +213,12 @@ h1 {
   margin-left: auto;
   margin-right: auto;
   margin-top: 100px;
+  border-radius: 5px;
+  padding: 10px;
 
 }
 
-input[type=text],
+/* input[type=text],
 input[type=password],
 textarea,
 input[type=email],
@@ -218,7 +226,7 @@ input[type=date],
 select {
   width: 70%;
   margin: auto;
-}
+} */
 
 @media (max-width: 576px) {
 

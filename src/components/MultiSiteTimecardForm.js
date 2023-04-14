@@ -176,7 +176,7 @@ function MultiSiteTimecardForm() {
             </h4><br></br>
             
              <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>
-      <Toast.Body>Timecard added!</Toast.Body>
+      <Toast.Body bg='success'>Timecard added!</Toast.Body>
     </Toast>
             <Form onSubmit={validateFormData}>
                 {formErrors && formErrors.map(e => <Alert key={e} variant="danger">{e}</Alert>)}

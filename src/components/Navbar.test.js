@@ -98,6 +98,7 @@ it('Logout functionality works', async () => {
         userNotFound: false,
         firstLogin: false
     }
+    let doLogout = jest.fn()
 
     let mockSetLoggedInUser = jest.fn().mockReturnValue({employeeId: null,
         position: null,
@@ -110,7 +111,7 @@ it('Logout functionality works', async () => {
         render(
 <MemoryRouter initialEntries={["/my-profile"]}>
 <UserContext.Provider value={mockUser}>
-    <Navibar setLoggedInUser={mockSetLoggedInUser}></Navibar>
+    <Navibar setLoggedInUser={mockSetLoggedInUser} doLogout={doLogout}></Navibar>
     <Routes>    
         <Route path="/login" element={<Login></Login>}></Route>
         <Route path="/my-profile" element={<MyTimecards></MyTimecards>}></Route>
@@ -131,6 +132,6 @@ it('Logout functionality works', async () => {
         userEvent.click(logoutBtn)
     })
 
-    expect(mockSetLoggedInUser).toHaveBeenCalled();
+    expect(doLogout).toHaveBeenCalled();
    
 })
