@@ -78,12 +78,12 @@ function ForgotPasswordModalForm() {
     
     return (
 
-        <div id='login-form-container'>
-            <p>Enter employee ID to receive password reset link</p>
+        <div className ='reset-password-internal-container'>
+            <p><b>Enter your employee ID - we'll send a password reset link to your email.</b></p>
             
             <Form onSubmit={handleIdSubmit} id='login-form'>
             {formErrors &&  formErrors.map((e)=> <Alert key={e} variant="danger">{e}</Alert>)}
-            <Image id="test" src={cascadeLogo} fluid="true"></Image>
+            {/* <Image id="test" src={cascadeLogo} fluid="true"></Image> */}
                 
                 <Form.Group className = "mb-3">
                 <Form.Label>Employee ID</Form.Label>
@@ -96,7 +96,7 @@ function ForgotPasswordModalForm() {
                 >
                 </Form.Control>
                 </Form.Group>
-            <Button type="submit" data-testid="forgotPasswordModalFormSubmit">Send Password Reset Link</Button>
+            <Button  className='cascade-color-button' type="submit" data-testid="forgotPasswordModalFormSubmit">Send Password Reset Link</Button>
             </Form>
 
             <Toast onClose={handleCloseToast} show={showToast} delay={5000} autohide>

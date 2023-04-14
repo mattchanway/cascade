@@ -81,6 +81,8 @@ function ForgotPasswordReset({setLoggedInUser}) {
     if(serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     return (
+        <div className ='reset-password-internal-container' >
+            <p><b>Set Your New Password Below</b></p>
         <Form onSubmit={handlePasswordSubmit}>
             {passwordErrors && passwordErrors.map((err)=><Alert key={err} variant ="danger">{err}</Alert>)}
             <Form.Group className="mb-3" controlId="expensesInput">
@@ -103,8 +105,9 @@ function ForgotPasswordReset({setLoggedInUser}) {
                     onChange={handleChange}
                 />
             </Form.Group>
-            <Button variant="primary" type="submit" data-testid='ForgotPasswordResetPasswordSubmit' >Submit Password</Button>
+            <Button className='cascade-color-button' type="submit" data-testid='ForgotPasswordResetPasswordSubmit' >Submit Password</Button>
         </Form>
+        </div>
 
     )
 
