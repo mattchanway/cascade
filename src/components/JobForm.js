@@ -18,11 +18,11 @@ function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, d
 
     const INIT_STATE = edit !== true ? {
         job_id: '', job_name: '', job_address_street_line1: '',
-        job_address_street_line2: '', job_address_street_city: '', job_description: '',
+        job_address_street_unit: '', job_address_street_city: '', job_description: '',
         shop_docs_link: ''
     } : {
         job_id: jobNumber, job_name: jobName, job_address_street_line1: addressLine1,
-        job_address_street_line2: addressLine2 || '', job_address_street_city: city, job_description: description || '',
+        job_address_street_unit: addressLine2 || '', job_address_street_city: city, job_description: description || '',
         shop_docs_link: link || ''
     }
 
@@ -32,15 +32,15 @@ function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, d
        
         try {
             let { job_id, job_name, job_address_street_line1,
-                job_address_street_line2, job_address_street_city, job_description,
+                job_address_street_unit, job_address_street_city, job_description,
                 shop_docs_link } = jobFormData;
             let res = !edit ? await axios.post(`${baseURL}/jobs`, {
                 job_id, job_name, job_address_street_line1,
-                job_address_street_line2, job_address_street_city, job_description,
+                job_address_street_unit, job_address_street_city, job_description,
                 shop_docs_link
             }) : await axios.put(`${baseURL}/jobs/${job_id}`, {
                 job_name, job_address_street_line1,
-                job_address_street_line2, job_address_street_city, job_description,
+                job_address_street_unit, job_address_street_city, job_description,
                 shop_docs_link
             })
           
@@ -132,8 +132,8 @@ function JobForm({ edit, jobNumber, jobName, addressLine1, addressLine2, city, d
                     <Form.Control
                         type="text"
                         data-testid="job-addressline2-input"
-                        name="job_address_street_line2"
-                        value={jobFormData.job_address_street_line2}
+                        name="job_address_street_unit"
+                        value={jobFormData.job_address_street_unit}
                         onChange={handleChange}
                     />
                 </Form.Group>

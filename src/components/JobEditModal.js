@@ -10,7 +10,7 @@ function JobEditModal({job, showJobEdit, handleCloseJobEdit}) {
     
 
     let { job_id, job_name, job_address_street_line1,
-        job_address_street_line2, job_address_street_city, job_description,
+        job_address_street_unit, job_address_street_city, job_description,
         shop_docs_link } = job;
 
       
@@ -27,7 +27,7 @@ function JobEditModal({job, showJobEdit, handleCloseJobEdit}) {
                 keyboard={false}
             >
                 <JobForm edit={true} jobNumber={job_id} jobName={job_name} addressLine1={job_address_street_line1}
-                    addressLine2={job_address_street_line2} city={job_address_street_city} description={job_description} link={shop_docs_link} ></JobForm>
+                    addressLine2={job_address_street_unit} city={job_address_street_city} description={job_description} link={shop_docs_link} ></JobForm>
             </Modal>
         </>
     );

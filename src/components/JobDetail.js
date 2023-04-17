@@ -73,7 +73,7 @@ function JobDetail({ }) {
         <Card.Title>{`${job.job_id} - ${job.job_name}`}</Card.Title>
         <Card.Text>
         {job.job_address_street_line1}
-        {job.job_address_street_unit !== null && job.job_address_street_unit}
+        {job.job_address_street_unit !== null && ` - ${job.job_address_street_unit}`}
         <br></br>{job.job_address_street_city}
         <br></br>{job.job_description}<br></br>
         </Card.Text>
