@@ -36,6 +36,7 @@ function MyTimecards() {
             setTimecardResults(res.data.table)
         }
         catch (e) {
+            console.log(e)
             setServerError(true);
         }
     }
