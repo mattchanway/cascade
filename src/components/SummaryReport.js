@@ -7,6 +7,11 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import MyTimecardsReportResults from './MyTimecardsReportResults';
 import Alert from 'react-bootstrap/Alert';
+import Dropdown from 'react-bootstrap/Dropdown';
+
+
+
+
 
 
 
@@ -21,8 +26,11 @@ function SummaryReport() {
     const [formErrors, setFromErrors] = useState([])
     const [timecardReportFormData, setTimecardReportFormData] = useState(INIT_STATE);
     const [timecardResults, setTimecardResults] = useState([]);
-    // const [excludedEmployees, setExcludedEmployees] = useState([])
     const [employeeBooleanArray, setEmployeeBooleanArray] = useState([])
+    const [showModal, setShowModal] = useState(false)
+
+    let handleCloseEmployeeCheckbox = () => setShowModal(false)
+    let handleOpenEmployeeCheckbox = () => setShowModal(true)
 
     // THE INTERFACE IS A BOOLEAN CHECKBOX DROPDOWN WITH EVERY CHECKBOX INITIALIZED TO TRUE
     // USE EFFECT TO GET ALL THE EMPLOYEES, NEED THEIR NAME AND ID
@@ -48,17 +56,20 @@ function SummaryReport() {
     }, [])
 
 
-    async function handleReportSubmit(fromDate, toDate) {
-       
+    async function handleReportSubmit(e) {
+        e.preventDefault()
         
         try {
-            let res = await axios.get(`${baseURL}/timecards/filter`, {
-                params: {
-                    fromDate: fromDate, toDate: toDate, employeeId: employeeId, jobId: null, overtime: null
-                }
+            let searchParams = new URLSearchParams();
+            searchParams.append("fromDate", timecardReportFormData.fromDate)
+            searchParams.append("toDate", timecardReportFormData.toDate)
+            let excludedEmployees = employeeBooleanArray.filter((emp) => emp.included===false).map(obj=>obj.employee_id)
+            excludedEmployees.forEach(id=>searchParams.append("excludedEmployees", id))
+            let res = await axios.get(`${baseURL}/timecards/reports/job-summary`, {
+                params: searchParams
             })
            
-            setTimecardResults(res.data.table)
+            console.log(res.data)
         }
         catch (e) {
             setServerError(true);
@@ -74,40 +85,28 @@ function SummaryReport() {
         }))
     }
 
-    function validateForm(evt){
-        evt.preventDefault();
-
-        let { fromDate, toDate} = timecardReportFormData;
-        let dateA = new Date(fromDate);
-        let dateB = new Date(toDate);
-
-        if(dateA > dateB){
-            setFromErrors([...formErrors, 'From date cannot be greater than to date.'])
-        }
-        else{
-            setFromErrors([]);
-            handleReportSubmit(fromDate, toDate)
-        }
-      
-
-    }
-
-
-
+    function onCheckClick(evt){
+        const {checked, name} = evt.target
+        let newArr = employeeBooleanArray.map((emp)=> emp.employee_id === +name ? {...emp, included: checked} : emp)
+        setEmployeeBooleanArray(newArr)
+       
+       }
+    
     if (serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
     }
 
-    
+    // {employeeBooleanArray && employeeBooleanArray.map(emp => <Form.Check type='checkbox' key={`empOption-${emp.employee_id}`} value={emp.included}>{emp.first_name} {emp.last_name}</Form.Check>)}
 
     return (
         <div>
             <h1>Summary Report</h1>
 
 
-            <Form className='report' onSubmit={validateForm}>
+            <Form className='report' onSubmit={handleReportSubmit}>
+                <p>**The For Employees dropdown shows the employees whose timecards will be included in the total - all employees selected by default.</p>
             {formErrors && formErrors.map(err=><Alert key={err} variant='danger'>{err}</Alert>)}
                 <Form.Group className="mb-3" controlId="from-date-input">
                     <Form.Label >From Date</Form.Label>
@@ -135,19 +134,23 @@ function SummaryReport() {
                         autoFocus
                     />
                 </Form.Group>
-                <Form.Group className="mb-3">
-                <Form.Label>Employees</Form.Label>
-                <Form.Control 
-                
-                
-                
-                />
+              
+                {employeeBooleanArray && <Dropdown>
+      <Dropdown.Toggle drop={'down'} variant="primary" id="dropdown-checkbox">
+        For Employees
+      </Dropdown.Toggle>
 
-                </Form.Group>
+      <Dropdown.Menu style={{ maxHeight: '200px', overflowY: 'scroll' }} >
+      {employeeBooleanArray.map((emp => <Form.Check  key={`exclude-sel-${emp.employee_id}`} defaultChecked={true} name={emp.employee_id} onChange={onCheckClick} type='checkbox' label={`${emp.first_name} ${emp.last_name}`}></Form.Check>))}
+      </Dropdown.Menu>
+    </Dropdown>}<br></br>
                 
                 <Button variant="primary" type="submit" data-testid='myTimecardsReportSubmit'>Get Timecards</Button>
-
+               
             </Form>
+            
+      
+            
             {/* RENDER RESULTS HERE */}
             {/* {timecardResults && <MyTimecardsReportResults timecardResults={timecardResults}></MyTimecardsReportResults>} */}
 

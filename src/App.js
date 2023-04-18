@@ -19,6 +19,7 @@ import ForgotPasswordReset from './components/ForgotPasswordReset';
 import ForgotPasswordModalForm from './components/ForgotPasswordModalForm';
 import FourOhFour from './components/FourOhFour';
 import Spinner from './components/Spinner';
+import SummaryReport from './components/SummaryReport';
 import baseURL from './helpers/constants';
 import Unauthorized from './components/Unauthorized';
 import MyTimecards from './components/MyTimecards';
@@ -93,6 +94,7 @@ function App() {
             <Route path="/jobs/new-job" element={<JobForm ></JobForm>} ></Route>
             <Route path="/jobs/:id" element={<JobDetail></JobDetail>} ></Route>
             <Route path="/report" element={<TimecardsFilterReportForm></TimecardsFilterReportForm>}></Route>
+            <Route path="/reports/summary-report" element={<SummaryReport></SummaryReport>}></Route>
             <Route path="/employees/new-employee" element={<EmployeeForm></EmployeeForm>} ></Route>
             <Route path="/employees/:id" element={<EmployeeDetail></EmployeeDetail>} ></Route>
             <Route path="/employees" element={<Employees></Employees>} ></Route>
