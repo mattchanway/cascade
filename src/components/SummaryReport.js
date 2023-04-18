@@ -21,7 +21,31 @@ function SummaryReport() {
     const [formErrors, setFromErrors] = useState([])
     const [timecardReportFormData, setTimecardReportFormData] = useState(INIT_STATE);
     const [timecardResults, setTimecardResults] = useState([]);
-    const [excludedEmployees, setExcludedEmployees] = useState([])
+    // const [excludedEmployees, setExcludedEmployees] = useState([])
+    const [employeeBooleanArray, setEmployeeBooleanArray] = useState([])
+
+    // THE INTERFACE IS A BOOLEAN CHECKBOX DROPDOWN WITH EVERY CHECKBOX INITIALIZED TO TRUE
+    // USE EFFECT TO GET ALL THE EMPLOYEES, NEED THEIR NAME AND ID
+    // KEPT AS STATE / FORM DATA, ALL INITIALIZED TO TRUE
+    // IF UNCHECKED, THAT ID IS ADDED TO EXCLUDED EMPLOYEES OR VICE VERSA
+
+    useEffect(() => {
+
+        async function getEmployees() {
+            try {
+                let res = await axios.get(`${baseURL}/employees`);
+                let arr = res.data.map(emp=> ({employee_id: emp.employee_id, first_name: emp.first_name, last_name:emp.last_name, included:true}))
+             
+                setEmployeeBooleanArray(arr);
+            }
+            catch (e) {
+
+                setServerError(true);
+            }
+        }
+        getEmployees();
+
+    }, [])
 
 
     async function handleReportSubmit(fromDate, toDate) {
@@ -110,6 +134,15 @@ function SummaryReport() {
                         type="date"
                         autoFocus
                     />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                <Form.Label>Employees</Form.Label>
+                <Form.Control 
+                
+                
+                
+                />
+
                 </Form.Group>
                 
                 <Button variant="primary" type="submit" data-testid='myTimecardsReportSubmit'>Get Timecards</Button>
