@@ -5,7 +5,7 @@ import UserContext from './UserContext';
 import baseURL from '../helpers/constants';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import MyTimecardsReportResults from './MyTimecardsReportResults';
+import SummaryReportResults from './SummaryReportResults'
 import Alert from 'react-bootstrap/Alert';
 import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -25,7 +25,7 @@ function SummaryReport() {
     const [serverError, setServerError] = useState(false);
     const [formErrors, setFromErrors] = useState([])
     const [timecardReportFormData, setTimecardReportFormData] = useState(INIT_STATE);
-    const [timecardResults, setTimecardResults] = useState([]);
+    const [summaryReportResults, setSummaryReportResults] = useState([]);
     const [employeeBooleanArray, setEmployeeBooleanArray] = useState([])
     const [showModal, setShowModal] = useState(false)
 
@@ -68,8 +68,8 @@ function SummaryReport() {
             let res = await axios.get(`${baseURL}/timecards/reports/job-summary`, {
                 params: searchParams
             })
-           
-            console.log(res.data)
+           console.log(res.data)
+            setSummaryReportResults(res.data)
         }
         catch (e) {
             setServerError(true);
@@ -98,7 +98,6 @@ function SummaryReport() {
         return <Navigate to="/login" replace={true}></Navigate>
     }
 
-    // {employeeBooleanArray && employeeBooleanArray.map(emp => <Form.Check type='checkbox' key={`empOption-${emp.employee_id}`} value={emp.included}>{emp.first_name} {emp.last_name}</Form.Check>)}
 
     return (
         <div>
@@ -148,12 +147,9 @@ function SummaryReport() {
                 <Button variant="primary" type="submit" data-testid='myTimecardsReportSubmit'>Get Timecards</Button>
                
             </Form>
-            
-      
-            
-            {/* RENDER RESULTS HERE */}
-            {/* {timecardResults && <MyTimecardsReportResults timecardResults={timecardResults}></MyTimecardsReportResults>} */}
 
+            {summaryReportResults && <SummaryReportResults results = {summaryReportResults}></SummaryReportResults> }
+            
 
         </div>
 
