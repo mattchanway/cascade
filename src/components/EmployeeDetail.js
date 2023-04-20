@@ -49,10 +49,12 @@ function EmployeeDetail() {
         getEmployee();
     }, []);
 
-    async function changeEmployeeStatus(employee_id, status) {
+    async function changeEmployeeStatus() {
+    
+        let updatedStatus = employee.status === true ? false : true
 
         try{
-        let res = await axios.patch(`${baseURL}/employees/status/${employee_id}`,{status: !status});
+        let res = await axios.patch(`${baseURL}/employees/status/${employee.employee_id}`,{status: updatedStatus});
         handleCloseEmployeeStatusModal();
 
         }
@@ -129,7 +131,7 @@ function EmployeeDetail() {
                         showEmployeeEdit={showEmployeeEdit}></EmployeeEditModal>}
                          {employee && position === 3 && <EmployeeStatusChangeModal showEmployeeStatusModal={showEmployeeStatusModal}
                         handleCloseEmployeeStatusModal={handleCloseEmployeeStatusModal} changeEmployeeStatus={changeEmployeeStatus}
-                        employee_id={employee.employee_id} status = {employee.status}
+                      
                         ></EmployeeStatusChangeModal>}
 
             </div>

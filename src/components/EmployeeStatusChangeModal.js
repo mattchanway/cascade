@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 
 
 function EmployeeStatusChangeModal({ handleCloseEmployeeStatusModal, showEmployeeStatusModal, changeEmployeeStatus,
-employee_id, status }) {
+ }) {
    
 
    
@@ -28,7 +28,7 @@ employee_id, status }) {
                     <Button variant="secondary" onClick={handleCloseEmployeeStatusModal}>
                         Leave employee active for now
                     </Button>
-                    <Button variant="primary" onClick={(employee_id, status)=> changeEmployeeStatus(employee_id, status)}>Mark this employee inactive</Button>
+                    <Button variant="primary" onClick={changeEmployeeStatus}>Mark this employee inactive</Button>
                 </Modal.Footer>
             </Modal>
         </>
