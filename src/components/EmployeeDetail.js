@@ -50,12 +50,14 @@ function EmployeeDetail() {
     }, []);
 
     async function changeEmployeeStatus() {
-    
-        let updatedStatus = employee.status === true ? false : true
+        
+        let updatedStatus = employee.active === true ? false : true
+       
 
         try{
         let res = await axios.patch(`${baseURL}/employees/status/${employee.employee_id}`,{status: updatedStatus});
         handleCloseEmployeeStatusModal();
+        setEmployee({...employee, active: updatedStatus})
 
         }
         catch(e){

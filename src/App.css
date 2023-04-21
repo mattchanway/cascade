@@ -187,7 +187,7 @@ h1 {
 .job-list-container {
   overflow: auto;
   background-color: #fafbfc;
-  height: 100%;
+  /* height: 100%; */
 }
 
 #login-form {

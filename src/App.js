@@ -24,6 +24,7 @@ import baseURL from './helpers/constants';
 import Unauthorized from './components/Unauthorized';
 import MyTimecards from './components/MyTimecards';
 import MultiSiteTimecardForm from './components/MultiSiteTimecardForm';
+import EmployeeMasterMenu from './components/EmployeeMasterMenu';
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -99,6 +100,7 @@ function App() {
             <Route path="/employees/:id" element={<EmployeeDetail></EmployeeDetail>} ></Route>
             <Route path="/employees" element={<Employees></Employees>} ></Route>
             <Route path="/admin" element={<Admin></Admin>}></Route>
+            <Route path="/apr20" element={<EmployeeMasterMenu></EmployeeMasterMenu>}></Route>
             <Route path="/admin/password" element={<ResetPasswordInternal loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}></ResetPasswordInternal>} ></Route>
             <Route path="/reset-password/:token" element={<ForgotPasswordReset setLoggedInUser={setLoggedInUser}></ForgotPasswordReset>} ></Route>
             <Route path="/accounts/password/reset" element={<ForgotPasswordModalForm></ForgotPasswordModalForm>} ></Route>
