@@ -49,7 +49,7 @@ function Navibar({setLoggedInUser}) {
             <Navbar.Collapse>
             <Nav className="me-auto">
             {firstName && <Nav.Link href="/">All Jobs</Nav.Link>}
-                {position === 3 && <Nav.Link href="/report">Reports</Nav.Link>}
+                {position === 3 && <Nav.Link href="/reports">Reports</Nav.Link>}
                 {!position && <Nav.Link href="/login">Login</Nav.Link>}
                 
                

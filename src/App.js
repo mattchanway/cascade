@@ -25,6 +25,7 @@ import Unauthorized from './components/Unauthorized';
 import MyTimecards from './components/MyTimecards';
 import MultiSiteTimecardForm from './components/MultiSiteTimecardForm';
 import EmployeeMasterMenu from './components/EmployeeMasterMenu';
+import ReportsList from './components/ReportsList';
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -94,19 +95,21 @@ function App() {
             <Route path="/add-multiple-timecards" element={<MultiSiteTimecardForm></MultiSiteTimecardForm>}></Route>
             <Route path="/jobs/new-job" element={<JobForm ></JobForm>} ></Route>
             <Route path="/jobs/:id" element={<JobDetail></JobDetail>} ></Route>
-            <Route path="/report" element={<TimecardsFilterReportForm></TimecardsFilterReportForm>}></Route>
-            <Route path="/reports/summary-report" element={<SummaryReport></SummaryReport>}></Route>
+            <Route path="/reports" element={<ReportsList></ReportsList>}></Route>
+            <Route path="/reports/employee-timecard" element={<TimecardsFilterReportForm></TimecardsFilterReportForm>}></Route>
+            <Route path="/reports/job-summary" element={<SummaryReport></SummaryReport>}></Route>
             <Route path="/employees/new-employee" element={<EmployeeForm></EmployeeForm>} ></Route>
             <Route path="/employees/:id" element={<EmployeeDetail></EmployeeDetail>} ></Route>
-            <Route path="/employees" element={<Employees></Employees>} ></Route>
+            
             <Route path="/admin" element={<Admin></Admin>}></Route>
-            <Route path="/apr20" element={<EmployeeMasterMenu></EmployeeMasterMenu>}></Route>
+            <Route path="/employees" element={<EmployeeMasterMenu></EmployeeMasterMenu>}></Route>
             <Route path="/admin/password" element={<ResetPasswordInternal loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}></ResetPasswordInternal>} ></Route>
             <Route path="/reset-password/:token" element={<ForgotPasswordReset setLoggedInUser={setLoggedInUser}></ForgotPasswordReset>} ></Route>
             <Route path="/accounts/password/reset" element={<ForgotPasswordModalForm></ForgotPasswordModalForm>} ></Route>
             <Route path="/404" element={<FourOhFour></FourOhFour>}></Route>
             <Route path="/my-profile" element={<MyTimecards></MyTimecards>}></Route>
             <Route path="/unauthorized" element={<Unauthorized></Unauthorized>}></Route>
+            
           </Routes>
 
         </UserContext.Provider>

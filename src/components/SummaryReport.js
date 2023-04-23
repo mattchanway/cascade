@@ -144,7 +144,7 @@ function SummaryReport() {
       </Dropdown.Menu>
     </Dropdown>}<br></br>
                 
-                <Button variant="primary" type="submit" data-testid='myTimecardsReportSubmit'>Get Timecards</Button>
+                <Button variant="primary" type="submit" data-testid='myTimecardsReportSubmit'>Get Results</Button>
                
             </Form>
 
