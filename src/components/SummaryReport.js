@@ -11,10 +11,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 
 
-
-
-
-
 function SummaryReport() {
 
     const { employeeId, position, userNotFound } = useContext(UserContext);
@@ -42,6 +38,7 @@ function SummaryReport() {
         async function getEmployees() {
             try {
                 let res = await axios.get(`${baseURL}/employees`);
+                console.log(res.data)
                 let arr = res.data.map(emp=> ({employee_id: emp.employee_id, first_name: emp.first_name, last_name:emp.last_name, included:true}))
              
                 setEmployeeBooleanArray(arr);
@@ -68,7 +65,7 @@ function SummaryReport() {
             let res = await axios.get(`${baseURL}/timecards/reports/job-summary`, {
                 params: searchParams
             })
-           console.log(res.data)
+          
             setSummaryReportResults(res.data)
         }
         catch (e) {
@@ -96,6 +93,10 @@ function SummaryReport() {
 
     if (employeeId === null && userNotFound === true) {
         return <Navigate to="/login" replace={true}></Navigate>
+    }
+
+    if (position !== 3) {
+        return <Navigate to="/unauthorized" replace={true}></Navigate>
     }
 
 
@@ -135,7 +136,7 @@ function SummaryReport() {
                 </Form.Group>
               
                 {employeeBooleanArray && <Dropdown>
-      <Dropdown.Toggle drop={'down'} variant="primary" id="dropdown-checkbox">
+      <Dropdown.Toggle drop={'down'} variant="primary" id="dropdown-checkbox" data-testid='forEmployeesDropdown'>
         For Employees
       </Dropdown.Toggle>
 
@@ -144,7 +145,7 @@ function SummaryReport() {
       </Dropdown.Menu>
     </Dropdown>}<br></br>
                 
-                <Button variant="primary" type="submit" data-testid='myTimecardsReportSubmit'>Get Results</Button>
+                <Button variant="primary" type="submit" data-testid='summaryReportSubmit'>Get Results</Button>
                
             </Form>
 
