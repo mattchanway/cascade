@@ -15,7 +15,7 @@ import TimecardsFilterReportResults from './TimecardsFilterReportResults';
 
 function TimecardsFilterReportForm() {
 
-    const { employeeId, position, userNotFound } = useContext(UserContext);
+    const { position, userNotFound } = useContext(UserContext);
 
     let INIT_STATE = {
         fromDate: '', toDate: '', employeeId: '', jobId: ''
@@ -91,9 +91,7 @@ function TimecardsFilterReportForm() {
 
     if (serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
-    if (employeeId === null && userNotFound === true) {
-        return <Navigate to="/login" replace={true}></Navigate>
-    }
+   
 
     if (position !== 3) {
        
