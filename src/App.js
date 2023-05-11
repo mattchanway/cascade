@@ -26,7 +26,7 @@ import MyTimecards from './components/MyTimecards';
 import MultiSiteTimecardForm from './components/MultiSiteTimecardForm';
 import EmployeeMasterMenu from './components/EmployeeMasterMenu';
 import ReportsList from './components/ReportsList';
-import EditTimecard from './components/EditTimecard'
+import DeleteTimecard from './components/DeleteTimecard'
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -101,7 +101,7 @@ function App() {
             <Route path="/reports/job-summary" element={<SummaryReport></SummaryReport>}></Route>
             <Route path="/employees/new-employee" element={<EmployeeForm></EmployeeForm>} ></Route>
             <Route path="/employees/:id" element={<EmployeeDetail></EmployeeDetail>} ></Route>
-            <Route path="/admin/edit-timecard" element={<EditTimecard></EditTimecard>}></Route>
+            <Route path="/admin/delete-timecard" element={<DeleteTimecard></DeleteTimecard>}></Route>
             <Route path="/admin" element={<Admin></Admin>}></Route>
             <Route path="/employees" element={<EmployeeMasterMenu></EmployeeMasterMenu>}></Route>
             <Route path="/admin/password" element={<ResetPasswordInternal loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}></ResetPasswordInternal>} ></Route>

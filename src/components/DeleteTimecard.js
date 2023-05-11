@@ -12,11 +12,12 @@ import Unauthorized from './Unauthorized';
 import Card from 'react-bootstrap/Card';
 import EmployeeEditModal from './EmployeeEditModal';
 import EmployeeStatusChangeModal from './EmployeeStatusChangeModal';
+import DeleteTimecardRow from './DeleteTimecardRow';
 
 
 
 
-function EditTimecard() {
+function DeleteTimecard() {
 
     const {position, userNotFound } = useContext(UserContext);
 
@@ -34,10 +35,9 @@ function EditTimecard() {
     let handleCloseEmployeeCheckbox = () => setShowModal(false)
     let handleOpenEmployeeCheckbox = () => setShowModal(true)
 
-    // THE INTERFACE IS A BOOLEAN CHECKBOX DROPDOWN WITH EVERY CHECKBOX INITIALIZED TO TRUE
-    // USE EFFECT TO GET ALL THE EMPLOYEES, NEED THEIR NAME AND ID
-    // KEPT AS STATE / FORM DATA, ALL INITIALIZED TO TRUE
-    // IF UNCHECKED, THAT ID IS ADDED TO EXCLUDED EMPLOYEES OR VICE VERSA
+    
+
+  
 
     useEffect(() => {
 
@@ -85,6 +85,22 @@ function EditTimecard() {
             catch(e){
                 setServerError(true)
             }
+
+    }
+
+    async function handleDelete(timecardId){
+        evt.preventDefault()
+
+        try{
+            let res = await axios.delete(`${baseURL}/timecards/${timecardId}`)
+
+        }
+
+        catch(e){
+            setServerError(true)
+
+        }
+
 
     }
 
@@ -153,19 +169,7 @@ function EditTimecard() {
                         </thead>
                         <tbody>
                             {timecardResults.map(t =>
-                                <tr key={`${t.timecard_id}-row`}>
-                                    <td key={`${t.timecard_id}-empIdCell`}>{t.employee_id}</td>
-                                    <td key={`${t.timecard_id}-nameCell`}>{`${t.first_name} ${t.last_name}`}</td>
-                                    <td key={`${t.timecard_id}-jobIdCell`}>{t.job_id}</td>
-                                    
-                                    <td key={`${t.timecard_id}-dateCell`}>{t.timecard_date.slice(0, 10)}</td>
-                                    <td key={`${t.timecard_id}-regTimeCell`}>{t.reg_time}</td>
-                                    <td key={`${t.timecard_id}-overtimeCell`}>{t.overtime}</td>
-                                    <td key={`${t.timecard_id}-expensesCell`}>{'$'+t.expenses.toFixed(2)}</td>
-                                    <td key={`${t.timecard_id}-buttonCell`}><Button>Edit</Button></td>
-                                    
-
-                                </tr>
+                                <DeleteTimecardRow t={t} handleDelete={handleDelete}></DeleteTimecardRow>
                             )}
 
                         </tbody>
@@ -182,4 +186,4 @@ function EditTimecard() {
 
 }
 
-export default EditTimecard
+export default DeleteTimecard
