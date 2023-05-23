@@ -67,7 +67,7 @@ function AddTimecardForm({showForm, handleClose, job, employeeId, handleShowToas
         evt.preventDefault();
         let { timecard_date, reg_time, overtime, expenses, notes } = timecardFormData;
         let errors = [];
-        if (isNaN(new Date(timecard_date))) errors.push("Please enter a valid date.")
+        if (isNaN(Date.parse(timecard_date))) errors.push("Please enter a valid date.")
         if(!reg_time.length) errors.push('Regular time cannot be blank.')
         if (reg_time.length && reg_time < 1 || reg_time.length && reg_time > 8) errors.push("Regular time must be at least 1, and no more than 8.");
         if (overtime < 0) errors.push("Overtime cannot be a negative number.");
