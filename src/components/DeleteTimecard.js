@@ -19,7 +19,7 @@ import DeleteTimecardRow from './DeleteTimecardRow';
 
 function DeleteTimecard() {
 
-    const {position, userNotFound } = useContext(UserContext);
+    const {position } = useContext(UserContext);
 
     let INIT_STATE = {
         date: '', employeeId: ''
@@ -30,14 +30,6 @@ function DeleteTimecard() {
     const [formErrors, setFromErrors] = useState([])
     const [timecardResults, setTimecardResults] = useState([])
     
-    const [showModal, setShowModal] = useState(false)
-
-    let handleCloseEmployeeCheckbox = () => setShowModal(false)
-    let handleOpenEmployeeCheckbox = () => setShowModal(true)
-
-    
-
-  
 
     useEffect(() => {
 
@@ -78,7 +70,7 @@ function DeleteTimecard() {
                         
                     
                 } )
-                console.log(res)
+             
                 setTimecardResults(res.data);
 
             }
@@ -89,11 +81,12 @@ function DeleteTimecard() {
     }
 
     async function handleDelete(timecardId){
-        evt.preventDefault()
+        
 
         try{
             let res = await axios.delete(`${baseURL}/timecards/${timecardId}`)
-
+            let newResults = timecardResults.filter(t=>t.timecard_id !== timecardId)
+            setTimecardResults(newResults)
         }
 
         catch(e){
@@ -150,7 +143,7 @@ function DeleteTimecard() {
                 <Button variant="primary" type="submit" data-testid='editTimecardSearchSubmit'>Search</Button>
 
             </Form>
-            {!timecardResults.length === 0 ? 'h' : <Table responsive>
+           <Table responsive>
             <thead>
                             <tr>
 
@@ -174,7 +167,7 @@ function DeleteTimecard() {
 
                         </tbody>
                 
-                </Table>}
+                </Table>
 
 
         </div>

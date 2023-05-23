@@ -1,4 +1,6 @@
-function DeleteTimecardRow({t}) {
+import Button from 'react-bootstrap/Button';
+
+function DeleteTimecardRow({t, handleDelete}) {
 
     
     return (
@@ -11,7 +13,7 @@ function DeleteTimecardRow({t}) {
                                     <td key={`${t.timecard_id}-regTimeCell`}>{t.reg_time}</td>
                                     <td key={`${t.timecard_id}-overtimeCell`}>{t.overtime}</td>
                                     <td key={`${t.timecard_id}-expensesCell`}>{'$'+t.expenses.toFixed(2)}</td>
-                                    <td key={`${t.timecard_id}-buttonCell`}><Button variant='danger'>Delete</Button></td>
+                                    <td key={`${t.timecard_id}-buttonCell`}><Button onClick={()=>handleDelete(t.timecard_id)} variant='danger'>Delete</Button></td>
                                     
                                 </tr>
                             

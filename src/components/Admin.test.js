@@ -46,7 +46,7 @@ it('Shows the admin list when the manager accesses', async () => {
         )
 
     });
-    expect(screen.getByText(/Employee Admin/)).toBeInTheDocument()
+    expect(screen.getByText(/Add a New Job/)).toBeInTheDocument()
 
 })
 

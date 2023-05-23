@@ -87,16 +87,17 @@ function TimecardsFilterReportForm() {
         }))
     }
 
+    if (position !== 3) {
+       
+        return <Navigate to="/unauthorized" replace={false}></Navigate>
+    }
 
 
     if (serverError === true) return <Navigate to="/404" replace={false}></Navigate>
 
    
 
-    if (position !== 3) {
-       
-        return <Navigate to="/unauthorized" replace={false}></Navigate>
-    }
+    
 
     return (
         <div>

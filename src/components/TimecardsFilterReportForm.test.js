@@ -247,13 +247,13 @@ it('redirects to login if user is null', async () => {
                     <Routes>
                         <Route path="/report" element={<TimecardsFilterReportForm></TimecardsFilterReportForm>}></Route>
                         <Route path="/404" element={<FourOhFour></FourOhFour>}></Route>
-                        <Route path="/Login" element={<Login></Login>}></Route>
+                        <Route path="/unauthorized" element={<Unauthorized></Unauthorized>}></Route>
                     </Routes>
                 </UserContext.Provider>
             </MemoryRouter>
         )
     });
-    expect(screen.getByText(/Login/)).toBeInTheDocument();
+    expect(screen.getByText(/You do not have permission to view this page./)).toBeInTheDocument();
 })
 
 it('Redirects to 404 if form submission throws', async () => {

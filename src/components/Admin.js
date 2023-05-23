@@ -27,6 +27,7 @@ function Admin() {
         
             <Link to="/jobs/new-job">Add a New Job</Link><br></br>
             <Link to="/admin/edit-timecard">Edit a timecard</Link><br></br>
+            <Link to="/admin/delete-timecard">Delete a timecard</Link><br></br>
             <Link to="/employees/new-employee">Add a New Employee</Link><br></br>
         </div>
 
