@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import UserContext from './UserContext';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Table from 'react-bootstrap/Table';
 import { useLocation, useParams, useNavigate, redirect, Navigate } from "react-router-dom";
 import axios from 'axios';
@@ -10,6 +11,7 @@ import baseURL from '../helpers/constants';
 import Unauthorized from './Unauthorized';
 import Card from 'react-bootstrap/Card';
 import EmployeeEditModal from './EmployeeEditModal';
+import EmployeeStatusChangeModal from './EmployeeStatusChangeModal';
 
 
 
@@ -17,18 +19,23 @@ import EmployeeEditModal from './EmployeeEditModal';
 function EmployeeDetail() {
     let { id } = useParams();
     const { employeeId, position, userNotFound } = useContext(UserContext);
-    const [employee, setEmployee] = useState([]);
+    const [employee, setEmployee] = useState({});
     const [timecardResults, setTimecardResults] = useState([]);
     const [serverError, setServerError] = useState(false);
     const [showEmployeeEdit, setShowEmployeeEdit] = useState(false);
+    const [showEmployeeStatusModal, setShowEmployeeStatusModal] = useState(false);
     const handleCloseEmployeeEdit = () => setShowEmployeeEdit(false);
     const handleShowEmployeeEdit = () => setShowEmployeeEdit(true);
+    const handleCloseEmployeeStatusModal = () => setShowEmployeeStatusModal(false);
+    const handleShowEmployeeStatusModal = () => setShowEmployeeStatusModal(true);
+
 
     useEffect(() => {
 
         async function getEmployee() {
             try {
                 let res = await axios.get(`${baseURL}/employees/${id}`);
+                
               
                 setEmployee(res.data.userData);
                 setTimecardResults(res.data.timecardsData)
@@ -41,6 +48,23 @@ function EmployeeDetail() {
         }
         getEmployee();
     }, []);
+
+    async function changeEmployeeStatus() {
+        
+        let updatedStatus = employee.active === true ? false : true
+       
+
+        try{
+        let res = await axios.patch(`${baseURL}/employees/status/${employee.employee_id}`,{status: updatedStatus});
+        handleCloseEmployeeStatusModal();
+        setEmployee({...employee, active: updatedStatus})
+
+        }
+        catch(e){
+            setServerError(true);
+
+        }
+    }
 
 
 
@@ -67,7 +91,10 @@ function EmployeeDetail() {
                 <Card.Text>
                 Employee ID: {employee.employee_id}
                 </Card.Text> 
-                {position === 3 && <Button variant='warning' onClick={handleShowEmployeeEdit} data-testid='emp-edit-btn' >Edit Employee</Button>}
+                {position === 3 && <ButtonGroup>
+                    <Button variant='warning' onClick={handleShowEmployeeEdit} data-testid='emp-edit-btn' >Edit Employee</Button>
+                    <Button onClick={handleShowEmployeeStatusModal} variant={employee.active ? 'danger' : 'success'} >{employee.active ? 'Deactivate Employee' : 'Activate Employee'}</Button>
+                    </ButtonGroup> }
                  </Card.Body>
                     </Card>}
       
@@ -104,6 +131,10 @@ function EmployeeDetail() {
                         {employee && position === 3 && <EmployeeEditModal employee={employee} 
                         handleCloseEmployeeEdit={handleCloseEmployeeEdit} 
                         showEmployeeEdit={showEmployeeEdit}></EmployeeEditModal>}
+                         {employee && position === 3 && <EmployeeStatusChangeModal showEmployeeStatusModal={showEmployeeStatusModal}
+                        handleCloseEmployeeStatusModal={handleCloseEmployeeStatusModal} changeEmployeeStatus={changeEmployeeStatus}
+                      
+                        ></EmployeeStatusChangeModal>}
 
             </div>
         )

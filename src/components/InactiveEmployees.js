@@ -1,4 +1,3 @@
-// import '../css/App.css';
 import React, { useEffect, useState, useContext } from 'react';
 import { useLocation, redirect, Navigate } from "react-router-dom";
 import axios from 'axios';
@@ -10,7 +9,7 @@ import baseURL from '../helpers/constants';
 
 
 
-function Employees() {
+function InactiveEmployees() {
     const [serverError, setServerError] = useState(false);
     const [employees, setEmployees] = useState([]);
     const { employeeId, position, userNotFound } = useContext(UserContext);
@@ -20,7 +19,7 @@ function Employees() {
         async function getEmployees() {
 
             try{
-            let res = await axios.get(`${baseURL}/employees`);
+            let res = await axios.get(`${baseURL}/employees/directory/inactive`);
            
             setEmployees(res.data);
             }
@@ -41,7 +40,7 @@ function Employees() {
 
     return (
         <div>
-               
+             
             {employees && <ListGroup className='job-list' as="ul">
 
                 {employees.map((e) => <ListGroup.Item key={e.employee_id} action href={`/employees/${e.employee_id}`}>{e.last_name}, {e.first_name} </ListGroup.Item>)}
@@ -55,4 +54,4 @@ function Employees() {
     )
 }
 
-export default Employees;
+export default InactiveEmployees;

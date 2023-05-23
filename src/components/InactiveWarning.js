@@ -23,8 +23,6 @@ function InactiveWarning({ id,showInactiveWarning, handleCloseInactiveWarning, s
 
     return (
         <>
-            
-
             <Modal
                 show={showInactiveWarning}
                 onHide={handleCloseInactiveWarning}

@@ -24,12 +24,10 @@ function Admin() {
     return (
         <div>
             <h1>Admin</h1>
-            <p>From this page, managers will be able to edit job details and employee details if necessary. For now, these
-                can be emailed as requests to the developer.
-            </p>
-            <h2>Job Admin</h2>
+        
             <Link to="/jobs/new-job">Add a New Job</Link><br></br>
-            <h2>Employee Admin</h2>
+            <Link to="/admin/edit-timecard">Edit a timecard</Link><br></br>
+            <Link to="/admin/delete-timecard">Delete a timecard</Link><br></br>
             <Link to="/employees/new-employee">Add a New Employee</Link><br></br>
         </div>
 
